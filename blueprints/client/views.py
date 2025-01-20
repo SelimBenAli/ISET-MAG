@@ -1,4 +1,4 @@
-from flask import Blueprint, request, jsonify, url_for, redirect
+from flask import Blueprint, request, jsonify, url_for, redirect, render_template
 
 from service.utilisateur_service import UtilisateurService
 from tools.user_tools import UserTools
@@ -15,5 +15,5 @@ class ClientViews:
         @self.client_bp.route('/location', methods=['GET'])
         def location_client():
             if self.user_tools.check_user_in_session('user'):
-                return 'Welcome to the client home page'
+                return render_template('client/location.html')
             return redirect(url_for('auth.login'))
