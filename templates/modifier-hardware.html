@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html data-bs-theme="light" lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+    <title>Dashboard - Hardware - Modifier</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/assets/bootstrap/css/bootstrap.min.css') }}">
+    <link rel="stylesheet"
+          href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i&amp;display=swap">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/assets/fonts/fontawesome-all.min.css') }}">
+</head>
+
+<body class="bg-gradient-primary">
+<div class="container">
+
+    <div class="row justify-content-center">
+        <div class="col-md-9 col-lg-12 col-xl-10">
+            <div class="card shadow-lg o-hidden border-0 my-5">
+                <div class="card-body p-0">
+                    <div class="row" style="justify-content: center">
+
+                        <div class="col-lg-6">
+                            <div class="p-5">
+                                <div class="text-center">
+                                    <h4 class="text-dark mb-4">Modifier Hardware</h4>
+                                </div>
+                                <div>
+                                    <div class="mb-3"><label class="text-secondary mb-2">Modèle : </label>
+                                        <select
+                                                id="modele-hardware" class="form-select form-select-lg mb-3">
+                                            {% for modele in liste_modele %}
+
+                                                <option value="{{ modele['id_modele'] }}"
+                                                        {% if modele['id_modele'] == hardware['modele_hardware']['id_modele'] %}
+                                                        selected {% endif %}>{{ modele['nom_modele'] }}
+                                                    - {{ modele['marque_modele']['nom_marque'] }}</option>
+                                            {% endfor %}
+                                        </select></div>
+                                    <div class="mb-3"><label class="text-secondary mb-2">Fournisseur : </label><select
+                                            id="fournisseur-hardware" class="form-select form-select-lg mb-3">
+                                        {% for fournisseur in liste_fournisseur %}
+                                            <option value="{{ fournisseur['id_fournisseur'] }}"  {% if fournisseur['id_fournisseur'] == hardware['fournisseur_hardware']['id_fournisseur'] %}
+                                                        selected {% endif %}>{{ fournisseur['nom_fournisseur'] }}</option>
+                                        {% endfor %}
+                                    </select></div>
+                                    <div class="mb-3"><label class="text-secondary mb-2">Magasin : </label><select
+                                            id="magasin-hardware" class="form-select form-select-lg mb-3">
+                                        <option value="0">Aucun</option>
+                                        {% for magasin in liste_magasin %}
+                                            <option value="{{ magasin['id_magasin'] }}" {% if magasin['id_magasin'] == hardware['magasin_hardware']['id_magasin'] %}
+                                                        selected {% endif %}>{{ magasin['nom_magasin'] }}</option>
+                                        {% endfor %}
+                                    </select></div>
+                                    <div class="mb-3"><label class="text-secondary mb-2">Salle : </label><select
+                                            id="salle-hardware" class="form-select form-select-lg mb-3">
+                                        <option value="0">Aucun</option>
+                                        {% for salle in liste_salle %}
+                                            <option value="{{ salle['id_salle'] }}" {% if salle['id_salle'] == hardware['salle_hardware']['id_salle'] %}
+                                                        selected {% endif %}>{{ salle['nom_salle'] }}</option>
+                                        {% endfor %}
+                                    </select></div>
+                                    <div class="mb-3"><label class="text-secondary mb-2">Numéro d'Inventaire
+                                        : </label><input class="form-control form-control-user" type="text"
+                                                         id="numero-inventaire-hardware" value="{{ hardware['numero_inventaire_hardware'] }}"
+                                                         placeholder="Numéro d'inventaire...">
+                                    </div>
+
+                                    <div class="mb-3"><label class="text-secondary mb-2">Date d'Achat : </label><input
+                                            class="form-control form-control-user" type="date" value="{{ hardware['date_achat_hardware'] }}"
+                                            id="date-achat-hardware" placeholder="Date Achat..."></div>
+
+                                    <div class="mb-3"><label class="text-secondary mb-2">Date de Mise en Service
+                                        : </label><input class="form-control form-control-user" type="date"
+                                                         id="date-mise-en-service-hardware" value="{{ hardware['date_mise_service_hardware'] }}"
+                                                         placeholder="Date de Mise en Service...."></div>
+
+                                    <div class="mb-3"><label class="text-secondary mb-2">Code à Barre : </label><input
+                                            class="form-control form-control-user" type="text" value="{{ hardware['code_hardware'] }}"
+                                            id="code-hardware" placeholder="Code à Barre...."></div>
+
+                                    <div class="mb-3"><label class="text-secondary mb-2">Etat : </label><select
+                                            id="etat-hardware" class="form-select form-select-lg mb-3">
+                                        {% for etat in liste_etat %}
+                                            <option value="{{ etat['id_etat'] }}" {% if etat['id_etat'] == hardware['etat_hardware']['id_etat'] %}
+                                                        selected {% endif %}>{{ etat['nom_etat'] }}</option>
+                                        {% endfor %}
+                                    </select></div>
+
+                                    <div class="mb-3">
+                                        <button class="btn btn-primary d-block btn-user w-100" type="button"
+                                                onclick="modifier_hardware({{ hardware['id_hardware'] }})">Modifier
+                                        </button>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="{{ url_for('static', filename='css/assets/bootstrap/js/bootstrap.min.js') }}"></script>
+<script src="{{ url_for('static', filename='css/assets/js/theme.js') }}"></script>
+<script src="{{ url_for('static', filename='js/hardware-js.js') }}"></script>
+<script src="{{ url_for('static', filename='js/script.js') }}"></script>
+</body>
+
+</html>
