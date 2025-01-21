@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html data-bs-theme="light" lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+    <title>Historique Réclamation</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/client-assets/bootstrap/css/bootstrap.min.css') }}">
+    <link rel="stylesheet"
+          href="https://fonts.googleapis.com/css?family=Raleway:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800&amp;display=swap">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/client-assets/css/aos.min.css') }}">
+</head>
+
+<body>
+{% include 'client/elements/side-bars/client-side-bar.html' %}
+<section class="py-5 mt-5">
+    <div class="container py-4 py-xl-5">
+        <div class="row gy-4 row-cols-1 row-cols-md-2 row-cols-lg-3">
+            {% for reclamation in liste_reclamations %}
+                <div class="col" data-aos="fade-up" data-aos-once="true">
+                    <div class="card border-0 h-100">
+                        <div class="card-body d-flex flex-column justify-content-between p-4">
+                            <div>
+                                <h6 class="fw-bold text-muted">{{ reclamation['date_reclamation'] }}</h6>
+                                <h4 class="display-5 fw-bold mb-4">{{ reclamation['hardware_reclamation']['modele_hardware']['nom_modele'] }} {{ reclamation['hardware_reclamation']['modele_hardware']['marque_modele']['nom_marque'] }}</h4>
+                                <h5 class="display-5 fw-bold mb-4">{{ reclamation['hardware_reclamation']['numero_inventaire_hardware'] }} </h5>
+
+                                <ul class="list-unstyled">
+
+                                        <span>Description : {{ reclamation['description_reclamation'] }} .</span>
+                                    </li>
+
+                                </ul>
+                            </div>
+                            <!--<a class="btn btn-primary" role="button" onclick="">Louer..</a>-->
+                            <hr>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+
+        </div>
+    </div>
+</section>
+
+{% include 'client/elements/footers/client-footer.html' %}
+<script src="{{ url_for('static', filename='css/client-assets/bootstrap/js/bootstrap.min.js') }}"></script>
+<script src="{{ url_for('static', filename='css/client-assets/js/aos.min.js') }}"></script>
+<script src="{{ url_for('static', filename='css/client-assets/js/bs-init.js') }}"></script>
+<script src="{{ url_for('static', filename='css/client-assets/js/startup-modern.js') }}"></script>
+</body>
+
+</html>

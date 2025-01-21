@@ -10,6 +10,8 @@ class Reclamation:
         self.date_reclamation = date_reclamation
 
     def dict_form(self):
-        return {'id_reclamation': self.id_reclamation, 'hardware': self.hardware, 'utilisateur': self.utilisateur,
-                'intervention': self.intervention, 'etat': self.etat, 'description': self.description,
+        return {'id_reclamation': self.id_reclamation, 'hardware_reclamation': self.hardware,
+                'utilisateur_reclamation': self.utilisateur,
+                'intervention_reclamation': self.intervention, 'etat_reclamation': self.etat,
+                'description_reclamation': self.description,
                 'date_reclamation': self.date_reclamation}

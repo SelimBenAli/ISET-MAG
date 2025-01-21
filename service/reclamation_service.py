@@ -21,14 +21,14 @@ class ReclamationService:
             data = self.cursor.fetchall()
             liste_reclamation = []
             for element in data:
-                hardware = HardwareService().find_hardware_by_id(element[1])
-                utilisateur = UtilisateurService().find_utilisateur_by_id(element[2])
-                intervention = InterventionService().find_intervention_by_id(element[3])
+                status, hardware = HardwareService().find_hardware_by_id(element[1])
+                status, utilisateur = UtilisateurService().find_utilisateur_by_id(element[2])
+                status, intervention = InterventionService().find_intervention_by_id(element[3])
                 etat = EtatService().find_etat_by_id(element[6])
                 reclamation = Reclamation(
-                    element[0], hardware, utilisateur, intervention, element[4], element[5], etat
+                    element[0], hardware[0], utilisateur, intervention, None, element[5], element[4]
                 )
-                liste_reclamation.append(reclamation)
+                liste_reclamation.append(reclamation.dict_form())
             self.cursor.close()
             self.connection.close()
             return 'success', liste_reclamation

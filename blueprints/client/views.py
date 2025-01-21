@@ -2,6 +2,7 @@ from flask import Blueprint, jsonify, url_for, redirect, render_template, sessio
 
 from service.hardware_service import HardwareService
 from service.intervention_service import InterventionService
+from service.reclamation_service import ReclamationService
 from service.utilisateur_service import UtilisateurService
 from tools.user_tools import UserTools
 
@@ -12,10 +13,17 @@ class ClientViews:
         self.client_service = UtilisateurService()
         self.intervention_service = InterventionService()
         self.hardware_service = HardwareService()
+        self.reclamation_service = ReclamationService()
         self.client_bp = Blueprint('client', __name__, template_folder='templates')
         self.client_routes()
 
     def client_routes(self):
+        @self.client_bp.route('/contact', methods=['GET'])
+        def contact_client():
+            if self.user_tools.check_user_in_session('user'):
+                return render_template('client/contacts.html')
+            return redirect(url_for('auth.login'))
+
         @self.client_bp.route('/location', methods=['GET'])
         def location_client():
             if self.user_tools.check_user_in_session('user'):
@@ -48,4 +56,16 @@ class ClientViews:
                     return render_template('client/404.html')
                 print(interventions)
                 return render_template('client/historique-materielle.html', liste_interventions=interventions)
+            return redirect(url_for('auth.login'))
+
+        @self.client_bp.route('/historique-reclamation', methods=['GET'])
+        def historique_reclamation_client():
+            if self.user_tools.check_user_in_session('user'):
+                user = session['user']
+                status, reclamations = self.reclamation_service.find_reclamation_by_id_utilisateur(
+                    user['id_utilisateur'])
+                if status != 'success':
+                    return render_template('client/404.html')
+                print(reclamations)
+                return render_template('client/historique-reclamation.html', liste_reclamations=reclamations)
             return redirect(url_for('auth.login'))
