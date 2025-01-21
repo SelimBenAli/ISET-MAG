@@ -26,6 +26,7 @@ class InterventionService:
                 status, utilisateur = UtilisateurService().find_utilisateur_by_id(element[1])
                 if element[4] is not None:
                     status, salle = SalleService().find_salle_by_id(element[4])
+                    salle = salle[0]
                 else:
                     salle = SalleService.create_none().dict_form()
                 status, hardware = HardwareService().find_hardware_by_id(element[5])

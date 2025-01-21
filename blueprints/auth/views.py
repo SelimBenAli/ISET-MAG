@@ -30,9 +30,9 @@ class AuthViews:
             if status == 'success':
                 if user[0]['mdp_utilisateur'] != self.cryption_tools.crypt_sha256(password):
                     return {'status': 'failed', 'message': 'Utilisateur Non Trouvé'}
-                my_user = user[0].pop('mdp_utilisateur')
-                session['user'] = my_user
-                return {'status': 'success', 'user': my_user}
+                user[0].pop('mdp_utilisateur')
+                session['user'] = user[0]
+                return {'status': 'success', 'user': user[0]}
             elif status == 'failed':
                 return {'status': 'failed', 'message': 'Utilisateur Non Trouvé'}
             else:

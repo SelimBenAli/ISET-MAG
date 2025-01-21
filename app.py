@@ -12,6 +12,7 @@ from blueprints.magasin import magasin_bp
 from blueprints.marque import marque_bp
 from blueprints.modele import modele_bp
 from blueprints.salle_bloc import salle_bloc_bp
+from blueprints.user import user_bp
 
 app = Flask(__name__)
 CORS(app)
@@ -28,6 +29,7 @@ app.register_blueprint(hardware_bp, url_prefix='/hardware')
 app.register_blueprint(intervention_bp, url_prefix='/intervention')
 app.register_blueprint(auth_bp, url_prefix='/auth')
 app.register_blueprint(client_bp, url_prefix='/client')
+app.register_blueprint(user_bp, url_prefix='/user')
 
 if __name__ == '__main__':
     app.run()

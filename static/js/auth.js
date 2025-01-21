@@ -6,8 +6,24 @@ function openPageContactClient() {
     window.location.href = "/client/contact";
 }
 
+function openPageLocationClient() {
+    window.location.href = "/client/location";
+}
+
+function openPageReclamationClient() {
+    window.location.href = "/client/reclamation/new";
+}
+
+function openPageHistoriqueMaterielleClient() {
+    window.location.href = "/client/historique-materielle";
+}
+
+function openPageHistoriqueReclamationClient() {
+    window.location.href = "/client/historique-reclamation";
+}
+
 function logout_request() {
-   window.location.href = "/auth/logout";
+    window.location.href = "/auth/logout";
 }
 
 function client_login_request() {
@@ -25,7 +41,7 @@ function client_login_request() {
             console.log(response)
             if (response.status === 'success') {
                 login_btn.disabled = false;
-                window.location.href = "/client/location";
+                openPageHistoriqueMaterielleClient();
             } else {
                 login_btn.disabled = false;
                 alert('Email ou mot de passe incorrect');

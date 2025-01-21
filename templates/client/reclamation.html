@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html data-bs-theme="light" lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+    <title>Nouvelle Réclamation - </title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/client-assets/bootstrap/css/bootstrap.min.css') }}">
+    <link rel="stylesheet"
+          href="https://fonts.googleapis.com/css?family=Raleway:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800&amp;display=swap">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/client-assets/css/aos.min.css') }}">
+</head>
+
+<body>
+{% include 'client/elements/side-bars/client-side-bar.html' %}
+<section class="py-5 mt-5">
+    <div class="container py-5">
+        <div class="row">
+            <div class="col-md-8 col-xl-6 text-center mx-auto">
+                <h2 class="display-6 fw-bold mb-4">Vous avez une <span class="underline">réclamation</span>?</h2>
+                <p class="text-muted">Si quelque chose ne marche pas vous pouvez envoyer une réclamation.</p>
+            </div>
+        </div>
+        <div class="row d-flex justify-content-center">
+            <div class="col-md-6">
+                <div>
+                    <div class="p-3 p-xl-4" data-bs-theme="light">
+                        {% if new == False %}
+                            <div class="mb-3"><label class="text-danger mb-2">Materielle Non Trouvé </label>
+                            </div>{% endif %}
+
+                        <div class="mb-3"><label class="text-primary mb-2">Numéro d'Inventaire : </label><input
+                                class="shadow form-control" type="text" id="numero_inventaire" name="numero_inventaire"
+                                placeholder="Numéro d'Inventaire..." {% if hardware != None %} readonly
+                                value="{{ hardware['numero_inventaire_hardware'] }}" {% endif %} ></div>
+                        {% if hardware != None %}
+                            <div class="mb-3"><label class="text-primary mb-2">Type : </label><input
+                                    class="shadow form-control" value="{{ hardware['modele_hardware']['nom_modele'] }}"
+                                    readonly></div>
+                            <div class="mb-3"><label class="text-primary mb-2">Marque : </label><input
+                                    class="shadow form-control"
+                                    value="{{ hardware['modele_hardware']['marque_modele']['nom_marque'] }}" readonly>
+                            </div>
+                            <div class="mb-3"><label class="text-primary mb-2">Salle : </label><input
+                                    class="shadow form-control" value="{{ hardware['salle_hardware']['nom_salle'] }}"
+                                    readonly></div>
+                            <div class="mb-3"><textarea class="shadow form-control" name="message" rows="6"
+                                                        id="description"
+                                                        placeholder="Message"></textarea></div>
+                            <div>
+                                <button class="btn btn-primary shadow d-block w-100" id="reclamation-btn" onclick="envoyer_reclamation()">
+                                    Envoyer
+                                </button>
+                            </div>
+                            <div>
+                                <button class="btn btn-primary shadow d-block w-100" style="margin-top: 1vh"
+                                        onclick="openPageReclamationClient()">Trouver Autre Materielle
+                                </button>
+                            </div>
+                        {% else %}
+                            <div>
+                                <button class="btn btn-primary shadow d-block w-100"
+                                        onclick="trouver_hardware_reclamation()">Trouver Materielle
+                                </button>
+                            </div>
+                        {% endif %}
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+{% include 'client/elements/footers/client-footer.html' %}
+<script src="{{ url_for('static', filename='css/client-assets/bootstrap/js/bootstrap.min.js') }}"></script>
+<script src="{{ url_for('static', filename='css/client-assets/js/aos.min.js') }}"></script>
+<script src="{{ url_for('static', filename='css/client-assets/js/bs-init.js') }}"></script>
+<script src="{{ url_for('static', filename='css/client-assets/js/startup-modern.js') }}"></script>
+<script src="{{ url_for('static', filename='js/client-script.js') }}"></script>
+</body>
+
+</html>

@@ -50,12 +50,12 @@ class ReclamationService:
     def find_reclamation_by_id_etat(self, id_etat):
         return self.find_reclamation_by_something(f" IDEtat = {id_etat}")
 
-    def add_reclamation(self, id_hardware, id_utilisateur, id_intervention, date_reclamation, description, id_etat):
+    def add_reclamation(self, id_hardware, id_utilisateur, id_intervention, description):
         return self.database_tools.execute_request(
-            f"""INSERT INTO reclamation_hardware (IDHardware, IDUtilisateur, IDIntervention, DateReclamation,
+            f"""INSERT INTO reclamation_hardware (IDHardware, IDUtilisateur, IDIntervention, 
              Description, IDEtat) 
-            VALUES ({id_hardware}, {id_utilisateur}, {id_intervention}, '{date_reclamation}', '{description}',
-             {id_etat})""")
+            VALUES ({id_hardware}, {id_utilisateur}, {id_intervention}, "{description}",
+             NULL)""")
 
     def update_reclamation(self, id_reclamation, id_hardware, id_utilisateur, id_intervention, date_reclamation,
                            description, id_etat):

@@ -1,5 +1,7 @@
-from flask import Blueprint, request, jsonify, url_for, redirect, render_template
+from flask import Blueprint, jsonify, url_for, redirect, render_template, session
 
+from service.hardware_service import HardwareService
+from service.intervention_service import InterventionService
 from service.utilisateur_service import UtilisateurService
 from tools.user_tools import UserTools
 
@@ -8,6 +10,8 @@ class ClientViews:
     def __init__(self):
         self.user_tools = UserTools()
         self.client_service = UtilisateurService()
+        self.intervention_service = InterventionService()
+        self.hardware_service = HardwareService()
         self.client_bp = Blueprint('client', __name__, template_folder='templates')
         self.client_routes()
 
@@ -16,4 +20,32 @@ class ClientViews:
         def location_client():
             if self.user_tools.check_user_in_session('user'):
                 return render_template('client/location.html')
+            return redirect(url_for('auth.login'))
+
+        @self.client_bp.route('/reclamation/<string:numero_inventaire_hardware>', methods=['GET'])
+        def reclamation_client(numero_inventaire_hardware):
+            if self.user_tools.check_user_in_session('user'):
+                new = False
+                if numero_inventaire_hardware is not None and numero_inventaire_hardware != "":
+                    if numero_inventaire_hardware == 'new':
+                        new = True
+                    status, hardware = self.hardware_service.find_hardware_by_numero_inventaire(
+                        numero_inventaire_hardware)
+                    if status == 'success' and hardware is not None and hardware != []:
+                        print(hardware)
+                        session['hardware_reclamation'] = hardware[0]
+                        return render_template('client/reclamation.html', hardware=hardware[0], new=True)
+                return render_template('client/reclamation.html', hardware=None, new=new)
+            return redirect(url_for('auth.login'))
+
+        @self.client_bp.route('/historique-materielle', methods=['GET'])
+        def historique_materielle_client():
+            if self.user_tools.check_user_in_session('user'):
+                user = session['user']
+                print(user)
+                status, interventions = self.intervention_service.find_intervention_by_user(user['id_utilisateur'])
+                if status != 'success':
+                    return render_template('client/404.html')
+                print(interventions)
+                return render_template('client/historique-materielle.html', liste_interventions=interventions)
             return redirect(url_for('auth.login'))
