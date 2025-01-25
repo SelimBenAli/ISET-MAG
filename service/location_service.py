@@ -1,5 +1,5 @@
 from service.admin_service import AdminService
-from service.hardware_service import HardwareService
+from service.modele_service import ModeleService
 from service.utilisateur_service import UtilisateurService
 from tools.database_tools import DatabaseConnection
 from entities.location import Location
@@ -15,17 +15,21 @@ class LocationService:
         try:
             self.connection, self.cursor = self.database_tools.find_connection()
             self.cursor.execute(
-                f"""SELECT `IDLocation`, `DateDebutEstime`, `DateFinEstimee`, `IDUtilisateur`, `IDHardware`, `Quantite`,
-                 `Confirmation`, `IDAdmin`, `DateConfirmation` FROM `louer_hardware` WHERE {add}""")
+                f"""SELECT `IDLocation`, `DateDebutEstime`, `DateFinEstimee`, `IDUtilisateur`, `IDModel`, `Quantite`,
+                 `Confirmation`, `IDAdmin`, `DateConfirmation` FROM `louer_hardware` WHERE {add} 
+                 ORDER BY IDLocation DESC""")
             data = self.cursor.fetchall()
             liste_location = []
             for element in data:
-                utilisateur = UtilisateurService().find_utilisateur_by_id(element[3])
-                hardware = HardwareService().find_hardware_by_id(element[4])
-                admin = AdminService().find_admin_by_id(element[7])
-                location = Location(element[0], element[1], element[2], utilisateur, hardware, element[5], element[6],
-                                    admin, element[8])
-                liste_location.append(location)
+                status, utilisateur = UtilisateurService().find_utilisateur_by_id(element[3])
+                status, modele = ModeleService().find_modele_by_id(element[4])
+                status, admin = AdminService().find_admin_by_id(element[7])
+                if status != 'success':
+                    admin = None
+                location = Location(element[0], element[1], element[2], utilisateur, modele[0], admin, element[5],
+                                    element[6],
+                                    element[8])
+                liste_location.append(location.dict_form())
             self.cursor.close()
             self.connection.close()
             return 'success', liste_location
@@ -50,20 +54,25 @@ class LocationService:
     def find_location_by_admin(self, id_admin):
         return self.find_location_by_something(f' IDAdmin = {id_admin}')
 
-    def add_location(self, date_debut_estime, date_fin_estimee, id_utilisateur, id_hardware, quantite, confirmation,
-                     id_admin, date_confirmation):
+    def add_location(self, date_debut_estime, date_fin_estimee, id_utilisateur, id_modele, quantite):
         return self.database_tools.execute_request(
-            f"""INSERT INTO louer_hardware (DateDebutEstime, DateFinEstimee, IDUtilisateur, IDHardware, Quantite, 
-            Confirmation, IDAdmin, DateConfirmation) VALUES ('{date_debut_estime}', '{date_fin_estimee}', 
-            {id_utilisateur}, {id_hardware}, {quantite}, {confirmation}, {id_admin}, '{date_confirmation}')""")
+            f"""INSERT INTO louer_hardware (`IDLocation`, `DateDebutEstime`, `DateFinEstimee`, `IDUtilisateur`,
+             `IDModel`, `Quantite`, `Confirmation`, `IDAdmin`, `DateConfirmation`) VALUES
+              (NULL, '{date_debut_estime}', '{date_fin_estimee}', 
+            {id_utilisateur}, {id_modele}, {quantite}, -1, NULL, NULL)""")
 
-    def update_location(self, id_location, date_debut_estime, date_fin_estimee, id_utilisateur, id_hardware, quantite,
+    def update_location(self, id_location, date_debut_estime, date_fin_estimee, id_utilisateur, id_modele, quantite,
                         confirmation, id_admin, date_confirmation):
         return self.database_tools.execute_request(
             f"""UPDATE louer_hardware SET DateDebutEstime = '{date_debut_estime}', 
             DateFinEstimee = '{date_fin_estimee}', IDUtilisateur = {id_utilisateur}, 
-            IDHardware = {id_hardware}, Quantite = {quantite}, Confirmation = {confirmation}, 
+            IDModel = {id_modele}, Quantite = {quantite}, Confirmation = {confirmation}, 
             IDAdmin = {id_admin}, DateConfirmation = '{date_confirmation}' WHERE IDLocation = {id_location}""")
+
+    def confirm_location(self, id_location, id_utilisateur, id_admin):
+        return self.database_tools.execute_request(
+            f"""UPDATE louer_hardware SET Confirmation = 1, IDUtilisateur = '{id_utilisateur}', IDAdmin = '{id_admin}'
+             WHERE IDLocation = {id_location}""")
 
     def delete_location(self, id_location):
         return self.database_tools.execute_request(f"""DELETE FROM louer_hardware WHERE IDLocation = {id_location}""")

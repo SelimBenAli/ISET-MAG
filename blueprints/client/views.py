@@ -1,7 +1,8 @@
-from flask import Blueprint, jsonify, url_for, redirect, render_template, session
+from flask import Blueprint, url_for, redirect, render_template, session
 
 from service.hardware_service import HardwareService
 from service.intervention_service import InterventionService
+from service.location_service import LocationService
 from service.reclamation_service import ReclamationService
 from service.utilisateur_service import UtilisateurService
 from tools.user_tools import UserTools
@@ -14,6 +15,7 @@ class ClientViews:
         self.intervention_service = InterventionService()
         self.hardware_service = HardwareService()
         self.reclamation_service = ReclamationService()
+        self.location_service = LocationService()
         self.client_bp = Blueprint('client', __name__, template_folder='templates')
         self.client_routes()
 
@@ -68,4 +70,15 @@ class ClientViews:
                     return render_template('client/404.html')
                 print(reclamations)
                 return render_template('client/historique-reclamation.html', liste_reclamations=reclamations)
+            return redirect(url_for('auth.login'))
+
+        @self.client_bp.route('/historique-location', methods=['GET'])
+        def historique_location_client():
+            if self.user_tools.check_user_in_session('user'):
+                user = session['user']
+                status, locations = self.location_service.find_location_by_utilisateur(user['id_utilisateur'])
+                if status != 'success':
+                    return render_template('client/404.html')
+                print(locations)
+                return render_template('client/historique-location.html', liste_locations=locations)
             return redirect(url_for('auth.login'))
