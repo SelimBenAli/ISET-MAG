@@ -23,13 +23,13 @@ class ClientViews:
         @self.client_bp.route('/contact', methods=['GET'])
         def contact_client():
             if self.user_tools.check_user_in_session('user'):
-                return render_template('client/contacts.html')
+                return render_template('client/contacts.html', page_name='openPageContactClient')
             return redirect(url_for('auth.login'))
 
         @self.client_bp.route('/location', methods=['GET'])
         def location_client():
             if self.user_tools.check_user_in_session('user'):
-                return render_template('client/location.html')
+                return render_template('client/location.html', page_name='openPageLocationClient')
             return redirect(url_for('auth.login'))
 
         @self.client_bp.route('/reclamation/<string:numero_inventaire_hardware>', methods=['GET'])
@@ -44,8 +44,10 @@ class ClientViews:
                     if status == 'success' and hardware is not None and hardware != []:
                         print(hardware)
                         session['hardware_reclamation'] = hardware[0]
-                        return render_template('client/reclamation.html', hardware=hardware[0], new=True)
-                return render_template('client/reclamation.html', hardware=None, new=new)
+                        return render_template('client/reclamation.html', hardware=hardware[0], new=True,
+                                               page_name='openPageReclamationClient')
+                return render_template('client/reclamation.html', hardware=None, new=new,
+                                       page_name='openPageReclamationClient')
             return redirect(url_for('auth.login'))
 
         @self.client_bp.route('/historique-materielle', methods=['GET'])
@@ -57,7 +59,8 @@ class ClientViews:
                 if status != 'success':
                     return render_template('client/404.html')
                 print(interventions)
-                return render_template('client/historique-materielle.html', liste_interventions=interventions)
+                return render_template('client/historique-materielle.html', liste_interventions=interventions,
+                                       page_name='openPageHistoriqueMaterielleClient')
             return redirect(url_for('auth.login'))
 
         @self.client_bp.route('/historique-reclamation', methods=['GET'])
@@ -69,7 +72,8 @@ class ClientViews:
                 if status != 'success':
                     return render_template('client/404.html')
                 print(reclamations)
-                return render_template('client/historique-reclamation.html', liste_reclamations=reclamations)
+                return render_template('client/historique-reclamation.html', liste_reclamations=reclamations,
+                                       page_name='openPageHistoriqueReclamationClient')
             return redirect(url_for('auth.login'))
 
         @self.client_bp.route('/historique-location', methods=['GET'])
@@ -80,5 +84,6 @@ class ClientViews:
                 if status != 'success':
                     return render_template('client/404.html')
                 print(locations)
-                return render_template('client/historique-location.html', liste_locations=locations)
+                return render_template('client/historique-location.html', liste_locations=locations,
+                                       page_name='openPageHistoriqueLocationClient')
             return redirect(url_for('auth.login'))

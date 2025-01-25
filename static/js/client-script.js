@@ -143,3 +143,28 @@ function load_marques() {
     })
     load_types()
 }
+
+function envoyer_message() {
+    var sujet = document.getElementById("sujet").value;
+    var message = document.getElementById("message").value;
+    var contact_btn = document.getElementById("contact-btn");
+    contact_btn.disabled = true;
+
+    var xhr = new XMLHttpRequest();
+    xhr.open('POST', '/user/send-message', true);
+    xhr.setRequestHeader('Content-Type', 'application/json');
+    xhr.onreadystatechange = function () {
+        if (xhr.readyState === 4 && xhr.status === 200) {
+            var response = JSON.parse(xhr.responseText);
+            console.log(response)
+            if (response.status === 'success') {
+                contact_btn.disabled = false;
+                openPageHistoriqueReclamationClient()
+            } else {
+                contact_btn.disabled = false;
+                alert('Erreur lors de l\'envoi du message');
+            }
+        }
+    };
+    xhr.send(JSON.stringify({sujet: sujet, message: message}));
+}

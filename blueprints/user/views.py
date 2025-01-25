@@ -3,6 +3,7 @@ from flask import Blueprint, jsonify, request, session
 from service.hardware_service import HardwareService
 from service.location_service import LocationService
 from service.marque_service import MarqueService
+from service.message_service import MessageService
 from service.modele_service import ModeleService
 from service.reclamation_service import ReclamationService
 from service.utilisateur_service import UtilisateurService
@@ -18,6 +19,7 @@ class UserViews:
         self.modele_service = ModeleService()
         self.marque_service = MarqueService()
         self.location_service = LocationService()
+        self.message_service = MessageService()
         self.user_bp = Blueprint('user', __name__, template_folder='templates')
         self.user_routes()
 
@@ -60,6 +62,19 @@ class UserViews:
                 status = self.location_service.add_location(date_debut, date_fin, session['user']['id_utilisateur'],
                                                             id_modele, quantite)
 
+                if status == 'success':
+                    return jsonify({'status': 'success'})
+                return jsonify({'status': 'failed'})
+            return jsonify({'status': 'failed'})
+
+        @self.user_bp.route('/send-message', methods=['POST'])
+        def send_message():
+            if self.user_tools.check_user_in_session('user'):
+                data = request.get_json()
+                message = data.get('message')
+                sujet = data.get('sujet')
+                user = session['user']
+                status = self.message_service.add_message(user['id_utilisateur'], sujet, message)
                 if status == 'success':
                     return jsonify({'status': 'success'})
                 return jsonify({'status': 'failed'})
