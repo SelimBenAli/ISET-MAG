@@ -88,6 +88,10 @@ function openPageIntervention() {
     window.location.href = "/dashboard/intervention";
 }
 
+function openPageLocation() {
+    window.location.href = "/dashboard/location";
+}
+
 function get_data_ready_load_table(table_id, table_header, table_footer, table_data, table_division_table){
     id_table = table_id;
     header = table_header;

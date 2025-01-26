@@ -27,28 +27,54 @@
                     <div class="card-body">
                         <div class="row">
 
-                            <div class="col-md-6">
+                            <div class="col-md-12"
+                                 style="display: flex; align-items: center; justify-content: space-between">
                                 <div class=" dataTables_filter" id="dataTable_filter"><label
-                                        class="form-label"><input type="search" id="nom"
-                                                                  class="form-control form-control-sm"
-                                                                  aria-controls="dataTable"
-                                                                  placeholder="Search" oninput=""></label></div>
+                                        class="form-label">Etat : <select type="date" id="etat-location"
+                                                                                class="form-control form-control-sm"
+                                                                                aria-controls="dataTable"
+                                                                                onchange="changer_etat()">
+                                        <option value="get-all">Tous</option>
+                                        <option value="0">En Attente</option>
+                                        <option value="1">Confirmé</option>
+                                        <option value="-1">Refusé</option>
+                                </select></label>
+                                </div>
+                                <div class=" dataTables_filter" id="dataTable_filter"><label
+                                        class="form-label"> Utilisateur : <input type="search" id="utilisateur-location"
+                                                                                 class="form-control form-control-sm"
+                                                                                 aria-controls="dataTable"
+                                                                                 placeholder="Chercher par utilisateur..."
+                                                                                 oninput="search_location_by_user()"></label>
+                                </div>
+                                <div class=" dataTables_filter" id="dataTable_filter"><label
+                                        class="form-label">Date Début : <input type="date" id="date-debut-location"
+                                                                               class="form-control form-control-sm"
+                                                                               aria-controls="dataTable"
+                                                                               placeholder="Search"
+                                                                               oninput="search_location_by_date_debut()"></label>
+                                </div>
+                                <div class=" dataTables_filter" id="dataTable_filter"><label
+                                        class="form-label">Date Fin : <input type="date" id="date-fin-location"
+                                                                             class="form-control form-control-sm"
+                                                                             aria-controls="dataTable"
+                                                                             placeholder="Search"
+                                                                             oninput="search_location_by_date_fin()"></label>
+                                </div>
                             </div>
-                            <div class="col-md-6" style="text-align: right">
 
-                            </div>
                         </div>
                         <div class="table-responsive table mt-2" id="dataTable" role="grid"
                              aria-describedby="dataTable_info">
                             <table class="table my-0" id="table-location">
 
 
-
                             </table>
                         </div>
                         <div class="row">
                             <div class="col-md-6 align-self-center">
-                                <p id="dataTable_info_location" class="dataTables_info" role="status" aria-live="polite">Showing
+                                <p id="dataTable_info_location" class="dataTables_info" role="status"
+                                   aria-live="polite">Showing
                                     1 to 10 of 27</p>
                             </div>
                             <div class="col-md-6">
@@ -67,7 +93,7 @@
 </div>
 <script src="{{ url_for('static', filename='css/assets/bootstrap/js/bootstrap.min.js') }}"></script>
 <script src="{{ url_for('static', filename='css/assets/js/theme.js') }}"></script>
-<script src="{{ url_for('static', filename='js/fournisseur-js.js') }}"></script>
+<script src="{{ url_for('static', filename='js/location-js.js') }}"></script>
 <script src="{{ url_for('static', filename='js/script.js') }}"></script>
 </body>
 

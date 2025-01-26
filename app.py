@@ -8,6 +8,7 @@ from blueprints.dashboard import dashboard_bp
 from blueprints.fournisseur import fournisseur_bp
 from blueprints.hardware import hardware_bp
 from blueprints.intervention import intervention_bp
+from blueprints.location import location_bp
 from blueprints.magasin import magasin_bp
 from blueprints.marque import marque_bp
 from blueprints.modele import modele_bp
@@ -27,6 +28,7 @@ app.register_blueprint(modele_bp, url_prefix='/modele')
 app.register_blueprint(magasin_bp, url_prefix='/magasin')
 app.register_blueprint(hardware_bp, url_prefix='/hardware')
 app.register_blueprint(intervention_bp, url_prefix='/intervention')
+app.register_blueprint(location_bp, url_prefix='/location')
 app.register_blueprint(auth_bp, url_prefix='/auth')
 app.register_blueprint(client_bp, url_prefix='/client')
 app.register_blueprint(user_bp, url_prefix='/user')

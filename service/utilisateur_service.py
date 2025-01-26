@@ -17,7 +17,7 @@ class UtilisateurService:
             data = self.cursor.fetchall()
             liste_utilisateur = []
             for element in data:
-                role = RoleService().find_role_by_id(element[6])
+                status, role = RoleService().find_role_by_id(element[6])
                 utilisateur = Utilisateur(element[0], element[1], element[2], element[3], element[4],
                                           element[5], element[7], role)
                 liste_utilisateur.append(utilisateur.dict_form())
