@@ -10,7 +10,9 @@ from service.magasin_service import MagasinService
 from service.marque_service import MarqueService
 from service.message_service import MessageService
 from service.modele_service import ModeleService
+from service.role_service import RoleService
 from service.salle_service import SalleService
+from service.utilisateur_service import UtilisateurService
 from tools.user_tools import UserTools
 
 
@@ -28,6 +30,8 @@ class DashboardViews:
         self.intervention_service = InterventionService()
         self.location_service = LocationService()
         self.message_service = MessageService()
+        self.utilisateur_service = UtilisateurService()
+        self.role_service = RoleService()
         self.dashboard_bp = Blueprint('dashboard', __name__, template_folder='templates')
         self.dashboard_fournisseur_routes()
         self.dashboard_salle_bloc_routes()
@@ -38,6 +42,7 @@ class DashboardViews:
         self.dashboard_intervention_routes()
         self.dashboard_location_routes()
         self.dashboard_message_routes()
+        self.dashboard_utilisateur_routes()
 
     def dashboard_salle_bloc_routes(self):
         @self.dashboard_bp.route('/salle-bloc', methods=['GET'])
@@ -242,4 +247,27 @@ class DashboardViews:
             else:
                 return redirect(url_for('admin.login'))
 
+    def dashboard_utilisateur_routes(self):
+        @self.dashboard_bp.route('/utilisateur', methods=['GET'])
+        def utilisateur_template():
+            if self.user_tools.check_user_in_session('admin'):
+                return render_template('utilisateur.html')
+            else:
+                return redirect(url_for('admin.login'))
 
+        @self.dashboard_bp.route('/add-utilisateur', methods=['GET'])
+        def ajout_utilisateur_template():
+            if self.user_tools.check_user_in_session('admin'):
+                status, role = self.role_service.find_all_role()
+                return render_template('ajout-utilisateur.html', liste_role=role)
+            else:
+                return redirect(url_for('admin.login'))
+
+        @self.dashboard_bp.route('/update-utilisateur/<int:idu>', methods=['GET'])
+        def modifier_utilisateur_template(idu):
+            if self.user_tools.check_user_in_session('admin'):
+                status, utilisateur = self.utilisateur_service.find_utilisateur_by_id(idu)
+                status, role = self.role_service.find_all_role()
+                return render_template('modifier-utilisateur.html', utilisateur=utilisateur[0], liste_role=role)
+            else:
+                return redirect(url_for('admin.login'))

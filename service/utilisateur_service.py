@@ -13,13 +13,14 @@ class UtilisateurService:
         try:
             self.connection, self.cursor = self.database_tools.find_connection()
             self.cursor.execute(
-                f"""SELECT IDUtilisateur, Nom, Prenom, Mail, Tel, MDP, Role, Code FROM utilisateur WHERE {add}""")
+                f"""SELECT IDUtilisateur, Nom, Prenom, Mail, Tel, MDP, Role, Code, Compte
+                 FROM utilisateur WHERE {add}""")
             data = self.cursor.fetchall()
             liste_utilisateur = []
             for element in data:
                 status, role = RoleService().find_role_by_id(element[6])
                 utilisateur = Utilisateur(element[0], element[1], element[2], element[3], element[4],
-                                          element[5], element[7], role)
+                                          element[5], element[7], role[0], element[8])
                 liste_utilisateur.append(utilisateur.dict_form())
             self.cursor.close()
             self.connection.close()
@@ -62,7 +63,23 @@ class UtilisateurService:
         return self.database_tools.execute_request(
             f"""DELETE FROM utilisateur WHERE IDUtilisateur = {id_utilisateur}""")
 
-    def update_utilisateur(self, id_utilisateur, nom, prenom, mail, tel, mdp, role, code):
+    def update_utilisateur(self, id_utilisateur, nom, prenom, mail, tel, role, code):
         return self.database_tools.execute_request(
             f"""UPDATE utilisateur SET Nom = '{nom}', Prenom = '{prenom}', Mail = '{mail}',Tel = '{tel}', 
-                MDP = '{mdp}', Role = '{role}', Code = '{code}' WHERE IDUtilisateur = {id_utilisateur}""")
+                Role = '{role}', Code = '{code}' WHERE IDUtilisateur = {id_utilisateur}""")
+
+    def desactiver_compte(self, id_utilisateur):
+        return self.database_tools.execute_request(
+            f"""UPDATE utilisateur SET Compte = 2 WHERE IDUtilisateur = {id_utilisateur}""")
+
+    def activer_compte(self, id_utilisateur):
+        return self.database_tools.execute_request(
+            f"""UPDATE utilisateur SET Compte = 1 WHERE IDUtilisateur = {id_utilisateur}""")
+
+    def activer_tous_compte(self):
+        return self.database_tools.execute_request(
+            f"""UPDATE utilisateur SET Compte = 1 WHERE Compte = 2""")
+
+    def desactiver_tous_compte(self):
+        return self.database_tools.execute_request(
+            f"""UPDATE utilisateur SET Compte = 2 WHERE Compte = 1""")

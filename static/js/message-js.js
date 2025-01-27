@@ -23,15 +23,17 @@ function load_page_message() {
 
 }
 
-/*function search_message() {
-    search = document.getElementById("nom_marque").value
-    if (search === "") {
-        liste_marque = liste_marque_tous
-    } else {
-        liste_marque = liste_marque_tous.filter(marque => marque.nom_marque.toLowerCase().includes(search.toLowerCase()))
-    }
-    load_table_marque_parameters()
-}*/
+function search_message_by_user() {
+    var search = document.getElementById("utilisateur-message").value
+    liste_message = liste_message_tous.filter(message => message.utilisateur_message.nom_utilisateur.toLowerCase().includes(search.toLowerCase()) || message.utilisateur_message.prenom_utilisateur.toLowerCase().includes(search.toLowerCase()))
+    load_table_message_parameters()
+}
+
+function search_message_by_subject() {
+    var search = document.getElementById("sujet-message").value
+    liste_message = liste_message_tous.filter(message => message.sujet_message.toLowerCase().includes(search.toLowerCase()))
+    load_table_message_parameters()
+}
 
 function load_table_message_parameters() {
     header = "<thead><tr><th>Code</th><th>Utilisateur</th><th>Sujet</th><th>Voir</th><th>Supprimer</th></tr></thead>"

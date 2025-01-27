@@ -28,8 +28,12 @@ class AuthViews:
             status, user = self.utilisateur_service.find_utilisateur_by_mail(email)
             print("user", user)
             if status == 'success':
-                if user[0]['mdp_utilisateur'] != self.cryption_tools.crypt_sha256(password):
+                if user[0]['compte_utilisateur'] == 'Active' and user[0]['mdp_utilisateur'] != self.cryption_tools.crypt_sha256(password):
                     return {'status': 'failed', 'message': 'Utilisateur Non Trouvé'}
+                if user[0]['compte_utilisateur'] == 'Banni':
+                    return {'status': 'failed', 'message': 'Utilisateur Désactivé'}
+                if user[0]['compte_utilisateur'] == 'Pas Encore Confirmé':
+                    return {'status': 'failed', 'message': 'Utilisateur Non Confirmé'}
                 user[0].pop('mdp_utilisateur')
                 session['user'] = user[0]
                 return {'status': 'success', 'user': user[0]}

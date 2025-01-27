@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html data-bs-theme="light" lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+    <title>Dashboard - Utilisateur - Modifier</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/assets/bootstrap/css/bootstrap.min.css') }}">
+    <link rel="stylesheet"
+          href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i&amp;display=swap">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/assets/fonts/fontawesome-all.min.css') }}">
+</head>
+
+<body class="bg-gradient-primary">
+<div class="container">
+
+    <div class="row justify-content-center">
+        <div class="col-md-9 col-lg-12 col-xl-10">
+            <div class="card shadow-lg o-hidden border-0 my-5">
+                <div class="card-body p-0">
+                    <div class="row" style="justify-content: center">
+
+                        <div class="col-lg-6">
+                            <div class="p-5">
+                                <div class="text-center">
+                                    <h4 class="text-dark mb-4">Modifier Utilisateur</h4>
+                                </div>
+                                <div>
+                                    <div class="mb-3"><label class="form-label">Nom : </label><input value="{{ utilisateur.nom_utilisateur }}"
+                                            class="form-control form-control-user" type="text"
+                                            id="nom-utilisateur" aria-describedby="emailHelp"
+                                            placeholder="Nom..."></div>
+                                    <div class="mb-3"><label class="form-label">Prenom : </label><input value="{{ utilisateur.prenom_utilisateur }}"
+                                            class="form-control form-control-user" type="text"
+                                            id="prenom-utilisateur" aria-describedby="emailHelp"
+                                            placeholder="Prenom..."></div>
+                                    <div class="mb-3"><label class="form-label">Email : </label><input value="{{ utilisateur.mail_utilisateur }}"
+                                            class="form-control form-control-user" type="text"
+                                            id="email-utilisateur" aria-describedby="emailHelp"
+                                            placeholder="Email..."></div>
+                                    <div class="mb-3"><label class="form-label">Téléphone : </label><input value="{{ utilisateur.telephone_utilisateur }}"
+                                            class="form-control form-control-user" type="text"
+                                            id="telephone-utilisateur" aria-describedby="emailHelp"
+                                            placeholder="Téléphone..."></div>
+                                    <div class="mb-3"><label class="form-label">Role : </label>
+                                        <select class="form-select form-select-user" id="role-utilisateur">
+                                            {% for role in liste_role %}
+                                                <option value="{{ role['id_role'] }}" {% if role['id_role'] == utilisateur.role_utilisateur.id_role %} selected {% endif %}>{{ role['nom_role'] }}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                    <div class="mb-3"><label class="form-label">Code : </label><input value="{{ utilisateur.code_utilisateur }}"
+                                            class="form-control form-control-user" type="text"
+                                            id="code-utilisateur" aria-describedby="emailHelp"
+                                            placeholder="Code..."></div>
+
+                                    <div class="mb-3">
+                                        <button class="btn btn-primary d-block btn-user w-100" type="button"
+                                                onclick="modifier_utilisateur({{ utilisateur.id_utilisateur }})">Modifier
+                                        </button>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="{{ url_for('static', filename='css/assets/bootstrap/js/bootstrap.min.js') }}"></script>
+<script src="{{ url_for('static', filename='css/assets/js/theme.js') }}"></script>
+<script src="{{ url_for('static', filename='js/utilisateur-js.js') }}"></script>
+<script src="{{ url_for('static', filename='js/script.js') }}"></script>
+</body>
+
+</html>

@@ -80,3 +80,86 @@ class UserViews:
                 return jsonify({'status': 'failed'})
             return jsonify({'status': 'failed'})
 
+        @self.user_bp.route('/get-utilisateurs', methods=['GET'])
+        def get_utilisateurs():
+            if self.user_tools.check_user_in_session('admin'):
+                status, utilisateurs = self.user_service.find_all_utilisateur()
+                return jsonify({'status': 'success', 'utilisateurs': utilisateurs})
+            return jsonify({'status': 'failed'})
+
+        @self.user_bp.route('/add-utilisateur', methods=['POST'])
+        def add_utilisateur():
+            if self.user_tools.check_user_in_session('admin'):
+                data = request.get_json()
+                nom = data.get('nom_utilisateur')
+                prenom = data.get('prenom_utilisateur')
+                mail = data.get('email_utilisateur')
+                tel = data.get('telephone_utilisateur')
+                role = data.get('role_utilisateur')
+                code = data.get('code_utilisateur')
+                status = self.user_service.add_utilisateur(nom, prenom, mail, tel, "", role, code)
+                if status == 'success':
+                    return jsonify({'status': 'success'})
+                return jsonify({'status': 'failed'})
+            return jsonify({'status': 'failed'})
+
+        @self.user_bp.route('/delete-utilisateur/<int:id_utilisateur>', methods=['DELETE'])
+        def delete_utilisateur(id_utilisateur):
+            if self.user_tools.check_user_in_session('admin'):
+                status = self.user_service.delete_utilisateur(id_utilisateur)
+                if status == 'success':
+                    return jsonify({'status': 'success'})
+                return jsonify({'status': 'failed'})
+            return jsonify({'status': 'failed'})
+
+        @self.user_bp.route('/update-utilisateur/<int:id_utilisateur>', methods=['PUT'])
+        def update_utilisateur(id_utilisateur):
+            if self.user_tools.check_user_in_session('admin'):
+                data = request.get_json()
+                nom = data.get('nom_utilisateur')
+                prenom = data.get('prenom_utilisateur')
+                mail = data.get('email_utilisateur')
+                tel = data.get('telephone_utilisateur')
+                role = data.get('role_utilisateur')
+                code = data.get('code_utilisateur')
+                status = self.user_service.update_utilisateur(id_utilisateur, nom, prenom, mail, tel, role, code)
+                if status == 'success':
+                    return jsonify({'status': 'success'})
+                return jsonify({'status': 'failed'})
+            return jsonify({'status': 'failed'})
+
+        @self.user_bp.route('/desactiver-compte/<int:id_utilisateur>', methods=['PUT'])
+        def desactiver_compte(id_utilisateur):
+            if self.user_tools.check_user_in_session('admin'):
+                status = self.user_service.desactiver_compte(id_utilisateur)
+                if status == 'success':
+                    return jsonify({'status': 'success'})
+                return jsonify({'status': 'failed'})
+            return jsonify({'status': 'failed'})
+
+        @self.user_bp.route('/activer-compte/<int:id_utilisateur>', methods=['PUT'])
+        def activer_compte(id_utilisateur):
+            if self.user_tools.check_user_in_session('admin'):
+                status = self.user_service.activer_compte(id_utilisateur)
+                if status == 'success':
+                    return jsonify({'status': 'success'})
+                return jsonify({'status': 'failed'})
+            return jsonify({'status': 'failed'})
+
+        @self.user_bp.route('/activer-tous-compte', methods=['PUT'])
+        def activer_tous_compte():
+            if self.user_tools.check_user_in_session('admin'):
+                status = self.user_service.activer_tous_compte()
+                if status == 'success':
+                    return jsonify({'status': 'success'})
+                return jsonify({'status': 'failed'})
+            return jsonify({'status': 'failed'})
+
+        @self.user_bp.route('/desactiver-tous-compte', methods=['PUT'])
+        def desactiver_tous_compte():
+            if self.user_tools.check_user_in_session('admin'):
+                status = self.user_service.desactiver_tous_compte()
+                if status == 'success':
+                    return jsonify({'status': 'success'})
+                return jsonify({'status': 'failed'})
+            return jsonify({'status': 'failed'})

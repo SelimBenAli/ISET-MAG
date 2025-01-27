@@ -1,0 +1,5 @@
+Compte Utilisateur
+    -1: Pas Encore Envoyé
+     0: Pas Encore Confirmé
+     1: Active
+     2: Banni

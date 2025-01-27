@@ -4,70 +4,70 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
-    <title>Dashboard - Message</title>
+    <title>Dashboard - Utilisateur</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/assets/bootstrap/css/bootstrap.min.css') }}">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
     <link rel="stylesheet"
           href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i&amp;display=swap">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/assets/fonts/fontawesome-all.min.css') }}">
 </head>
 
-<body id="page-top" onload="load_page_message()">
-<div id="hidden-big-div" class="hidden-big" style="display: none">
-    <div id="hidden-message" class="hidden-small-first bg-white" style="width: 80%">
-                        <div class="close-div" onclick="fermer_message()" >x</div>
-                        <div class="card-body">
-                            <div><p class="text" id="message-data" >aaaaaa</p></div>
-                            <div><label
-                                    class="form-label" id="message-sujet" >Sujet : </label></div>
-                            <div><label
-                                    class="form-label">Contenu : </label><textarea id="message-contenu" class="form-control form-control-sm"></textarea></div>
-                        </div>
-    </div>
-</div>
+<body id="page-top" onload="load_page_utilisateur()">
 <div id="wrapper">
     {% include "elements/side-bars/side-bar-admin.html" %}
     <div class="d-flex flex-column" id="content-wrapper">
         <div id="content">
             {% include "elements/headers/header-admin.html" %}
             <div class="container-fluid">
-                <h3 class="text-dark mb-4">Message</h3>
+                <h3 class="text-dark mb-4">Utilisateur</h3>
                 <div class="card shadow">
-                    <div class="card-header py-3">
+                    <div class="card-header py-3" style="display: flex;justify-content: space-between;">
                         <p class="text-primary m-0 fw-bold" style="border-color: rgb(78,223,92);color: rgb(78,223,92);">
-                            Liste des messages</p>
+                            Liste des utilisateurs</p>
+                        <div>
+                            <button class="btn btn-outline-dark" type="button" data-bs-toggle="modal"
+                                    data-bs-target="#modal-utilisateur" onclick="desactiver_tous()">Désactiver tous les
+                                utilisateurs
+                            </button>
+                            <button class="btn btn-outline-info" type="button" data-bs-toggle="modal"
+                                    data-bs-target="#modal-utilisateur" onclick="activer_tous()">Activer tous les
+                                utilisateurs
+                            </button>
+                        </div>
                     </div>
                     <div class="card-body">
                         <div class="row">
 
                             <div class="col-md-6">
-                                <div class=" dataTables_filter" id="dataTable_filter_message"><label
-                                        class="form-label"><input type="search" id="utilisateur_message"
+                                <div class=" dataTables_filter" id="dataTable_filter_utilisateur"><label
+                                        class="form-label"><input type="search" id="nom-utilisateur"
                                                                   class="form-control form-control-sm"
                                                                   aria-controls="dataTable"
-                                                                  placeholder="Chercher par utilisateur..." oninput="search_message_by_user()"></label></div><div class=" dataTables_filter" id="dataTable_filter_message"><label
-                                        class="form-label"><input type="search" id="sujet_message"
-                                                                  class="form-control form-control-sm"
-                                                                  aria-controls="dataTable"
-                                                                  placeholder="Chercher par sujet..." oninput="search_message_by_subject()"></label></div>
+                                                                  placeholder="Chercher par nom et prenom..."
+                                                                  oninput="search_utilisateur()"></label></div>
+                            </div>
+                            <div class="col-md-6" style="text-align: right">
+                                <button class="btn btn-primary" type="button" data-bs-toggle="modal"
+                                        data-bs-target="#modal-utilisateur" onclick="openPageUtilisateurAdd()">Ajouter
+                                    un utilisateur
+                                </button>
                             </div>
                         </div>
                         <div class="table-responsive table mt-2" id="dataTable" role="grid"
                              aria-describedby="dataTable_info">
-                            <table class="table my-0" id="table-message">
-
+                            <table class="table my-0" id="table-utilisateur">
 
 
                             </table>
                         </div>
                         <div class="row">
                             <div class="col-md-6 align-self-center">
-                                <p id="dataTable_info_message" class="dataTables_info" role="status" aria-live="polite">Showing
+                                <p id="dataTable_info_utilisateur" class="dataTables_info" role="status"
+                                   aria-live="polite">Showing
                                     1 to 10 of 27</p>
                             </div>
                             <div class="col-md-6">
                                 <nav class="d-lg-flex justify-content-lg-end dataTables_paginate paging_simple_numbers">
-                                    <ul class="pagination" id="pagination-message">
+                                    <ul class="pagination" id="pagination-utilisateur">
                                     </ul>
                                 </nav>
                             </div>
@@ -81,7 +81,7 @@
 </div>
 <script src="{{ url_for('static', filename='css/assets/bootstrap/js/bootstrap.min.js') }}"></script>
 <script src="{{ url_for('static', filename='css/assets/js/theme.js') }}"></script>
-<script src="{{ url_for('static', filename='js/message-js.js') }}"></script>
+<script src="{{ url_for('static', filename='js/utilisateur-js.js') }}"></script>
 <script src="{{ url_for('static', filename='js/script.js') }}"></script>
 </body>
 

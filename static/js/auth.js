@@ -48,7 +48,8 @@ function client_login_request() {
                 openPageHistoriqueMaterielleClient();
             } else {
                 login_btn.disabled = false;
-                alert('Email ou mot de passe incorrect');
+                alert("Erreur d'authentification");
+                alert(response.message);
             }
         }
     };

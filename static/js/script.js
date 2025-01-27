@@ -96,6 +96,18 @@ function openPageMessage() {
     window.location.href = "/dashboard/message";
 }
 
+function openPageUtilisateur() {
+    window.location.href = "/dashboard/utilisateur";
+}
+
+function openPageUtilisateurAdd() {
+    window.location.href = "/dashboard/add-utilisateur";
+}
+
+function openPageUtilisateurUpdate(id_utilisateur) {
+    window.location.href = "/dashboard/update-utilisateur/" + id_utilisateur;
+}
+
 function get_data_ready_load_table(table_id, table_header, table_footer, table_data, table_division_table){
     id_table = table_id;
     header = table_header;
