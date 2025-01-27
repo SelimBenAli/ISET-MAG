@@ -8,6 +8,7 @@ from service.intervention_service import InterventionService
 from service.location_service import LocationService
 from service.magasin_service import MagasinService
 from service.marque_service import MarqueService
+from service.message_service import MessageService
 from service.modele_service import ModeleService
 from service.salle_service import SalleService
 from tools.user_tools import UserTools
@@ -26,6 +27,7 @@ class DashboardViews:
         self.etat_service = EtatService()
         self.intervention_service = InterventionService()
         self.location_service = LocationService()
+        self.message_service = MessageService()
         self.dashboard_bp = Blueprint('dashboard', __name__, template_folder='templates')
         self.dashboard_fournisseur_routes()
         self.dashboard_salle_bloc_routes()
@@ -35,6 +37,7 @@ class DashboardViews:
         self.dashboard_hardware_routes()
         self.dashboard_intervention_routes()
         self.dashboard_location_routes()
+        self.dashboard_message_routes()
 
     def dashboard_salle_bloc_routes(self):
         @self.dashboard_bp.route('/salle-bloc', methods=['GET'])
@@ -230,3 +233,13 @@ class DashboardViews:
                 return render_template('location.html')
             else:
                 return redirect(url_for('admin.login'))
+
+    def dashboard_message_routes(self):
+        @self.dashboard_bp.route('/message', methods=['GET'])
+        def message_template():
+            if self.user_tools.check_user_in_session('admin'):
+                return render_template('message.html')
+            else:
+                return redirect(url_for('admin.login'))
+
+

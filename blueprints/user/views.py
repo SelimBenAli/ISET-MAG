@@ -79,3 +79,4 @@ class UserViews:
                     return jsonify({'status': 'success'})
                 return jsonify({'status': 'failed'})
             return jsonify({'status': 'failed'})
+

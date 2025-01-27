@@ -92,6 +92,10 @@ function openPageLocation() {
     window.location.href = "/dashboard/location";
 }
 
+function openPageMessage() {
+    window.location.href = "/dashboard/message";
+}
+
 function get_data_ready_load_table(table_id, table_header, table_footer, table_data, table_division_table){
     id_table = table_id;
     header = table_header;

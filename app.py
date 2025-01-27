@@ -11,6 +11,7 @@ from blueprints.intervention import intervention_bp
 from blueprints.location import location_bp
 from blueprints.magasin import magasin_bp
 from blueprints.marque import marque_bp
+from blueprints.message import message_bp
 from blueprints.modele import modele_bp
 from blueprints.salle_bloc import salle_bloc_bp
 from blueprints.user import user_bp
@@ -32,6 +33,7 @@ app.register_blueprint(location_bp, url_prefix='/location')
 app.register_blueprint(auth_bp, url_prefix='/auth')
 app.register_blueprint(client_bp, url_prefix='/client')
 app.register_blueprint(user_bp, url_prefix='/user')
+app.register_blueprint(message_bp, url_prefix='/message')
 
 if __name__ == '__main__':
     app.run()

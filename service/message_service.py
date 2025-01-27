@@ -1,5 +1,7 @@
 from entities.message import Message
+from service.utilisateur_service import UtilisateurService
 from tools.database_tools import DatabaseConnection
+from tools.date_tools import DateTools
 
 
 class MessageService:
@@ -7,17 +9,21 @@ class MessageService:
         self.cursor = None
         self.connection = None
         self.database_tools = DatabaseConnection()
+        self.user_service = UtilisateurService()
+        self.date_tools = DateTools()
 
     def find_message_by_something(self, add):
         try:
             self.connection, self.cursor = self.database_tools.find_connection()
             self.cursor.execute(
-                f"""SELECT `IDMessage`, `UtilisateurMessage`, `DateMessage`, `SujetMessage`, `ContenuMessage` 
+                f"""SELECT `IDMessage`, `IDUtilisateur`, `Date`, `Sujet`, `Contenu` 
                 FROM message WHERE {add}""")
             data = self.cursor.fetchall()
             liste_message = []
             for element in data:
-                message = Message(element[0], element[1], element[2], element[3], element[4])
+                status, user = self.user_service.find_utilisateur_by_id(element[1])
+                message = Message(element[0], user[0], self.date_tools.convert_date_time(element[2]), element[3],
+                                  element[4])
                 liste_message.append(message.dict_form())
             self.cursor.close()
             self.connection.close()
@@ -40,3 +46,6 @@ class MessageService:
     def add_message(self, utilisateur, sujet, contenu):
         return self.database_tools.execute_request(f"""INSERT INTO message (IDUtilisateur, 
         Sujet, Contenu) VALUES ({utilisateur}, '{sujet}', '{contenu}')""")
+
+    def delete_message(self, id_message):
+        return self.database_tools.execute_request(f"""DELETE FROM message WHERE IDMessage = {id_message}""")
