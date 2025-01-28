@@ -10,6 +10,7 @@ from service.magasin_service import MagasinService
 from service.marque_service import MarqueService
 from service.message_service import MessageService
 from service.modele_service import ModeleService
+from service.reclamation_service import ReclamationService
 from service.role_service import RoleService
 from service.salle_service import SalleService
 from service.utilisateur_service import UtilisateurService
@@ -32,6 +33,7 @@ class DashboardViews:
         self.message_service = MessageService()
         self.utilisateur_service = UtilisateurService()
         self.role_service = RoleService()
+        self.reclamation_service = ReclamationService()
         self.dashboard_bp = Blueprint('dashboard', __name__, template_folder='templates')
         self.dashboard_fournisseur_routes()
         self.dashboard_salle_bloc_routes()
@@ -43,6 +45,7 @@ class DashboardViews:
         self.dashboard_location_routes()
         self.dashboard_message_routes()
         self.dashboard_utilisateur_routes()
+        self.dashboard_reclamation_routes()
 
     def dashboard_salle_bloc_routes(self):
         @self.dashboard_bp.route('/salle-bloc', methods=['GET'])
@@ -271,3 +274,13 @@ class DashboardViews:
                 return render_template('modifier-utilisateur.html', utilisateur=utilisateur[0], liste_role=role)
             else:
                 return redirect(url_for('admin.login'))
+
+    def dashboard_reclamation_routes(self):
+        @self.dashboard_bp.route('/reclamation', methods=['GET'])
+        def reclamation_template():
+            if self.user_tools.check_user_in_session('admin'):
+                return render_template('reclamation.html')
+            else:
+                return redirect(url_for('admin.login'))
+
+
