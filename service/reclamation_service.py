@@ -4,6 +4,7 @@ from service.hardware_service import HardwareService
 from service.intervention_service import InterventionService
 from service.utilisateur_service import UtilisateurService
 from tools.database_tools import DatabaseConnection
+from tools.date_tools import DateTools
 
 
 class ReclamationService:
@@ -11,6 +12,7 @@ class ReclamationService:
         self.cursor = None
         self.connection = None
         self.database_tools = DatabaseConnection()
+        self.date_tools = DateTools()
 
     def find_reclamation_by_something(self, add):
         try:
@@ -24,9 +26,12 @@ class ReclamationService:
                 status, hardware = HardwareService().find_hardware_by_id(element[1])
                 status, utilisateur = UtilisateurService().find_utilisateur_by_id(element[2])
                 status, intervention = InterventionService().find_intervention_by_id(element[3])
-                etat = EtatService().find_etat_by_id(element[6])
+                if status == 'error':
+                    intervention = None
+                # etat = EtatService().find_etat_by_id(element[6])
                 reclamation = Reclamation(
-                    element[0], hardware[0], utilisateur, intervention, None, element[5], element[4]
+                    element[0], hardware[0], utilisateur[0], intervention, None, element[5],
+                    self.date_tools.convert_date_time(element[4])
                 )
                 liste_reclamation.append(reclamation.dict_form())
             self.cursor.close()

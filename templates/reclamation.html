@@ -6,12 +6,27 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
     <title>Dashboard - Réclamation</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/assets/bootstrap/css/bootstrap.min.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
     <link rel="stylesheet"
           href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i&amp;display=swap">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/assets/fonts/fontawesome-all.min.css') }}">
 </head>
 
 <body id="page-top" onload="load_page_reclamation()">
+<div id="hidden-big-div" class="hidden-big" style="display: none">
+    <div id="hidden-reclamation" class="hidden-small-first bg-white" style="width: 80%">
+        <div class="close-div" onclick="fermer_reclamation()">x</div>
+        <div class="card-body">
+            <div><p class="text" id="reclamation-data">aaaaaa</p></div>
+            <div><label
+                    class="form-label" id="reclamation-sujet">Modèle : </label></div>
+            <div><label
+                    class="form-label">Contenu : </label><textarea id="reclamation-contenu"
+                                                                   class="form-control form-control-sm"></textarea>
+            </div>
+        </div>
+    </div>
+</div>
 <div id="wrapper">
     {% include "elements/side-bars/side-bar-admin.html" %}
     <div class="d-flex flex-column" id="content-wrapper">
@@ -32,7 +47,13 @@
                                         class="form-label"><input type="search" id="utilisateur-reclamation"
                                                                   class="form-control form-control-sm"
                                                                   aria-controls="dataTable"
-                                                                  placeholder="Chercher par utilisateur..." oninput=""></label></div>
+                                                                  placeholder="Chercher par utilisateur..." oninput="search_reclamation_by_user()"></label>
+                                </div><div class=" dataTables_filter" id="dataTable_filter"><label
+                                        class="form-label"><input type="search" id="num-inv-reclamation"
+                                                                  class="form-control form-control-sm"
+                                                                  aria-controls="dataTable"
+                                                                  placeholder="Chercher par numéro d'inventaire..." oninput="search_reclamation_by_num_inventaire()"></label>
+                                </div>
                             </div>
                         </div>
                         <div class="table-responsive table mt-2" id="dataTable" role="grid"
@@ -40,12 +61,12 @@
                             <table class="table my-0" id="table-reclamation">
 
 
-
                             </table>
                         </div>
                         <div class="row">
                             <div class="col-md-6 align-self-center">
-                                <p id="dataTable_info_reclamation" class="dataTables_info" role="status" aria-live="polite">Showing
+                                <p id="dataTable_info_reclamation" class="dataTables_info" role="status"
+                                   aria-live="polite">Showing
                                     1 to 10 of 27</p>
                             </div>
                             <div class="col-md-6">
