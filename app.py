@@ -1,6 +1,8 @@
 from flask_cors import CORS
 from flask import Flask
+from flask_socketio import SocketIO
 
+# Import Blueprints
 from blueprints.admin import admin_bp
 from blueprints.auth import auth_bp
 from blueprints.client import client_bp
@@ -17,10 +19,16 @@ from blueprints.reclamation import reclamation_bp
 from blueprints.salle_bloc import salle_bloc_bp
 from blueprints.user import user_bp
 
+from extensions import socketio
+
 app = Flask(__name__)
 CORS(app)
 app.secret_key = 'secret_key'
 
+# ✅ Initialize socketio AFTER creating the app
+socketio.init_app(app)
+
+# Register Blueprints
 app.register_blueprint(admin_bp, url_prefix='/admin')
 app.register_blueprint(dashboard_bp, url_prefix='/dashboard')
 app.register_blueprint(fournisseur_bp, url_prefix='/fournisseur')
@@ -38,4 +46,4 @@ app.register_blueprint(user_bp, url_prefix='/user')
 app.register_blueprint(message_bp, url_prefix='/message')
 
 if __name__ == '__main__':
-    app.run()
+    socketio.run(app, debug=True)  # Use socketio.run instead of app.run()

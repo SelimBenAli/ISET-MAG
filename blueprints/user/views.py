@@ -8,6 +8,7 @@ from service.modele_service import ModeleService
 from service.reclamation_service import ReclamationService
 from service.utilisateur_service import UtilisateurService
 from tools.user_tools import UserTools
+from extensions import socketio
 
 
 class UserViews:
@@ -76,6 +77,7 @@ class UserViews:
                 user = session['user']
                 status = self.message_service.add_message(user['id_utilisateur'], sujet, message)
                 if status == 'success':
+                    socketio.emit('update_admin_message', {'message': 'success'})
                     return jsonify({'status': 'success'})
                 return jsonify({'status': 'failed'})
             return jsonify({'status': 'failed'})
