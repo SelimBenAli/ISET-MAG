@@ -112,7 +112,7 @@ function openPageReclamation() {
     window.location.href = "/dashboard/reclamation";
 }
 
-function get_data_ready_load_table(table_id, table_header, table_footer, table_data, table_division_table){
+function get_data_ready_load_table(table_id, table_header, table_footer, table_data, table_division_table) {
     id_table = table_id;
     header = table_header;
     footer = table_footer;
@@ -137,7 +137,7 @@ function load_table() {
     table.innerHTML += footer;
 }
 
-function get_data_ready_pagination(pagination_id, data_length, division_table, table_show_div_id, table_entite){
+function get_data_ready_pagination(pagination_id, data_length, division_table, table_show_div_id, table_entite) {
     id_pagination = pagination_id;
     show_div_id = table_show_div_id;
     entite = table_entite;
@@ -211,4 +211,23 @@ function load_pagination_show_table(current_page) {
         end = data.length;
     }
     show_div.innerHTML = `Affichage de ${start} à ${end} sur ${data.length} ${entite}`
+}
+
+let inputField = document.querySelector("body")
+
+inputField.addEventListener("paste", handlePaste);
+
+function handlePaste(e) {
+    var clipboardData, pastedData;
+
+    // Stop data actually being pasted into div
+    e.stopPropagation();
+    e.preventDefault();
+
+    // Get pasted data via clipboard API
+    clipboardData = e.clipboardData || window.clipboardData;
+    pastedData = clipboardData.getData('Text');
+
+    // Do whatever with pasteddata
+    alert(pastedData);
 }

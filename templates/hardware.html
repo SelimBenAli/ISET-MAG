@@ -17,7 +17,7 @@
     <div id="hidden-reclamation" class="hidden-small-first bg-white" style="width: 80%">
         <div class="close-div" onclick="fermer_hardware()">x</div>
         <div class="card-body">
-            <div>
+            <div style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center">
                 <div><label
                         class="form-label" id="hardware-code">Code : </label></div>
                 <div><label
@@ -25,16 +25,20 @@
                 <div><label
                         class="form-label" id="hardware-num-inv">Numéro d'Inventaire : </label></div>
                 <div><label
+                        class="form-label" id="hardware-etat">Etat : </label></div>
+            </div>
+            <div style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center">
+                <div><label
                         class="form-label" id="hardware-date-achat">Date d'Achat : </label></div>
                 <div><label
                         class="form-label" id="hardware-date-mise-service">Date de Mise en Service : </label></div>
                 <div><label
                         class="form-label" id="hardware-date-ajout">Date d'Ajout : </label></div>
-                <div><label
-                        class="form-label" id="hardware-etat">Etat : </label></div>
             </div>
 
-            <div>
+            <div >
+                <div style="display: flex; justify-content: space-between"><label
+                        class="form-label" >Hardwares Liés : </label><button onclick="ajout_liason()" class="btn btn-outline-warning" >Ajouter une liaison</button></div>
 
                 <div class="table-responsive table mt-2" id="dataTable" role="grid"
                              aria-describedby="dataTable_info">
@@ -43,18 +47,6 @@
 
 
                             </table>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-6 align-self-center">
-                                <p id="dataTable_info_hl" class="dataTables_info" role="status" aria-live="polite">Showing
-                                    1 to 10 of 27</p>
-                            </div>
-                            <div class="col-md-6">
-                                <nav class="d-lg-flex justify-content-lg-end dataTables_paginate paging_simple_numbers">
-                                    <ul class="pagination" id="pagination-hl">
-                                    </ul>
-                                </nav>
-                            </div>
                         </div>
 
             </div>

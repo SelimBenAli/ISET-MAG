@@ -21,17 +21,19 @@ class HardwareService:
     def find_hardware_by_something(self, add):
         try:
             self.connection, self.cursor = self.database_tools.find_connection()
-            self.cursor.execute(
+            req = (
                 f"""SELECT IDHardware, IDModel, IDFournisseur, IDMagasin, IDSalle, IDEtat,
                 NumeroInventaire, DateAchat, DateAjout, DateMiseEnService, 
                 Code, HistoriqueRelation FROM hardware WHERE {add}""")
+
+            self.cursor.execute(req)
             data = self.cursor.fetchall()
             liste_hardware = []
             for element in data:
                 status, modele = ModeleService().find_modele_by_id(element[1])
                 status, fournisseur = FournisseurService().find_fournisseur_by_id(element[2])
-                status, magasin = MagasinService().find_magasin_by_id(element[3])
                 status, relation = RelationService().find_relation_by_hardware(element[0])
+                status, magasin = MagasinService().find_magasin_by_id(element[3])
                 if status == 'error':
                     magasin = MagasinService().create_none().dict_form()
                 else:
@@ -48,7 +50,7 @@ class HardwareService:
                                     self.date_tools.convert_date(element[8]),
                                     self.date_tools.convert_date(element[9]),
                                     element[10], relation)
-                print(hardware, hardware.dict_form())
+
                 liste_hardware.append(hardware.dict_form())
             self.cursor.close()
             self.connection.close()
@@ -84,7 +86,7 @@ class HardwareService:
         return self.find_hardware_by_something(f" DateMiseEnService = {date_mise_en_service} ")
 
     def find_hardware_by_code(self, code):
-        return self.find_hardware_by_something(f" Code = {code} ")
+        return self.find_hardware_by_something(f" Code = '{code}' ")
 
     # NOT FOUND
     def find_hardware_by_historique_relation(self, historique_relation):
@@ -97,7 +99,6 @@ class HardwareService:
                 VALUES ({id_model}, {id_fournisseur}, {id_magasin}, {id_salle}, '{numero_inventaire}', {date_achat},
                  NOW(),
                  {date_mise_en_service}, '{code}', {id_etat}, {json.dumps(historique_relation)})""")
-        print(req)
         return self.database_tools.execute_request(req)
 
     def update_hardware(self, id_hardware, id_model, id_fournisseur, id_magasin, id_salle, numero_inventaire,

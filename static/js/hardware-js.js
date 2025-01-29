@@ -1,6 +1,7 @@
 var liste_hardware_tous = []
 var liste_hardware = []
 var division_table = 7
+var current_hardware = null
 
 function load_page_hardware_liste() {
     var xhr = new XMLHttpRequest();
@@ -9,7 +10,7 @@ function load_page_hardware_liste() {
     xhr.onreadystatechange = function () {
         if (xhr.readyState === 4 && xhr.status === 200) {
             var response = JSON.parse(xhr.responseText);
-            console.log(response)
+
             if (response.status === 'success') {
                 liste_hardware = response.hardwares
                 liste_hardware_tous = response.hardwares
@@ -201,7 +202,7 @@ function ajout_hardware_request() {
     xhr.onreadystatechange = function () {
         if (xhr.readyState === 4 && xhr.status === 200) {
             var response = JSON.parse(xhr.responseText);
-            console.log(response)
+
             if (response.status === 'success') {
                 if (response.status === 'success') {
                     alert("Ajout effectué")
@@ -261,7 +262,7 @@ function modifier_hardware_request(idh) {
     xhr.onreadystatechange = function () {
         if (xhr.readyState === 4 && xhr.status === 200) {
             var response = JSON.parse(xhr.responseText);
-            console.log(response)
+
             if (response.status === 'success') {
                 if (response.status === 'success') {
                     alert("Modification effectuée")
@@ -299,7 +300,7 @@ function supprimer_hardware_request(idh) {
     xhr.onreadystatechange = function () {
         if (xhr.readyState === 4 && xhr.status === 200) {
             var response = JSON.parse(xhr.responseText);
-            console.log(response)
+
             if (response.status === 'success') {
                 if (response.status === 'success')
                 {
@@ -321,8 +322,7 @@ function openPageHardwareConsult(idh) {
         l[i].style.zIndex = 0
     }
 
-    hardware = liste_hardware.find(hardware => hardware.id_hardware === idh)
-    console.log(hardware)
+    hardware = liste_hardware_tous.find(hardware => hardware.id_hardware === idh)
     document.getElementById("hardware-modele").innerHTML = "Modèle : " + hardware.modele_hardware.nom_modele + " " + hardware.modele_hardware.marque_modele.nom_marque
     document.getElementById("hardware-num-inv").innerHTML = "Numéro d'Inventaire : " + hardware.numero_inventaire_hardware
     document.getElementById("hardware-code").innerHTML = "Code : " + hardware.code_hardware
@@ -330,37 +330,110 @@ function openPageHardwareConsult(idh) {
     document.getElementById("hardware-date-achat").innerHTML = "Date d'Achat : " + hardware.date_achat_hardware
     document.getElementById("hardware-date-mise-service").innerHTML = "Date de Mise en Service : " + hardware.date_mise_service_hardware
     document.getElementById("hardware-date-ajout").innerHTML = "Date d'Ajout : " + hardware.date_ajout_hardware
+    current_hardware = hardware.id_hardware
     load_table_hl_parameters(hardware.historique_relation_hardware)
 }
 
 
 function load_table_hl_parameters(liste_hl) {
-    header = "<thead><tr><th>Code</th><th>Marque</th><th>Modèle</th><th>Numéro Inventaire</th><th>Supprimer</th></tr></thead>"
+    t = document.getElementById("table-hl")
+    t.innerHTML = "<thead><tr><th>Code</th><th>Marque</th><th>Modèle</th><th>Numéro Inventaire</th><th>Supprimer</th></tr></thead>"
     footer = "<tfoot><tr><th>Code</th><th>Marque</th><th>Modèle</th><th>Numéro Inventaire</th><th>Supprimer</th></tr></tfoot>"
     body = []
     l = 0;
     liste_hl.forEach(hardware_id => {
-        my_hardware = liste_hardware.find(hardware => hardware.id_hardware === hardware_id.hardware_1)
+        my_hardware = liste_hardware.find(hardware => hardware.id_hardware === hardware_id)
         l++;
-        body.push("<tr><td>" + hardware.id_hardware + "</td><td>" + hardware.modele_hardware.marque_modele_nom_marque + "</td><td>" + hardware.modele_hardware.nom_modele + "</td><td>" + hardware.numero_inventaire_hardware + "</td><td><button class='btn btn-outline-danger' onclick=''>Supprimer</button></td></tr>")
+        t.innerHTML += "<tr><td>" + my_hardware.id_hardware + "</td><td>" + my_hardware.modele_hardware.marque_modele.nom_marque + "</td><td>" + my_hardware.modele_hardware.nom_modele + "</td><td>" + my_hardware.numero_inventaire_hardware + "</td><td><button class='btn btn-outline-danger' onclick='supprimer_liaison(" + my_hardware.code_hardware + ")'>Supprimer</button></td></tr>"
     });
-    load_table_hl(l, header, footer, body, 4)
+    t.innerHTML += footer
+
 }
-
-
-function load_table_hl(l, header, footer, body, division_table) {
-    get_data_ready_load_table("table-hl", header, footer, body, division_table)
-    get_data_ready_pagination("pagination-hl", l, division_table, "dataTable_info_hl", "hardwares")
-}
-
-
 
 
 
 function fermer_hardware() {
+    close_div()
+    current_hardware = null
+}
+
+function close_div() {
     document.getElementById("hidden-big-div").style.display = "none";
     l = document.getElementsByClassName("page-link")
     for (i = 0; i < l.length; i++) {
-        l[i].style.zIndex = 3
+        l[i].style.zIndex = 1
     }
+}
+
+function ajout_liason() {
+    new_link = ask_for_hardware_id()
+    if (new_link != null) {
+        ajout_liason_request(new_link)
+    }
+}
+
+function ask_for_hardware_id() {
+    var id_hardware = prompt("Entrez l'ID du matériel à lier", "");
+    if (id_hardware != null) {
+        return id_hardware
+    }
+}
+
+function ajout_liason_request(idh) {
+    var xhr = new XMLHttpRequest();
+    xhr.open('PUT', '/hardware/add-hardware-link/' + current_hardware, true);
+    xhr.setRequestHeader('Content-Type', 'application/json');
+    xhr.onreadystatechange = function () {
+        if (xhr.readyState === 4 && xhr.status === 200) {
+            var response = JSON.parse(xhr.responseText);
+
+            if (response.status === 'success') {
+                if (response.status === 'success') {
+                    alert("Ajout effectué")
+                    liste_hardware = response.hardwares
+                    liste_hardware_tous = response.hardwares
+                    close_div()
+                    openPageHardwareConsult(current_hardware)
+                }
+            } else {
+                alert('Erreur lors de l\'ajout');
+            }
+        }
+    };
+    xhr.send(JSON.stringify({
+        id_hardware2: idh
+    }));
+}
+
+function supprimer_liaison(idh) {
+    confirmation = confirm("Voulez-vous vraiment supprimer cette liaison?")
+    if (confirmation) {
+        supprimer_liaison_request(idh)
+    }
+}
+
+function supprimer_liaison_request(idh) {
+    var xhr = new XMLHttpRequest();
+    xhr.open('PUT', '/hardware/delete-hardware-link/' + current_hardware, true);
+    xhr.setRequestHeader('Content-Type', 'application/json');
+    xhr.onreadystatechange = function () {
+        if (xhr.readyState === 4 && xhr.status === 200) {
+            var response = JSON.parse(xhr.responseText);
+
+            if (response.status === 'success') {
+                if (response.status === 'success') {
+                    alert("Suppression effectuée")
+                    liste_hardware = response.hardwares
+                    liste_hardware_tous = response.hardwares
+                    close_div()
+                    openPageHardwareConsult(current_hardware)
+                }
+            } else {
+                alert('Erreur lors de la suppression');
+            }
+        }
+    };
+    xhr.send(JSON.stringify({
+        id_hardware2: idh
+    }));
 }

@@ -1,5 +1,6 @@
-from flask import Blueprint, request, jsonify
+from flask import Blueprint, request, jsonify, url_for
 from service.hardware_service import HardwareService
+from service.relation_service import RelationService
 from tools.user_tools import UserTools
 
 
@@ -7,6 +8,7 @@ class HardwareViews:
     def __init__(self):
         self.user_tools = UserTools()
         self.hardware_service = HardwareService()
+        self.relation_service = RelationService()
         self.hardware_bp = Blueprint('hardware', __name__, template_folder='templates')
         self.hardware_routes()
 
@@ -24,7 +26,6 @@ class HardwareViews:
                 date_mise_en_service = data.get('date_mise_en_service_hardware')
                 code_hardware = data.get('code_hardware')
                 id_etat = data.get('etat_hardware')
-                print("mag : ", id_magasin, " salle : ", id_salle)
                 if id_modele is None:
                     return jsonify({'status': 'failed', 'message': 'modele is required'})
                 if id_fournisseur is None:
@@ -48,7 +49,7 @@ class HardwareViews:
                                                             date_achat, date_mise_en_service, code_hardware, id_etat,
                                                             None
                                                             )
-                print(status)
+
                 if status != 'failed' and status[0] != 'failed' and status != 'error' and status[0] != 'error':
                     return {'status': 'success'}
             return {'status': 'failed', 'message': 'error'}
@@ -66,7 +67,7 @@ class HardwareViews:
                 date_mise_en_service = data.get('date_mise_en_service_hardware')
                 code_hardware = data.get('code_hardware')
                 id_etat = data.get('etat_hardware')
-                print("mag : ", id_magasin, " salle : ", id_salle)
+
                 if id_modele is None:
                     return jsonify({'status': 'failed', 'message': 'modele is required'})
                 if id_fournisseur is None:
@@ -107,6 +108,45 @@ class HardwareViews:
         def get_hardwares():
             if self.user_tools.check_user_in_session('admin'):
                 status, hardwares = self.hardware_service.find_all_hardware()
-                print(hardwares)
                 return jsonify({'status': 'success', 'hardwares': hardwares})
+            return {'status': 'failed'}
+
+        @self.hardware_bp.route('/add-hardware-link/<int:id_hardware>', methods=['PUT'])
+        def add_hardware_link(id_hardware):
+            if self.user_tools.check_user_in_session('admin'):
+                data = request.get_json()
+                id_hardware2 = data.get('id_hardware2')
+                status, hw2 = self.hardware_service.find_hardware_by_code(id_hardware2)
+                if status != 'success':
+                    return {'status': 'failed', 'message': 'hardware non trouvé'}
+                status, hw1 = self.hardware_service.find_hardware_by_id(id_hardware)
+                if status != 'success':
+                    return {'status': 'failed', 'message': 'hardware non trouvé'}
+                id_hardware2 = hw2[0]['id_hardware']
+                if id_hardware2 in hw1[0]['historique_relation_hardware']:
+                    return {'status': 'failed', 'message': 'hardware déjà lié'}
+                status = self.relation_service.add_relation(id_hardware, id_hardware2)
+                if status != 'failed':
+                    status, hardwares = self.hardware_service.find_all_hardware()
+                    return jsonify({'status': 'success', 'hardwares': hardwares})
+            return {'status': 'failed'}
+
+        @self.hardware_bp.route('/delete-hardware-link/<int:id_hardware>', methods=['PUT'])
+        def delete_hardware_link(id_hardware):
+            if self.user_tools.check_user_in_session('admin'):
+                data = request.get_json()
+                id_hardware2 = data.get('id_hardware2')
+                status, hw2 = self.hardware_service.find_hardware_by_code(id_hardware2)
+                if status != 'success':
+                    return {'status': 'failed', 'message': 'hardware non trouvé'}
+                status, hw1 = self.hardware_service.find_hardware_by_id(id_hardware)
+                if status != 'success':
+                    return {'status': 'failed', 'message': 'hardware non trouvé'}
+                id_hardware2 = hw2[0]['id_hardware']
+                if id_hardware2 not in hw1[0]['historique_relation_hardware']:
+                    return {'status': 'failed', 'message': 'hardware non lié'}
+                status = self.relation_service.delete_relation(id_hardware, id_hardware2)
+                if status != 'failed':
+                    status, hardwares = self.hardware_service.find_all_hardware()
+                    return jsonify({'status': 'success', 'hardwares': hardwares})
             return {'status': 'failed'}
