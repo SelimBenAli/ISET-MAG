@@ -5,6 +5,7 @@ from service.etat_service import EtatService
 from service.fournisseur_service import FournisseurService
 from service.magasin_service import MagasinService
 from service.modele_service import ModeleService
+from service.relation_service import RelationService
 from service.salle_service import SalleService
 from tools.database_tools import DatabaseConnection
 from tools.date_tools import DateTools
@@ -30,6 +31,7 @@ class HardwareService:
                 status, modele = ModeleService().find_modele_by_id(element[1])
                 status, fournisseur = FournisseurService().find_fournisseur_by_id(element[2])
                 status, magasin = MagasinService().find_magasin_by_id(element[3])
+                status, relation = RelationService().find_relation_by_hardware(element[0])
                 if status == 'error':
                     magasin = MagasinService().create_none().dict_form()
                 else:
@@ -43,8 +45,9 @@ class HardwareService:
 
                 hardware = Hardware(element[0], modele[0], fournisseur[0], magasin, salle, etat[0], element[6],
                                     self.date_tools.convert_date(element[7]),
+                                    self.date_tools.convert_date(element[8]),
                                     self.date_tools.convert_date(element[9]),
-                                    element[10], None)
+                                    element[10], relation)
                 print(hardware, hardware.dict_form())
                 liste_hardware.append(hardware.dict_form())
             self.cursor.close()

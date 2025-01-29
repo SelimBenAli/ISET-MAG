@@ -1,6 +1,6 @@
 class Hardware:
     def __init__(self, id_hardware, modele, fournisseur, magasin, salle, etat, numero_inventaire, date_achat,
-                 date_mise_service,
+                 date_mise_service, date_ajout,
                  code_hardware, historique_relation):
         self.id_hardware = id_hardware
         self.modele = modele
@@ -11,7 +11,7 @@ class Hardware:
         self.numero_inventaire = numero_inventaire
         self.date_achat = date_achat
         self.date_mise_service = date_mise_service
-        self.date_ajout = 'NOW()'
+        self.date_ajout = date_ajout
         self.code_hardware = code_hardware
         self.historique_relation = historique_relation
 

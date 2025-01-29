@@ -6,12 +6,63 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
     <title>Dashboard - Hardware</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/assets/bootstrap/css/bootstrap.min.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
     <link rel="stylesheet"
           href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i&amp;display=swap">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/assets/fonts/fontawesome-all.min.css') }}">
 </head>
 
 <body id="page-top" onload="load_page_hardware_liste()">
+<div id="hidden-big-div" class="hidden-big" style="display: none">
+    <div id="hidden-reclamation" class="hidden-small-first bg-white" style="width: 80%">
+        <div class="close-div" onclick="fermer_hardware()">x</div>
+        <div class="card-body">
+            <div>
+                <div><label
+                        class="form-label" id="hardware-code">Code : </label></div>
+                <div><label
+                        class="form-label" id="hardware-modele">Modèle : </label></div>
+                <div><label
+                        class="form-label" id="hardware-num-inv">Numéro d'Inventaire : </label></div>
+                <div><label
+                        class="form-label" id="hardware-date-achat">Date d'Achat : </label></div>
+                <div><label
+                        class="form-label" id="hardware-date-mise-service">Date de Mise en Service : </label></div>
+                <div><label
+                        class="form-label" id="hardware-date-ajout">Date d'Ajout : </label></div>
+                <div><label
+                        class="form-label" id="hardware-etat">Etat : </label></div>
+            </div>
+
+            <div>
+
+                <div class="table-responsive table mt-2" id="dataTable" role="grid"
+                             aria-describedby="dataTable_info">
+                            <table class="table my-0" id="table-hl">
+
+
+
+                            </table>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 align-self-center">
+                                <p id="dataTable_info_hl" class="dataTables_info" role="status" aria-live="polite">Showing
+                                    1 to 10 of 27</p>
+                            </div>
+                            <div class="col-md-6">
+                                <nav class="d-lg-flex justify-content-lg-end dataTables_paginate paging_simple_numbers">
+                                    <ul class="pagination" id="pagination-hl">
+                                    </ul>
+                                </nav>
+                            </div>
+                        </div>
+
+            </div>
+
+
+        </div>
+    </div>
+</div>
 <div id="wrapper">
     {% include "elements/side-bars/side-bar-admin.html" %}
     <div class="d-flex flex-column" id="content-wrapper">

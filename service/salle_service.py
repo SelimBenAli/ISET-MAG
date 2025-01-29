@@ -13,7 +13,8 @@ class SalleService:
         try:
             self.connection, self.cursor = self.database_tools.find_connection()
             self.cursor.execute(
-                f"""SELECT `IDSalle`, `Nom`, `IDBloc` FROM salle WHERE {add}""")
+                f"""SELECT `IDSalle`, `Nom`, `IDBloc` FROM salle WHERE
+                  {add}""")
             data = self.cursor.fetchall()
             liste_salle = []
             for element in data:

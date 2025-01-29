@@ -153,7 +153,7 @@ function load_table_hardware_parameters() {
     footer = "<tfoot><tr><th>Code</th><th>Modèle</th><th>Marque</th><th>Magasin</th><th>Salle</th><th>Num Inventaire</th><th>Etat</th><th>Code à Bar</th><th>Consulter</th><th>Modifier</th><th>Supprimer</th></tr></tfoot>"
     body = []
     liste_hardware.forEach(hardware => {
-        body.push("<tr><td>" + hardware.id_hardware + "</td><td>" + hardware.modele_hardware.nom_modele + "</td><td>" + hardware.modele_hardware.marque_modele.nom_marque + "</td><td>" + hardware.magasin_hardware.nom_magasin + "</td><td>" + hardware.salle_hardware.nom_salle + "</td><td>" + hardware.numero_inventaire_hardware + "</td><td>" + hardware.etat_hardware.nom_etat + "</td><td>" + hardware.code_hardware + "</td><td><button class='btn btn-outline-info'>Consulter</button></td><td><button class='btn btn-outline-secondary' onclick='openPageHardwareUpdate(" + hardware.id_hardware + ")'>Modifier</button></td><td><button class='btn btn-outline-danger' onclick='supprimer_hardware(" + hardware.id_hardware + ")'>Supprimer</button></td></tr>")
+        body.push("<tr><td>" + hardware.id_hardware + "</td><td>" + hardware.modele_hardware.nom_modele + "</td><td>" + hardware.modele_hardware.marque_modele.nom_marque + "</td><td>" + hardware.magasin_hardware.nom_magasin + "</td><td>" + hardware.salle_hardware.nom_salle + "</td><td>" + hardware.numero_inventaire_hardware + "</td><td>" + hardware.etat_hardware.nom_etat + "</td><td>" + hardware.code_hardware + "</td><td><button class='btn btn-outline-info' onclick='openPageHardwareConsult(" + hardware.id_hardware + ")'>Consulter</button></td><td><button class='btn btn-outline-secondary' onclick='openPageHardwareUpdate(" + hardware.id_hardware + ")'>Modifier</button></td><td><button class='btn btn-outline-danger' onclick='supprimer_hardware(" + hardware.id_hardware + ")'>Supprimer</button></td></tr>")
     });
     division_table = 7
     load_table_hardware(header, footer, body, division_table)
@@ -312,4 +312,55 @@ function supprimer_hardware_request(idh) {
         }
     };
     xhr.send();*/
+}
+
+function openPageHardwareConsult(idh) {
+    document.getElementById("hidden-big-div").style.display = "block";
+    l = document.getElementsByClassName("page-link")
+    for (i = 0; i < l.length; i++) {
+        l[i].style.zIndex = 0
+    }
+
+    hardware = liste_hardware.find(hardware => hardware.id_hardware === idh)
+    console.log(hardware)
+    document.getElementById("hardware-modele").innerHTML = "Modèle : " + hardware.modele_hardware.nom_modele + " " + hardware.modele_hardware.marque_modele.nom_marque
+    document.getElementById("hardware-num-inv").innerHTML = "Numéro d'Inventaire : " + hardware.numero_inventaire_hardware
+    document.getElementById("hardware-code").innerHTML = "Code : " + hardware.code_hardware
+    document.getElementById("hardware-etat").innerHTML ="Etat : " +  hardware.etat_hardware.nom_etat
+    document.getElementById("hardware-date-achat").innerHTML = "Date d'Achat : " + hardware.date_achat_hardware
+    document.getElementById("hardware-date-mise-service").innerHTML = "Date de Mise en Service : " + hardware.date_mise_service_hardware
+    document.getElementById("hardware-date-ajout").innerHTML = "Date d'Ajout : " + hardware.date_ajout_hardware
+    load_table_hl_parameters(hardware.historique_relation_hardware)
+}
+
+
+function load_table_hl_parameters(liste_hl) {
+    header = "<thead><tr><th>Code</th><th>Marque</th><th>Modèle</th><th>Numéro Inventaire</th><th>Supprimer</th></tr></thead>"
+    footer = "<tfoot><tr><th>Code</th><th>Marque</th><th>Modèle</th><th>Numéro Inventaire</th><th>Supprimer</th></tr></tfoot>"
+    body = []
+    l = 0;
+    liste_hl.forEach(hardware_id => {
+        my_hardware = liste_hardware.find(hardware => hardware.id_hardware === hardware_id.hardware_1)
+        l++;
+        body.push("<tr><td>" + hardware.id_hardware + "</td><td>" + hardware.modele_hardware.marque_modele_nom_marque + "</td><td>" + hardware.modele_hardware.nom_modele + "</td><td>" + hardware.numero_inventaire_hardware + "</td><td><button class='btn btn-outline-danger' onclick=''>Supprimer</button></td></tr>")
+    });
+    load_table_hl(l, header, footer, body, 4)
+}
+
+
+function load_table_hl(l, header, footer, body, division_table) {
+    get_data_ready_load_table("table-hl", header, footer, body, division_table)
+    get_data_ready_pagination("pagination-hl", l, division_table, "dataTable_info_hl", "hardwares")
+}
+
+
+
+
+
+function fermer_hardware() {
+    document.getElementById("hidden-big-div").style.display = "none";
+    l = document.getElementsByClassName("page-link")
+    for (i = 0; i < l.length; i++) {
+        l[i].style.zIndex = 3
+    }
 }

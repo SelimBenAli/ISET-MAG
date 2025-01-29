@@ -282,5 +282,3 @@ class DashboardViews:
                 return render_template('reclamation.html')
             else:
                 return redirect(url_for('admin.login'))
-
-
