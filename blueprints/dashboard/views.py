@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, redirect, url_for
+from flask import Blueprint, render_template, redirect, url_for, session
 
 from service.bloc_service import BlocService
 from service.etat_service import EtatService
@@ -246,6 +246,8 @@ class DashboardViews:
         @self.dashboard_bp.route('/message', methods=['GET'])
         def message_template():
             if self.user_tools.check_user_in_session('admin'):
+                user_id = session['admin']['id_admin']
+                self.message_service.add_seen_all_message(user_id)
                 return render_template('message.html')
             else:
                 return redirect(url_for('admin.login'))

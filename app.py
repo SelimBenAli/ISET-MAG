@@ -25,7 +25,6 @@ app = Flask(__name__)
 CORS(app)
 app.secret_key = 'secret_key'
 
-# ✅ Initialize socketio AFTER creating the app
 socketio.init_app(app)
 
 # Register Blueprints

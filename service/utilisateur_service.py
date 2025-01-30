@@ -12,9 +12,10 @@ class UtilisateurService:
     def find_utilisateur_by_something(self, add):
         try:
             self.connection, self.cursor = self.database_tools.find_connection()
-            self.cursor.execute(
+            req = (
                 f"""SELECT IDUtilisateur, Nom, Prenom, Mail, Tel, MDP, Role, Code, Compte
                  FROM utilisateur WHERE {add}""")
+            self.cursor.execute(req)
             data = self.cursor.fetchall()
             liste_utilisateur = []
             for element in data:
@@ -22,8 +23,11 @@ class UtilisateurService:
                 utilisateur = Utilisateur(element[0], element[1], element[2], element[3], element[4],
                                           element[5], element[7], role[0], element[8])
                 liste_utilisateur.append(utilisateur.dict_form())
-            self.cursor.close()
-            self.connection.close()
+            try:
+                self.cursor.close()
+                self.connection.close()
+            except Exception as e:
+                ...
             return 'success', liste_utilisateur
         except Exception as e:
             return 'error', e

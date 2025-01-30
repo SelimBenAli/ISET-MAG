@@ -1,4 +1,4 @@
-from flask import Blueprint, request, jsonify
+from flask import Blueprint, jsonify, session
 from service.message_service import MessageService
 from tools.user_tools import UserTools
 
@@ -28,3 +28,12 @@ class MessageViews:
                 return jsonify({'status': 'failed'})
             return jsonify({'status': 'failed'})
 
+        @self.message_bp.route('/messages-notifications', methods=['GET'])
+        def messages_notifications():
+            if self.user_tools.check_user_in_session('admin'):
+                id_admin = session['admin']['id_admin']
+                status, messages = self.message_service.find_message_by_something(
+                    ' `Vu` NOT LIKE "%' + str(id_admin) + ';%" ORDER BY `Date` DESC')
+                print(messages)
+                return jsonify({'status': 'success', 'messages': messages})
+            return {'status': 'failed'}
