@@ -37,6 +37,7 @@ class UserViews:
                                                                   user['id_utilisateur'], 'NULL',
                                                                   description)
                 if status == 'success':
+                    socketio.emit('update_admin_alert', {'message': 'success'})
                     return jsonify({'status': 'success'})
                 return jsonify({'status': 'failed'})
             return jsonify({'status': 'failed'})
@@ -64,6 +65,7 @@ class UserViews:
                                                             id_modele, quantite)
 
                 if status == 'success':
+                    socketio.emit('update_admin_alert', {'message': 'success'})
                     return jsonify({'status': 'success'})
                 return jsonify({'status': 'failed'})
             return jsonify({'status': 'failed'})

@@ -45,4 +45,4 @@ app.register_blueprint(user_bp, url_prefix='/user')
 app.register_blueprint(message_bp, url_prefix='/message')
 
 if __name__ == '__main__':
-    socketio.run(app, debug=True)  # Use socketio.run instead of app.run()
+    socketio.run(app, debug=True)

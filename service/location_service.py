@@ -18,8 +18,7 @@ class LocationService:
             self.connection, self.cursor = self.database_tools.find_connection()
             self.cursor.execute(
                 f"""SELECT `IDLocation`, `DateDebutEstime`, `DateFinEstimee`, `IDUtilisateur`, `IDModel`, `Quantite`,
-                 `Confirmation`, `IDAdmin`, `DateConfirmation` FROM `louer_hardware` WHERE {add} 
-                 ORDER BY IDLocation DESC""")
+                 `Confirmation`, `IDAdmin`, `DateConfirmation`, `DateAjout` FROM `louer_hardware` WHERE {add}  """)
             data = self.cursor.fetchall()
             liste_location = []
             for element in data:
@@ -29,10 +28,9 @@ class LocationService:
                 if status != 'success':
                     admin = None
                 location = Location(element[0], str(self.date_tools.convert_date_time(element[1])),
-                                    str(self.date_tools.convert_date_time(element[2])), utilisateur[0], modele[0], admin,
-                                    element[5],
-                                    element[6],
-                                    element[8])
+                                    str(self.date_tools.convert_date_time(element[2])), utilisateur[0], modele[0],
+                                    admin, element[5], element[6],
+                                    element[8], str(self.date_tools.convert_date_time(element[9])))
                 liste_location.append(location.dict_form())
             self.cursor.close()
             self.connection.close()
@@ -41,22 +39,22 @@ class LocationService:
             return 'error', e
 
     def find_all_location(self):
-        return self.find_location_by_something(' 1')
+        return self.find_location_by_something(' 1 ORDER BY `DateAjout` DESC ')
 
     def find_location_by_id(self, id_location):
-        return self.find_location_by_something(f' IDLocation = {id_location}')
+        return self.find_location_by_something(f' IDLocation = {id_location} ORDER BY `DateAjout` DESC ')
 
     def find_location_by_utilisateur(self, id_utilisateur):
-        return self.find_location_by_something(f' IDUtilisateur = {id_utilisateur}')
+        return self.find_location_by_something(f' IDUtilisateur = {id_utilisateur} ORDER BY `DateAjout` DESC ')
 
     def find_location_by_hardware(self, id_hardware):
-        return self.find_location_by_something(f' IDHardware = {id_hardware}')
+        return self.find_location_by_something(f' IDHardware = {id_hardware} ORDER BY `DateAjout` DESC ')
 
     def find_location_by_confirmation(self, confirmation):
-        return self.find_location_by_something(f' Confirmation = {confirmation}')
+        return self.find_location_by_something(f' Confirmation = {confirmation} ORDER BY `DateAjout` DESC')
 
     def find_location_by_admin(self, id_admin):
-        return self.find_location_by_something(f' IDAdmin = {id_admin}')
+        return self.find_location_by_something(f' IDAdmin = {id_admin} ORDER BY `DateAjout` DESC ')
 
     def add_location(self, date_debut_estime, date_fin_estimee, id_utilisateur, id_modele, quantite):
         return self.database_tools.execute_request(
