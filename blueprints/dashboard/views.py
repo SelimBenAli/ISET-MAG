@@ -46,6 +46,7 @@ class DashboardViews:
         self.dashboard_message_routes()
         self.dashboard_utilisateur_routes()
         self.dashboard_reclamation_routes()
+        self.dashboard_profile_routes()
 
     def dashboard_salle_bloc_routes(self):
         @self.dashboard_bp.route('/salle-bloc', methods=['GET'])
@@ -283,5 +284,13 @@ class DashboardViews:
             if self.user_tools.check_user_in_session('admin'):
                 self.reclamation_service.add_seen_all_reclamation(session['admin']['id_admin'])
                 return render_template('reclamation.html')
+            else:
+                return redirect(url_for('admin.login'))
+
+    def dashboard_profile_routes(self):
+        @self.dashboard_bp.route('/profile', methods=['GET'])
+        def profile_template():
+            if self.user_tools.check_user_in_session('admin'):
+                return render_template('profile.html')
             else:
                 return redirect(url_for('admin.login'))
