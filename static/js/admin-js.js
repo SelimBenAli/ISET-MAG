@@ -114,8 +114,7 @@ function show_alerts_notifications(data) {
         {
             my_reclamation = alert.reclamation
             div.innerHTML += `
-                      <a class="dropdown-item d-flex align-items-center"
-                                                                         href="#">
+                      <a class="dropdown-item d-flex align-items-center" onclick="openPageReclamation()">
                         <div class="me-3">
                             <div class="bg-warning icon-circle"><i class="fas fa-exclamation-triangle text-white"></i></div>
                         </div>
@@ -129,8 +128,7 @@ function show_alerts_notifications(data) {
         else {
             my_location = alert.location
             div.innerHTML += `
-            <a class="dropdown-item d-flex align-items-center"
-                                                                         href="#">
+            <a class="dropdown-item d-flex align-items-center" onclick="openPageLocation()">
                         <div class="me-3">
                             <div class="bg-primary icon-circle"><i class="fas fa-file-alt text-white"></i></div>
                         </div>
@@ -142,7 +140,7 @@ function show_alerts_notifications(data) {
 
         }
     })
-    div.innerHTML += ' <a class="dropdown-item text-center small text-gray-500" onclick="openPageMessage()">Afficher Tous les Messages.</a>'
+    div.innerHTML += ' <div class="dropdown-item text-center small text-gray-500"><div style="display: flex; justify-content: space-between"><a onclick="openPageLocation()">Locations.</a><a onclick="openPageReclamation()">Réclamations.</a></div></div>'
 }
 
 function alert_notification_sound() {

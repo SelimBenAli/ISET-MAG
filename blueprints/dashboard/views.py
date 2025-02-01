@@ -281,6 +281,7 @@ class DashboardViews:
         @self.dashboard_bp.route('/reclamation', methods=['GET'])
         def reclamation_template():
             if self.user_tools.check_user_in_session('admin'):
+                self.reclamation_service.add_seen_all_reclamation(session['admin']['id_admin'])
                 return render_template('reclamation.html')
             else:
                 return redirect(url_for('admin.login'))

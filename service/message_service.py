@@ -65,30 +65,27 @@ class MessageService:
             f"""UPDATE message SET Vu = '{my_list}' WHERE IDMessage = {id_message}""")
 
     def add_seen_all_message(self, id_utilisateur):
+        self.connection, self.cursor = self.database_tools.find_connection()
+        self.cursor.execute(f"""SELECT `IDMessage`, `Vu` FROM message WHERE `Vu` NOT LIKE "%{id_utilisateur}%;" """)
+        liste_vues = self.cursor.fetchall()
+        print(liste_vues)
+        for liste_vu in liste_vues:
+            print("aa : ", liste_vu)
+            if liste_vu is not None:
+                vues = liste_vu[1]
+                id_message = liste_vu[0]
+                if vues is not None and vues != "":
+                    my_list = str(vues) + f"{str(id_utilisateur)};"
+                else:
+                    my_list = f"{id_utilisateur};"
+                req = (
+                    f"""UPDATE message SET Vu = '{my_list}' WHERE IDMessage = {id_message}""")
+                print(req)
+                self.database_tools.execute_request(req)
+        self.connection.commit()
 
-            self.connection, self.cursor = self.database_tools.find_connection()
-            self.cursor.execute(f"""SELECT `IDMessage`, `Vu` FROM message WHERE `Vu` NOT LIKE "%{id_utilisateur}%;" """)
-            liste_vues = self.cursor.fetchall()
-            print(liste_vues)
-            my_list = ""
-            for liste_vu in liste_vues:
-                print("aa : ", liste_vu)
-                if liste_vu is not None:
-                    vues = liste_vu[1]
-                    id_message = liste_vu[0]
-                    if vues is not None and vues != "":
-                        my_list = str(vues) + f"{str(id_utilisateur)};"
-                    else:
-                        my_list = f"{id_utilisateur};"
-                    req = (
-                        f"""UPDATE message SET Vu = '{my_list}' WHERE IDMessage = {id_message}""")
-                    print(req)
-                    self.database_tools.execute_request(req)
-            self.connection.commit()
-
-            self.cursor.close()
-            self.connection.close()
-
+        self.cursor.close()
+        self.connection.close()
 
     def return_list_seen(self, id_message):
         self.connection, self.cursor = self.database_tools.find_connection()

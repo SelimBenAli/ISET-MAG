@@ -50,10 +50,10 @@ class MessageViews:
             if self.user_tools.check_user_in_session('admin'):
                 id_admin = session['admin']['id_admin']
                 status, reclamations = self.reclamation_service.find_reclamation_by_something(
-                    ' 1 ORDER BY `DateReclamation` DESC LIMIT 0, 6 ')
+                    f" `Vu` NOT LIKE '%{id_admin};%' ORDER BY `DateReclamation` DESC LIMIT 0, 6 ")
                 status, locations = self.location_service.find_location_by_something(
                     ' Confirmation = 0 ORDER BY `DateAjout` DESC LIMIT 0, 6')
-                print("88", reclamations, locations)
+                print("22", reclamations, locations)
                 reclamations.sort(key=lambda x: x['date_reclamation'], reverse=True)
                 locations.sort(key=lambda x: x['date_ajout_location'], reverse=True)
                 alertes = []
