@@ -291,6 +291,8 @@ class DashboardViews:
         @self.dashboard_bp.route('/profile', methods=['GET'])
         def profile_template():
             if self.user_tools.check_user_in_session('admin'):
-                return render_template('profile.html')
+                user = session['admin']
+                print("99", user)
+                return render_template('profile.html', user=user)
             else:
                 return redirect(url_for('admin.login'))

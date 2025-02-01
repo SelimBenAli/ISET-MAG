@@ -43,3 +43,16 @@ class AdminService:
             return 'success', admin.dict_form()
         except Exception as e:
             return 'error', e
+
+    def change_details(self, id_admin, prenom, nom, email):
+        try:
+            self.connection, self.cursor = self.database_tools.find_connection()
+            self.cursor.execute(
+                f"""UPDATE admin SET Nom = '{nom}', Prenom = '{prenom}', Mail = '{email}' 
+                WHERE IDAdmin = {id_admin}""")
+            self.connection.commit()
+            self.cursor.close()
+            self.connection.close()
+            return 'success'
+        except Exception as e:
+            return 'error', e

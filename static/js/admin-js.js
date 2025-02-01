@@ -30,6 +30,26 @@ function login_request(email, password) {
 
 }
 
+function change_settings() {
+    nom = document.getElementById('nom').value;
+    prenom = document.getElementById('prenom').value;
+    email = document.getElementById('email').value;
+    var xhr = new XMLHttpRequest();
+    xhr.open('PUT', '/admin/change-details', true);
+    xhr.setRequestHeader('Content-Type', 'application/json');
+    xhr.onreadystatechange = function () {
+        if (xhr.readyState === 4 && xhr.status === 200) {
+            var response = JSON.parse(xhr.responseText);
+            if (response.status === 'success') {
+                openPageReclamation()
+            } else {
+                alert('Error');
+            }
+        }
+    };
+    xhr.send(JSON.stringify({nom: nom, prenom: prenom, email: email}));
+}
+
 function load_messages_notifications() {
     console.log('load_messages_notifications')
     var xhr = new XMLHttpRequest();

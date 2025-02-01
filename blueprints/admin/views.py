@@ -39,3 +39,17 @@ class AdminViews:
         def logout():
             session['admin'] = None
             return render_template('admin-login.html')
+
+        @self.admin_bp.route('/change-details', methods=['PUT'])
+        def change_details():
+            if self.user_tools.check_user_in_session('admin'):
+                data = request.get_json()
+                id_admin = session['admin']['id_admin']
+                email = data.get('email')
+                prenom = data.get('prenom')
+                nom = data.get('nom')
+                status = self.admin_service.change_details(id_admin, prenom, nom, email)
+                if status == 'success':
+                    return {'status': 'success'}
+                return {'status': 'failed'}
+            return {'status': 'failed'}
