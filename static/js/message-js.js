@@ -3,6 +3,7 @@ var liste_message = []
 var division_table = 7
 
 function load_page_message() {
+    enter_loading_mode()
     var xhr = new XMLHttpRequest();
     xhr.open('GET', '/message/get-messages', true);
     xhr.setRequestHeader('Content-Type', 'application/json');
@@ -14,6 +15,7 @@ function load_page_message() {
                 liste_message = response.messages
                 liste_message_tous = response.messages
                 load_table_message_parameters()
+                quit_loading_mode()
             } else {
                 alert('Erreur');
             }

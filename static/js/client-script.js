@@ -119,11 +119,6 @@ function check_quantity() {
     xhr.send(JSON.stringify({date_debut: date_debut, date_fin: date_fin, id_modele: select_type}));
 }
 
-function enter_loading_mode() {
-}
-
-function quit_loading_mode() {
-}
 
 function load_types() {
     var select_type = document.getElementById("select-type");

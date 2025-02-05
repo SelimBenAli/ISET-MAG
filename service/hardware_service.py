@@ -94,11 +94,13 @@ class HardwareService:
 
     def add_hardware(self, id_model, id_fournisseur, id_magasin, id_salle, numero_inventaire, date_achat,
                      date_mise_en_service, code, id_etat, historique_relation):
+        print("date 10 : ", date_achat, date_mise_en_service)
         req = (f"""INSERT INTO hardware (IDModel, IDFournisseur, IDMagasin, IDSalle, 
          NumeroInventaire, DateAchat, DateAjout, DateMiseEnService, Code, IDEtat, HistoriqueRelation) 
-                VALUES ({id_model}, {id_fournisseur}, {id_magasin}, {id_salle}, '{numero_inventaire}', {date_achat},
+                VALUES ({id_model}, {id_fournisseur}, {id_magasin}, {id_salle}, '{numero_inventaire}', '{date_achat}',
                  NOW(),
-                 {date_mise_en_service}, '{code}', {id_etat}, {json.dumps(historique_relation)})""")
+                 '{date_mise_en_service}', '{code}', {id_etat}, {json.dumps(historique_relation)})""")
+        print(req)
         return self.database_tools.execute_request(req)
 
     def update_hardware(self, id_hardware, id_model, id_fournisseur, id_magasin, id_salle, numero_inventaire,

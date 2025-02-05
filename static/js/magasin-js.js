@@ -3,6 +3,7 @@ var liste_magasin = []
 var division_table = 7
 
 function load_page_magasin() {
+    enter_loading_mode()
     var xhr = new XMLHttpRequest();
     xhr.open('GET', '/magasin/get-magasins', true);
     xhr.setRequestHeader('Content-Type', 'application/json');
@@ -14,6 +15,7 @@ function load_page_magasin() {
                 liste_magasin = response.magasins
                 liste_magasin_tous = response.magasins
                 load_table_magasin_parameters()
+                quit_loading_mode()
             } else {
                 alert('Erreur');
             }

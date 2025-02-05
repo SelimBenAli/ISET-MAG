@@ -3,6 +3,7 @@ var liste_location = []
 var division_table = 7
 
 function load_page_location() {
+    enter_loading_mode()
     var xhr = new XMLHttpRequest();
     xhr.open('GET', '/location/get-locations', true);
     xhr.setRequestHeader('Content-Type', 'application/json');
@@ -14,6 +15,7 @@ function load_page_location() {
                 liste_location_tous = response.locations
                 liste_location = response.locations
                 load_table_location_parameters()
+                quit_loading_mode()
             } else {
                 alert('Erreur');
             }

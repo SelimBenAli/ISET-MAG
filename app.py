@@ -1,5 +1,5 @@
 from flask_cors import CORS
-from flask import Flask
+from flask import Flask, url_for, redirect
 from flask_socketio import SocketIO
 
 # Import Blueprints
@@ -44,5 +44,16 @@ app.register_blueprint(client_bp, url_prefix='/client')
 app.register_blueprint(user_bp, url_prefix='/user')
 app.register_blueprint(message_bp, url_prefix='/message')
 
+
+@app.route('/')
+def index_client():
+    return redirect(url_for('auth.login'))
+
+
+@app.route('/admin')
+def index_admin():
+    return redirect(url_for('dashboard.reclamation_template'))
+
+
 if __name__ == '__main__':
-    socketio.run(app, debug=True)
+    socketio.run(app, debug=True, host='0.0.0.0')

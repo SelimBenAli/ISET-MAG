@@ -3,6 +3,7 @@ var liste_reclamation = []
 var division_table = 7
 
 function load_page_reclamation() {
+    enter_loading_mode()
     var xhr = new XMLHttpRequest();
     xhr.open('GET', '/reclamation/get-reclamations', true);
     xhr.setRequestHeader('Content-Type', 'application/json');
@@ -14,6 +15,7 @@ function load_page_reclamation() {
                 liste_reclamation = response.reclamations
                 liste_reclamation_tous = response.reclamations
                 load_table_reclamation_parameters()
+                quit_loading_mode()
             } else {
                 alert('Erreur');
             }

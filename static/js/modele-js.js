@@ -3,6 +3,7 @@ var liste_modele = []
 var division_table = 7
 
 function load_page_modele() {
+    enter_loading_mode()
     var xhr = new XMLHttpRequest();
     xhr.open('GET', '/modele/get-modeles', true);
     xhr.setRequestHeader('Content-Type', 'application/json');
@@ -14,8 +15,9 @@ function load_page_modele() {
                 liste_modele = response.modeles
                 liste_modele_tous = response.modeles
                 load_table_modele_parameters()
+                quit_loading_mode()
             } else {
-                alert('Email ou mot de passe incorrect');
+                alert('Erreur');
             }
         }
     };

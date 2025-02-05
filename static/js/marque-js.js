@@ -3,6 +3,7 @@ var liste_marque = []
 var division_table = 7
 
 function load_page_marque() {
+    enter_loading_mode()
     var xhr = new XMLHttpRequest();
     xhr.open('GET', '/marque/get-marques', true);
     xhr.setRequestHeader('Content-Type', 'application/json');
@@ -14,8 +15,9 @@ function load_page_marque() {
                 liste_marque = response.marques
                 liste_marque_tous = response.marques
                 load_table_marque_parameters()
+                quit_loading_mode()
             } else {
-                alert('Email ou mot de passe incorrect');
+                alert('Erreur');
             }
         }
     };

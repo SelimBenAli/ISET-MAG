@@ -5,6 +5,7 @@ var liste_bloc = []
 var division_table = 7
 
 function load_page_salle_bloc() {
+    enter_loading_mode()
     var xhr = new XMLHttpRequest();
     xhr.open('GET', '/salle-bloc/get-salle-and-bloc', true);
     xhr.setRequestHeader('Content-Type', 'application/json');
@@ -18,8 +19,9 @@ function load_page_salle_bloc() {
                 liste_salle_tous = response.salles
                 liste_bloc_tous = response.blocs
                 load_table_salle_parameters()
+                quit_loading_mode()
             } else {
-                alert('Email ou mot de passe incorrect');
+                alert('Erreur');
             }
         }
     };
@@ -149,7 +151,7 @@ function ajout_salle_request(nom, bloc) {
             if (response.status === 'success') {
                 window.location.href = "/dashboard/salle-bloc";
             } else {
-                alert('Email ou mot de passe incorrect');
+                alert('Erreur');
             }
         }
     };

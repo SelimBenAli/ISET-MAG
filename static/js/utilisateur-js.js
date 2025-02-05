@@ -3,6 +3,7 @@ var liste_utilisateur = []
 var division_table = 7
 
 function load_page_utilisateur() {
+    enter_loading_mode()
     var xhr = new XMLHttpRequest();
     xhr.open('GET', '/user/get-utilisateurs', true);
     xhr.setRequestHeader('Content-Type', 'application/json');
@@ -14,6 +15,7 @@ function load_page_utilisateur() {
                 liste_utilisateur = response.utilisateurs
                 liste_utilisateur_tous = response.utilisateurs
                 load_table_utilisateur_parameters()
+                quit_loading_mode()
             } else {
                 alert('Erreur');
             }

@@ -4,6 +4,7 @@ var division_table = 7
 var current_hardware = null
 
 function load_page_hardware_liste() {
+    enter_loading_mode();
     var xhr = new XMLHttpRequest();
     xhr.open('GET', '/hardware/get-hardwares', true);
     xhr.setRequestHeader('Content-Type', 'application/json');
@@ -14,9 +15,10 @@ function load_page_hardware_liste() {
             if (response.status === 'success') {
                 liste_hardware = response.hardwares
                 liste_hardware_tous = response.hardwares
-                load_table_hardware_parameters()
+                load_table_hardware_parameters();
+                quit_loading_mode();
             } else {
-                alert('Email ou mot de passe incorrect');
+                alert('Erreur');
             }
         }
     };
@@ -150,6 +152,7 @@ function search_hardware_by_all() {
 }
 
 function load_table_hardware_parameters() {
+
     header = "<thead><tr><th>Code</th><th>Modèle</th><th>Marque</th><th>Magasin</th><th>Salle</th><th>Num Inventaire</th><th>Etat</th><th>Code à Bar</th><th>Consulter</th><th>Modifier</th><th>Supprimer</th></tr></thead>"
     footer = "<tfoot><tr><th>Code</th><th>Modèle</th><th>Marque</th><th>Magasin</th><th>Salle</th><th>Num Inventaire</th><th>Etat</th><th>Code à Bar</th><th>Consulter</th><th>Modifier</th><th>Supprimer</th></tr></tfoot>"
     body = []

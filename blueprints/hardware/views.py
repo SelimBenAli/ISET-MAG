@@ -26,6 +26,7 @@ class HardwareViews:
                 date_mise_en_service = data.get('date_mise_en_service_hardware')
                 code_hardware = data.get('code_hardware')
                 id_etat = data.get('etat_hardware')
+                print("date 1 : ", date_achat, date_mise_en_service)
                 if id_modele is None:
                     return jsonify({'status': 'failed', 'message': 'modele is required'})
                 if id_fournisseur is None:
@@ -44,6 +45,7 @@ class HardwareViews:
                     id_salle = ' NULL '
                 if id_magasin == 0 or id_magasin == '0':
                     id_magasin = ' NULL '
+                print("date 2 : ", date_achat, date_mise_en_service)
                 status = self.hardware_service.add_hardware(id_modele, id_fournisseur, id_magasin, id_salle,
                                                             num_inventaire,
                                                             date_achat, date_mise_en_service, code_hardware, id_etat,

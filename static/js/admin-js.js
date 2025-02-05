@@ -160,7 +160,7 @@ function show_alerts_notifications(data) {
 
         }
     })
-    div.innerHTML += ' <div class="dropdown-item text-center small text-gray-500"><div style="display: flex; justify-content: space-between"><a onclick="openPageLocation()">Locations.</a><a onclick="openPageReclamation()">Réclamations.</a></div></div>'
+    div.innerHTML += ' <div class="dropdown-item text-center small text-gray-500"><div style="display: flex; justify-content: space-between"><a onclick="openPageLocation()">Réservations.</a><a onclick="openPageReclamation()">Réclamations.</a></div></div>'
 }
 
 function alert_notification_sound() {
@@ -186,5 +186,11 @@ socket.on('update_admin_alert', function (data) {
     console.log("updated alert : ", data)
     load_alerts_notifications(data)
     alert_notification_sound()
+});
+
+socket.on('update_admin_message', function (data) {
+    console.log("updated message : ", data)
+    load_messages_notifications(data)
+    message_notification_sound()
 });
 

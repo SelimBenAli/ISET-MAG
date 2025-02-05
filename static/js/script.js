@@ -235,3 +235,29 @@ function handlePaste(e) {
     // Do whatever with pasteddata
     alert(pastedData);
 }
+
+function enter_loading_mode() {
+    big_div = document.getElementsByClassName('container-fluid')[0];
+    loading_div = document.createElement('div');
+    loading_div.id = 'loading';
+    loading_div.style = "    position: fixed;\n" +
+        "    top: 0;\n" +
+        "    left: 0;\n" +
+        "    width: 100%;\n" +
+        "    height: 100%;\n" +
+        "    background-color: rgba(0, 0, 0, 0.5);\n" +
+        "    backdrop-filter: blur(4px);\n" +
+        "    z-index: 3;" +
+        "display: flex;" +
+        "align-items: center;" +
+        "justify-content: center;"
+    loading_div.innerHTML = `<div class="spinner-border text-primary" role="status">
+    <span class="sr-only">Loading...</span>
+    </div>`;
+    big_div.appendChild(loading_div);
+}
+
+function quit_loading_mode() {
+    loading_div = document.getElementById('loading');
+    loading_div.remove();
+}

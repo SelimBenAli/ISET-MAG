@@ -3,6 +3,7 @@ var liste_fournisseur = []
 var division_table = 7
 
 function load_page_fournisseur() {
+    enter_loading_mode()
     var xhr = new XMLHttpRequest();
     xhr.open('GET', '/fournisseur/get-fournisseurs', true);
     xhr.setRequestHeader('Content-Type', 'application/json');
@@ -14,8 +15,9 @@ function load_page_fournisseur() {
                 liste_fournisseur = response.fournisseurs
                 liste_fournisseur_tous = response.fournisseurs
                 load_table_fournisseur_parameters()
+                quit_loading_mode()
             } else {
-                alert('Email ou mot de passe incorrect');
+                alert('Erreur');
             }
         }
     };

@@ -3,6 +3,7 @@ var liste_intervention = []
 var division_table = 7
 
 function load_page_intervention() {
+    enter_loading_mode()
     var xhr = new XMLHttpRequest();
     xhr.open('GET', '/intervention/get-interventions', true);
     xhr.setRequestHeader('Content-Type', 'application/json');
@@ -14,8 +15,9 @@ function load_page_intervention() {
                 liste_intervention = response.interventions
                 liste_intervention_tous = response.interventions
                 load_table_intervention_parameters()
+                quit_loading_mode()
             } else {
-                alert('Error');
+                alert('Erreur');
             }
         }
     };
