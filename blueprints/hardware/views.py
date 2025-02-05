@@ -42,9 +42,9 @@ class HardwareViews:
                 if date_mise_en_service is None or date_mise_en_service == '':
                     date_mise_en_service = ' NULL '
                 if id_salle == 0 or id_salle == '0':
-                    id_salle = ' NULL '
+                    id_salle = 'NULL'
                 if id_magasin == 0 or id_magasin == '0':
-                    id_magasin = ' NULL '
+                    id_magasin = 'NULL'
                 print("date 2 : ", date_achat, date_mise_en_service)
                 status = self.hardware_service.add_hardware(id_modele, id_fournisseur, id_magasin, id_salle,
                                                             num_inventaire,
