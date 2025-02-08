@@ -19,11 +19,19 @@ class ReclamationService:
             self.connection, self.cursor = self.database_tools.find_connection()
             self.cursor.execute(
                 f"""SELECT `IDReclamation`, `IDHardware`, `IDUtilisateur`, `IDIntervention`, `DateReclamation`,
-                 `Description`, `IDEtat`, `Vu` FROM `reclamation_hardware` WHERE {add}""")
+                 `Description`, `IDEtat`, `Vu`, `IDTechnicien`, `DescriptionTechnicien`, `DateTechnicien`
+                  FROM `reclamation_hardware` WHERE {add}""")
             data = self.cursor.fetchall()
             liste_reclamation = []
             for element in data:
                 status, hardware = HardwareService().find_hardware_by_id(element[1])
+                if element[8] == 'NULL' or element[8] is None:
+                    technicien = None
+                    description_technicien = None
+                else:
+                    status, technicien = UtilisateurService().find_utilisateur_by_id(element[8])
+                    technicien = technicien[0]
+                    description_technicien = element[9]
                 status, utilisateur = UtilisateurService().find_utilisateur_by_id(element[2])
                 status, intervention = InterventionService().find_intervention_by_id(element[3])
                 if status == 'error':
@@ -31,7 +39,8 @@ class ReclamationService:
                 # etat = EtatService().find_etat_by_id(element[6])
                 reclamation = Reclamation(
                     element[0], hardware[0], utilisateur[0], intervention, None, element[5],
-                    self.date_tools.convert_date_time(element[4]), element[7])
+                    self.date_tools.convert_date_time(element[4]), element[7], technicien, description_technicien,
+                    self.date_tools.convert_date_time(element[10]))
                 liste_reclamation.append(reclamation.dict_form())
             self.cursor.close()
             self.connection.close()
@@ -54,12 +63,21 @@ class ReclamationService:
     def find_reclamation_by_id_etat(self, id_etat):
         return self.find_reclamation_by_something(f" IDEtat = {id_etat}")
 
+    def find_reclamation_by_not_finished(self):
+        return self.find_reclamation_by_something(f" IDTechnicien IS NULL ")
+
     def add_reclamation(self, id_hardware, id_utilisateur, id_intervention, description):
         return self.database_tools.execute_request(
             f"""INSERT INTO reclamation_hardware (IDHardware, IDUtilisateur, IDIntervention, 
              Description, IDEtat, Vu) 
             VALUES ({id_hardware}, {id_utilisateur}, {id_intervention}, "{description}",
              NULL, '')""")
+
+    def finish_reclamation(self, id_reclamation, id_technicien, description):
+        return self.database_tools.execute_request(
+            f""" UPDATE reclamation_hardware SET IDTechnicien = '{id_technicien}',
+             DescriptionTechnicien = '{description}', DateTechnicien = NOW() WHERE IDReclamation = '{id_reclamation}' """
+        )
 
     def update_reclamation(self, id_reclamation, id_hardware, id_utilisateur, id_intervention, date_reclamation,
                            description, id_etat):
@@ -93,6 +111,5 @@ class ReclamationService:
                 print(req)
                 self.database_tools.execute_request(req)
         self.connection.commit()
-
         self.cursor.close()
         self.connection.close()

@@ -23,13 +23,13 @@ class ClientViews:
         @self.client_bp.route('/contact', methods=['GET'])
         def contact_client():
             if self.user_tools.check_user_in_session('user'):
-                return render_template('client/contacts.html', page_name='openPageContactClient')
+                return render_template('client/contacts.html', page_name='openPageContactClient', user=session['user'])
             return redirect(url_for('auth.login'))
 
         @self.client_bp.route('/location', methods=['GET'])
         def location_client():
             if self.user_tools.check_user_in_session('user'):
-                return render_template('client/location.html', page_name='openPageLocationClient')
+                return render_template('client/location.html', page_name='openPageLocationClient', user=session['user'])
             return redirect(url_for('auth.login'))
 
         @self.client_bp.route('/reclamation/<string:numero_inventaire_hardware>', methods=['GET'])
@@ -45,9 +45,9 @@ class ClientViews:
                         print(hardware)
                         session['hardware_reclamation'] = hardware[0]
                         return render_template('client/reclamation.html', hardware=hardware[0], new=True,
-                                               page_name='openPageReclamationClient')
+                                               page_name='openPageReclamationClient', user=session['user'])
                 return render_template('client/reclamation.html', hardware=None, new=new,
-                                       page_name='openPageReclamationClient')
+                                       page_name='openPageReclamationClient', user=session['user'])
             return redirect(url_for('auth.login'))
 
         @self.client_bp.route('/historique-materielle', methods=['GET'])
@@ -60,7 +60,7 @@ class ClientViews:
                     return render_template('client/404.html')
                 print(interventions)
                 return render_template('client/historique-materielle.html', liste_interventions=interventions,
-                                       page_name='openPageHistoriqueMaterielleClient')
+                                       page_name='openPageHistoriqueMaterielleClient', user=session['user'])
             return redirect(url_for('auth.login'))
 
         @self.client_bp.route('/historique-reclamation', methods=['GET'])
@@ -73,7 +73,7 @@ class ClientViews:
                     return render_template('client/404.html')
                 print(reclamations)
                 return render_template('client/historique-reclamation.html', liste_reclamations=reclamations,
-                                       page_name='openPageHistoriqueReclamationClient')
+                                       page_name='openPageHistoriqueReclamationClient', user=session['user'])
             return redirect(url_for('auth.login'))
 
         @self.client_bp.route('/historique-location', methods=['GET'])
@@ -85,5 +85,37 @@ class ClientViews:
                     return render_template('client/404.html')
                 print(locations)
                 return render_template('client/historique-location.html', liste_locations=locations,
-                                       page_name='openPageHistoriqueLocationClient')
+                                       page_name='openPageHistoriqueLocationClient', user=session['user'])
             return redirect(url_for('auth.login'))
+
+        @self.client_bp.route('/reclamation-active', methods=['GET'])
+        def reclamation_active_client():
+            if self.user_tools.check_user_in_session('user'):
+                user = session['user']
+                if user['role_utilisateur']['id_role'] != 2:
+                    return render_template('client/404.html')
+                status, reclamations = self.reclamation_service.find_reclamation_by_not_finished()
+                if status != 'success':
+                    return render_template('client/404.html')
+                print(reclamations)
+                return render_template('client/reclamation-active.html', liste_reclamations=reclamations,
+                                       page_name='openPageReclamationActiveClient', user=session['user'])
+            return redirect(url_for('auth.login'))
+
+        @self.client_bp.route('/fermer-reclamation/<int:idr>', methods=['GET'])
+        def fermer_reclamation_client(idr):
+            if self.user_tools.check_user_in_session('user'):
+                user = session['user']
+                if user['role_utilisateur']['id_role'] != 2:
+                    return render_template('client/404.html')
+                status, reclamation = self.reclamation_service.find_reclamation_by_id(idr)
+                if status != 'success':
+                    return render_template('client/404.html')
+                print(reclamation)
+                return render_template('client/fermer-reclamation.html', reclamation=reclamation[0],
+                                       page_name='openPageReclamationActiveClient', user=session['user'])
+            return redirect(url_for('auth.login'))
+
+    @staticmethod
+    def get_current_user():
+        return session['user']

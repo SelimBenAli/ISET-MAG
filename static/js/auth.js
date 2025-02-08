@@ -26,6 +26,14 @@ function openPageHistoriqueLocationClient() {
     window.location.href = "/client/historique-location";
 }
 
+function openPageReclamationActiveClient() {
+    window.location.href = "/client/reclamation-active";
+}
+
+function openPageFermerReclamationClient(idr) {
+    window.location.href = "/client/fermer-reclamation/" + idr;
+}
+
 function logout_request() {
     window.location.href = "/auth/logout";
 }

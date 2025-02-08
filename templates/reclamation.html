@@ -44,15 +44,29 @@
 
                             <div class="col-md-12" style="display: flex; justify-content: space-around">
                                 <div class=" dataTables_filter" id="dataTable_filter"><label
+                                        class="form-label">Etat de Réclamation :
+                                <select class="form-select" onchange="search_reclamation_by_status()" id="etat_reclamation" >
+                                    <option value="get-all">Tous</option>
+                                    <option value="1">En cours</option>
+                                    <option value="2">Fermée</option>
+                                </select>
+                                </label>
+                                </div>
+
+
+                                <div class=" dataTables_filter" id="dataTable_filter"><label
                                         class="form-label"><input type="search" id="utilisateur-reclamation"
                                                                   class="form-control form-control-sm"
                                                                   aria-controls="dataTable"
-                                                                  placeholder="Chercher par utilisateur..." oninput="search_reclamation_by_user()"></label>
-                                </div><div class=" dataTables_filter" id="dataTable_filter"><label
+                                                                  placeholder="Chercher par utilisateur..."
+                                                                  oninput="search_reclamation_by_user()"></label>
+                                </div>
+                                <div class=" dataTables_filter" id="dataTable_filter"><label
                                         class="form-label"><input type="search" id="num-inv-reclamation"
                                                                   class="form-control form-control-sm"
                                                                   aria-controls="dataTable"
-                                                                  placeholder="Chercher par numéro d'inventaire..." oninput="search_reclamation_by_num_inventaire()"></label>
+                                                                  placeholder="Chercher par numéro d'inventaire..."
+                                                                  oninput="search_reclamation_by_num_inventaire()"></label>
                                 </div>
                             </div>
                         </div>

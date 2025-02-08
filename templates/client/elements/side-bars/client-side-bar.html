@@ -5,6 +5,11 @@
                 class="visually-hidden">Toggle navigation</span><span class="navbar-toggler-icon"></span></button>
         <div class="collapse navbar-collapse" id="navcol-1">
             <ul class="navbar-nav mx-auto">
+            {% if user['role_utilisateur']['id_role'] == 2 %}
+                <li class="nav-item"><a
+                        class="nav-link {% if page_name == 'openPageReclamationActive' %} fw-bold underline {% endif %} "
+                        onclick="openPageReclamationActiveClient()">Réclamations en Cour</a></li>
+                {% endif %}
                 <li class="nav-item"><a
                         class="nav-link {% if page_name == 'openPageLocationClient' %} fw-bold underline {% endif %} "
                         onclick="openPageLocationClient()">Réserver Matériel</a></li>
@@ -23,6 +28,7 @@
                 <li class="nav-item"><a
                         class="nav-link {% if page_name == 'openPageContactClient' %} fw-bold underline {% endif %} "
                         onclick="openPageContactClient()">Contactez Nous</a></li>
+
             </ul>
             <a class="btn btn-primary shadow" role="button" onclick="logout_request()">Logout</a>
         </div>

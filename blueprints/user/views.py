@@ -167,3 +167,15 @@ class UserViews:
                     return jsonify({'status': 'success'})
                 return jsonify({'status': 'failed'})
             return jsonify({'status': 'failed'})
+
+        @self.user_bp.route('/fermer-reclamation/<int:idr>', methods=['PUT'])
+        def fermer_reclamation(idr):
+            if self.user_tools.check_user_in_session('admin'):
+                data = request.get_json()
+                description = data.get('description')
+                technicien = session['user']
+                status = self.reclamation_service.finish_reclamation(idr, technicien['id_utilisateur'], description)
+                if status == 'success':
+                    return jsonify({'status': 'success'})
+                return jsonify({'status': 'failed'})
+            return jsonify({'status': 'failed'})

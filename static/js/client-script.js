@@ -163,3 +163,23 @@ function envoyer_message() {
     };
     xhr.send(JSON.stringify({sujet: sujet, message: message}));
 }
+
+function envoyer_fermeture_reclamation(idr) {
+     var message = document.getElementById("comment").value;
+
+    var xhr = new XMLHttpRequest();
+    xhr.open('PUT', '/user/fermer-reclamation/' + idr, true);
+    xhr.setRequestHeader('Content-Type', 'application/json');
+    xhr.onreadystatechange = function () {
+        if (xhr.readyState === 4 && xhr.status === 200) {
+            var response = JSON.parse(xhr.responseText);
+            console.log(response)
+            if (response.status === 'success') {
+                openPageReclamationActiveClient()
+            } else {
+                alert('Erreur');
+            }
+        }
+    };
+    xhr.send(JSON.stringify({message: message}));
+}
