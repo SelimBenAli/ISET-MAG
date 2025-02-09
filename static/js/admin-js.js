@@ -1,4 +1,5 @@
 var lien = "http://127.0.0.1:5000/static/";
+
 function login() {
     console.log('login')
     var email = document.getElementById("email").value;
@@ -104,10 +105,6 @@ function alert_message_number(number) {
 }
 
 
-
-
-
-
 function load_alerts_notifications() {
     console.log('load_alerts_notifications')
     var xhr = new XMLHttpRequest();
@@ -130,8 +127,7 @@ function show_alerts_notifications(data) {
     div = document.getElementById('alerts-notifications-div');
     div.innerHTML = '<h6 class="dropdown-header">Centre des Alertes</h6>';
     data.forEach(function (alert) {
-        if (alert.type === 'reclamation')
-        {
+        if (alert.type === 'reclamation') {
             my_reclamation = alert.reclamation
             div.innerHTML += `
                       <a class="dropdown-item d-flex align-items-center" onclick="openPageReclamation()">
@@ -144,8 +140,7 @@ function show_alerts_notifications(data) {
                     </a>
                        
         `;
-        }
-        else {
+        } else {
             my_location = alert.location
             div.innerHTML += `
             <a class="dropdown-item d-flex align-items-center" onclick="openPageLocation()">
@@ -194,3 +189,14 @@ socket.on('update_admin_message', function (data) {
     message_notification_sound()
 });
 
+socket.on('close_admin_session', function (data) {
+    user_element = document.querySelector('userdata').textContent;
+    user_element = user_element.replaceAll("\'", "\"");
+    user_data = JSON.parse(user_element);
+    if (data.id_admin == user_data.id_admin) {
+        console.log("closed session 5 : ", "ok")
+        console.log("closed session : ", data)
+        alert("Session Fermé par l'administrateur")
+        window.location.href = "/auth/logout";
+    }
+});

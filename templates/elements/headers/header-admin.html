@@ -4,6 +4,7 @@
 <audio id="sound-message" src="{{ url_for('static', filename='sound/alert.wav') }}"></audio>
 <script>load_messages_notifications()</script>
 <script>load_alerts_notifications()</script>
+<userdata hidden>{{ user }}</userdata>
 
 <nav class="navbar navbar-expand bg-white shadow mb-4 topbar">
     <div class="container-fluid">
@@ -92,8 +93,8 @@
                     ><i
                             class="fas fa-user fa-sm fa-fw me-2 text-gray-400"></i>&nbsp;Profile</a><a
                             class="dropdown-item" href="#"><i class="fas fa-cogs fa-sm fa-fw me-2 text-gray-400"></i>&nbsp;Settings</a><a
-                            class="dropdown-item" href="#"><i class="fas fa-list fa-sm fa-fw me-2 text-gray-400"></i>&nbsp;Activity
-                        log</a>
+                            onclick="openPageAdminUtilisateur()"
+                            class="dropdown-item" href="#"><i class="fas fa-list fa-sm fa-fw me-2 text-gray-400"></i>&nbsp;Liste des Admins</a>
                         <div class="dropdown-divider"></div>
                         <a class="dropdown-item" href="#"><i
                                 class="fas fa-sign-out-alt fa-sm fa-fw me-2 text-gray-400"></i>&nbsp;Logout</a>

@@ -40,14 +40,12 @@ function search_reclamation_by_status() {
     if (search === "get-all") {
         liste_reclamation = liste_reclamation_tous
     } else if (search === "1") {
-        console.log("1")
         liste_reclamation = liste_reclamation_tous.filter(
             reclamation => {
                 return reclamation.technicien_reclamation == null
             }
         );
     } else {
-        console.log("2")
         liste_reclamation = liste_reclamation_tous.filter(
             reclamation => {
                 return reclamation.technicien_reclamation != null

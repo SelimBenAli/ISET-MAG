@@ -2,6 +2,7 @@ from flask import Blueprint, render_template, request, session, flash
 
 from service.admin_service import AdminService
 from tools.user_tools import UserTools
+from extensions import socketio
 
 
 class AdminViews:
@@ -24,6 +25,12 @@ class AdminViews:
             status, admin = self.admin_service.find_admin(email, password)
             print(status)
             if status == 'success':
+                if admin['desactive_admin'] == 1:
+                    flash('Votre Compte est Désactivé', 'error')
+                    return {'status': 'failed'}
+                if admin['marked_as_deleted'] == 1:
+                    flash('Votre Compte est Supprimé', 'error')
+                    return {'status': 'failed'}
                 print("ok", admin)
                 session['admin'] = admin.dict_form()
                 return {'status': 'success'}
@@ -50,6 +57,25 @@ class AdminViews:
                 nom = data.get('nom')
                 status = self.admin_service.change_details(id_admin, prenom, nom, email)
                 if status == 'success':
+                    return {'status': 'success'}
+                return {'status': 'failed'}
+            return {'status': 'failed'}
+
+        @self.admin_bp.route('/load-page-admins', methods=['GET'])
+        def load_page_admins():
+            if self.user_tools.check_user_in_session('admin'):
+                status, admins = self.admin_service.find_all_admin()
+                if status == 'success':
+                    return {'status': 'success', 'admins': admins}
+                return {'status': 'failed'}
+            return {'status': 'failed'}
+
+        @self.admin_bp.route('/desactivate-admin/<int:ida>', methods=['PUT'])
+        def desactivate_admin(ida):
+            if self.user_tools.check_user_in_session('admin'):
+                status = self.admin_service.desactivate_admin(ida)
+                if status == 'success':
+                    socketio.emit('close_admin_session', {'message': 'success', 'id_admin': ida})
                     return {'status': 'success'}
                 return {'status': 'failed'}
             return {'status': 'failed'}

@@ -53,7 +53,7 @@ class DashboardViews:
         def salle_bloc_template():
             if self.user_tools.check_user_in_session('admin'):
                 status, liste_bloc = self.bloc_service.find_all_bloc()
-                return render_template('salle-bloc.html', liste_bloc=liste_bloc)
+                return render_template('salle-bloc.html', liste_bloc=liste_bloc, user=session['admin'])
             else:
                 return redirect(url_for('admin.login'))
 
@@ -61,7 +61,7 @@ class DashboardViews:
         def ajout_salle_bloc_template():
             if self.user_tools.check_user_in_session('admin'):
                 liste_bloc = self.bloc_service.find_all_bloc()[1]
-                return render_template('ajout-salle-bloc.html', liste_bloc=liste_bloc)
+                return render_template('ajout-salle-bloc.html', liste_bloc=liste_bloc, user=session['admin'])
             else:
                 return redirect(url_for('admin.login'))
 
@@ -69,7 +69,7 @@ class DashboardViews:
         def modifier_bloc_template(idb):
             if self.user_tools.check_user_in_session('admin'):
                 status, bloc = self.bloc_service.find_bloc_by_id(idb)
-                return render_template('modifier-bloc.html', bloc=bloc[0])
+                return render_template('modifier-bloc.html', bloc=bloc[0], user=session['admin'])
             else:
                 return redirect(url_for('admin.login'))
 
@@ -78,7 +78,8 @@ class DashboardViews:
             if self.user_tools.check_user_in_session('admin'):
                 status, salle = self.salle_service.find_salle_by_id(ids)
                 liste_bloc = self.bloc_service.find_all_bloc()[1]
-                return render_template('modifier-salle.html', salle=salle[0], liste_bloc=liste_bloc)
+                return render_template('modifier-salle.html', salle=salle[0], liste_bloc=liste_bloc,
+                                       user=session['admin'])
             else:
                 return redirect(url_for('admin.login'))
 
@@ -86,14 +87,14 @@ class DashboardViews:
         @self.dashboard_bp.route('/fournisseur', methods=['GET'])
         def fournisseur_template():
             if self.user_tools.check_user_in_session('admin'):
-                return render_template('fournisseur.html')
+                return render_template('fournisseur.html', user=session['admin'])
             else:
                 return redirect(url_for('admin.login'))
 
         @self.dashboard_bp.route('/add-fournisseur', methods=['GET'])
         def ajout_fournisseur_template():
             if self.user_tools.check_user_in_session('admin'):
-                return render_template('ajout-fournisseur.html')
+                return render_template('ajout-fournisseur.html', user=session['admin'])
             else:
                 return redirect(url_for('admin.login'))
 
@@ -101,7 +102,7 @@ class DashboardViews:
         def modifier_fournisseur_template(idf):
             if self.user_tools.check_user_in_session('admin'):
                 status, fournisseur = self.fournisseur_service.find_fournisseur_by_id(idf)
-                return render_template('modifier-fournisseur.html', fournisseur=fournisseur[0])
+                return render_template('modifier-fournisseur.html', fournisseur=fournisseur[0], user=session['admin'])
             else:
                 return redirect(url_for('admin.login'))
 
@@ -109,14 +110,14 @@ class DashboardViews:
         @self.dashboard_bp.route('/marque', methods=['GET'])
         def marque_template():
             if self.user_tools.check_user_in_session('admin'):
-                return render_template('marque.html')
+                return render_template('marque.html', user=session['admin'])
             else:
                 return redirect(url_for('admin.login'))
 
         @self.dashboard_bp.route('/add-marque', methods=['GET'])
         def ajout_marque_template():
             if self.user_tools.check_user_in_session('admin'):
-                return render_template('ajout-marque.html')
+                return render_template('ajout-marque.html', user=session['admin'])
             else:
                 return redirect(url_for('admin.login'))
 
@@ -124,7 +125,7 @@ class DashboardViews:
         def modifier_marque_template(idm):
             if self.user_tools.check_user_in_session('admin'):
                 status, marque = self.marque_service.find_marque_by_id(idm)
-                return render_template('modifier-marque.html', marque=marque[0])
+                return render_template('modifier-marque.html', marque=marque[0], user=session['admin'])
             else:
                 return redirect(url_for('admin.login'))
 
@@ -133,7 +134,7 @@ class DashboardViews:
         def modele_template():
             if self.user_tools.check_user_in_session('admin'):
                 liste_marque = self.marque_service.find_all_marque()[1]
-                return render_template('modele.html', liste_marque=liste_marque)
+                return render_template('modele.html', liste_marque=liste_marque, user=session['admin'])
             else:
                 return redirect(url_for('admin.login'))
 
@@ -141,7 +142,7 @@ class DashboardViews:
         def ajout_modele_template():
             if self.user_tools.check_user_in_session('admin'):
                 liste_marque = self.marque_service.find_all_marque()[1]
-                return render_template('ajout-modele.html', liste_marque=liste_marque)
+                return render_template('ajout-modele.html', liste_marque=liste_marque, user=session['admin'])
             else:
                 return redirect(url_for('admin.login'))
 
@@ -150,7 +151,8 @@ class DashboardViews:
             if self.user_tools.check_user_in_session('admin'):
                 status, modele = self.modele_service.find_modele_by_id(idm)
                 liste_marque = self.marque_service.find_all_marque()[1]
-                return render_template('modifier-modele.html', modele=modele[0], liste_marque=liste_marque)
+                return render_template('modifier-modele.html', modele=modele[0], liste_marque=liste_marque,
+                                       user=session['admin'])
             else:
                 return redirect(url_for('admin.login'))
 
@@ -159,7 +161,7 @@ class DashboardViews:
         def magasin_template():
             if self.user_tools.check_user_in_session('admin'):
                 liste_bloc = self.bloc_service.find_all_bloc()[1]
-                return render_template('magasin.html', liste_bloc=liste_bloc)
+                return render_template('magasin.html', liste_bloc=liste_bloc, user=session['admin'])
             else:
                 return redirect(url_for('admin.login'))
 
@@ -167,7 +169,7 @@ class DashboardViews:
         def ajout_magasin_template():
             if self.user_tools.check_user_in_session('admin'):
                 liste_salle = self.salle_service.find_all_salle()[1]
-                return render_template('ajout-magasin.html', liste_salle=liste_salle)
+                return render_template('ajout-magasin.html', liste_salle=liste_salle, user=session['admin'])
             else:
                 return redirect(url_for('admin.login'))
 
@@ -176,7 +178,8 @@ class DashboardViews:
             if self.user_tools.check_user_in_session('admin'):
                 status, magasin = self.magasin_service.find_magasin_by_id(idm)
                 liste_salle = self.salle_service.find_all_salle()[1]
-                return render_template('modifier-magasin.html', magasin=magasin[0], liste_salle=liste_salle)
+                return render_template('modifier-magasin.html', magasin=magasin[0], liste_salle=liste_salle,
+                                       user=session['admin'])
             else:
                 return redirect(url_for('admin.login'))
 
@@ -192,7 +195,8 @@ class DashboardViews:
                 liste_marque = self.marque_service.find_all_marque()[1]
                 return render_template('hardware.html', liste_modele=liste_modele, liste_marque=liste_marque,
                                        liste_fournisseur=liste_fournisseur,
-                                       liste_magasin=liste_magasin, liste_salle=liste_salle, liste_etat=liste_etat)
+                                       liste_magasin=liste_magasin, liste_salle=liste_salle, liste_etat=liste_etat,
+                                       user=session['admin'])
             else:
                 return redirect(url_for('admin.login'))
 
@@ -206,7 +210,8 @@ class DashboardViews:
                 liste_etat = self.etat_service.find_all_etat()[1]
                 return render_template('ajout-hardware.html', liste_modele=liste_modele,
                                        liste_fournisseur=liste_fournisseur,
-                                       liste_magasin=liste_magasin, liste_salle=liste_salle, liste_etat=liste_etat)
+                                       liste_magasin=liste_magasin, liste_salle=liste_salle, liste_etat=liste_etat,
+                                       user=session['admin'])
             else:
                 return redirect(url_for('admin.login'))
 
@@ -221,7 +226,7 @@ class DashboardViews:
                 liste_etat = self.etat_service.find_all_etat()[1]
                 return render_template('modifier-hardware.html', hardware=hardware[0], liste_modele=liste_modele,
                                        liste_fournisseur=liste_fournisseur, liste_magasin=liste_magasin,
-                                       liste_salle=liste_salle, liste_etat=liste_etat)
+                                       liste_salle=liste_salle, liste_etat=liste_etat, user=session['admin'])
             else:
                 return redirect(url_for('admin.login'))
 
@@ -229,7 +234,7 @@ class DashboardViews:
         @self.dashboard_bp.route('/intervention', methods=['GET'])
         def intervention_template():
             if self.user_tools.check_user_in_session('admin'):
-                return render_template('intervention.html')
+                return render_template('intervention.html', user=session['admin'])
             else:
                 return redirect(url_for('admin.login'))
 
@@ -239,7 +244,7 @@ class DashboardViews:
         @self.dashboard_bp.route('/location', methods=['GET'])
         def location_template():
             if self.user_tools.check_user_in_session('admin'):
-                return render_template('location.html')
+                return render_template('location.html', user=session['admin'])
             else:
                 return redirect(url_for('admin.login'))
 
@@ -249,7 +254,7 @@ class DashboardViews:
             if self.user_tools.check_user_in_session('admin'):
                 user_id = session['admin']['id_admin']
                 self.message_service.add_seen_all_message(user_id)
-                return render_template('message.html')
+                return render_template('message.html', user=session['admin'])
             else:
                 return redirect(url_for('admin.login'))
 
@@ -257,7 +262,7 @@ class DashboardViews:
         @self.dashboard_bp.route('/utilisateur', methods=['GET'])
         def utilisateur_template():
             if self.user_tools.check_user_in_session('admin'):
-                return render_template('utilisateur.html')
+                return render_template('utilisateur.html', user=session['admin'])
             else:
                 return redirect(url_for('admin.login'))
 
@@ -265,7 +270,7 @@ class DashboardViews:
         def ajout_utilisateur_template():
             if self.user_tools.check_user_in_session('admin'):
                 status, role = self.role_service.find_all_role()
-                return render_template('ajout-utilisateur.html', liste_role=role)
+                return render_template('ajout-utilisateur.html', liste_role=role, user=session['admin'])
             else:
                 return redirect(url_for('admin.login'))
 
@@ -274,7 +279,8 @@ class DashboardViews:
             if self.user_tools.check_user_in_session('admin'):
                 status, utilisateur = self.utilisateur_service.find_utilisateur_by_id(idu)
                 status, role = self.role_service.find_all_role()
-                return render_template('modifier-utilisateur.html', utilisateur=utilisateur[0], liste_role=role)
+                return render_template('modifier-utilisateur.html', utilisateur=utilisateur[0], liste_role=role,
+                                       user=session['admin'])
             else:
                 return redirect(url_for('admin.login'))
 
@@ -283,7 +289,7 @@ class DashboardViews:
         def reclamation_template():
             if self.user_tools.check_user_in_session('admin'):
                 self.reclamation_service.add_seen_all_reclamation(session['admin']['id_admin'])
-                return render_template('reclamation.html')
+                return render_template('reclamation.html', user=session['admin'])
             else:
                 return redirect(url_for('admin.login'))
 
@@ -294,5 +300,12 @@ class DashboardViews:
                 user = session['admin']
                 print("99", user)
                 return render_template('profile.html', user=user)
+            else:
+                return redirect(url_for('admin.login'))
+
+        @self.dashboard_bp.route('/admin-utilisateur', methods=['GET'])
+        def admin_utilisateur_template():
+            if self.user_tools.check_user_in_session('admin'):
+                return render_template('admin-utilisateur.html', user=session['admin'])
             else:
                 return redirect(url_for('admin.login'))

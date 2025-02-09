@@ -1,5 +1,4 @@
 from flask import Blueprint, jsonify, session
-
 from service.location_service import LocationService
 from service.message_service import MessageService
 from service.reclamation_service import ReclamationService
