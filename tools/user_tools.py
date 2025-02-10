@@ -20,12 +20,13 @@ class UserTools:
         if user not in session or not session[user] or session[user] == "" or session[user] is None:
             return False
         print(user, session[user])
-        na = self.refresh_session(session[user])
-        print(na)
-        if na is None:
-            return False
-        if na['marked_as_deleted'] == 1:
-            return False
-        if na['desactive_admin'] == 1:
-            return False
+        if user == 'admin':
+            na = self.refresh_session(session[user])
+            print("na", na)
+            if na is None:
+                return False
+            if na['marked_as_deleted'] == 1:
+                return False
+            if na['desactive_admin'] == 1:
+                return False
         return True

@@ -309,3 +309,10 @@ class DashboardViews:
                 return render_template('admin-utilisateur.html', user=session['admin'])
             else:
                 return redirect(url_for('admin.login'))
+
+        @self.dashboard_bp.route('/add-admin', methods=['GET'])
+        def ajout_admin_template():
+            if self.user_tools.check_user_in_session('admin'):
+                return render_template('ajout-admin.html')
+            else:
+                return redirect(url_for('admin.login'))

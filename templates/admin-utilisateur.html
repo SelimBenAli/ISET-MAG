@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
-    <title>Dashboard - Marque</title>
+    <title>Dashboard - Admin</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/assets/bootstrap/css/bootstrap.min.css') }}">
     <link rel="stylesheet"
           href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i&amp;display=swap">
@@ -18,7 +18,7 @@
         <div id="content">
             {% include "elements/headers/header-admin.html" %}
             <div class="container-fluid">
-                <h3 class="text-dark mb-4">Marque</h3>
+                <h3 class="text-dark mb-4">Admin</h3>
                 <div class="card shadow">
                     <div class="card-header py-3">
                         <p class="text-primary m-0 fw-bold" style="border-color: rgb(78,223,92);color: rgb(78,223,92);">
@@ -29,20 +29,21 @@
 
                             <div class="col-md-6">
                                 <div class=" dataTables_filter" id="dataTable_filter_marque"><label
-                                        class="form-label"><input type="search" id="nom-admin"
+                                        class="form-label"><input type="search"
                                                                   class="form-control form-control-sm"
-                                                                  aria-controls="dataTable"
-                                                                  placeholder="Chercher Par Nom..." oninput=""></label></div>
+                                                                  aria-controls="dataTable" id="search-admin"
+                                                                  placeholder="Chercher Par Nom..."
+                                                                  oninput="search_admin()"></label></div>
                             </div>
                             <div class="col-md-6" style="text-align: right">
                                 <button class="btn btn-primary" type="button" data-bs-toggle="modal"
-                                        data-bs-target="#modal-marque" onclick="">Ajouter un admin</button>
+                                        data-bs-target="#modal-marque" onclick="openPageAddAdmin()">Ajouter un admin
+                                </button>
                             </div>
                         </div>
                         <div class="table-responsive table mt-2" id="dataTable" role="grid"
                              aria-describedby="dataTable_info">
                             <table class="table my-0" id="table-admins">
-
 
 
                             </table>

@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, request, session, flash, redirect, url_for
+from flask import Blueprint, render_template, request, session, redirect, url_for
 
 from service.admin_service import AdminService
 from tools.user_tools import UserTools
@@ -82,6 +82,28 @@ class AdminViews:
         def activate_admin(ida):
             if self.user_tools.check_user_in_session('admin'):
                 status = self.admin_service.activate_admin(ida)
+                if status == 'success':
+                    return {'status': 'success'}
+                return {'status': 'failed'}
+            return {'status': 'failed'}
+
+        @self.admin_bp.route('/add-admin', methods=['POST'])
+        def add_admin():
+            if self.user_tools.check_user_in_session('admin'):
+                data = request.get_json()
+                nom = data.get('nom_admin')
+                prenom = data.get('prenom_admin')
+                email = data.get('email_admin')
+                status = self.admin_service.add_admin(nom, prenom, email, 2)
+                if status == 'success':
+                    return {'status': 'success'}
+                return {'status': 'failed'}
+            return {'status': 'failed'}
+
+        @self.admin_bp.route('/delete-admin/<int:ida>', methods=['DELETE'])
+        def delete_admin(ida):
+            if self.user_tools.check_user_in_session('admin'):
+                status = self.admin_service.delete_admin(ida)
                 if status == 'success':
                     return {'status': 'success'}
                 return {'status': 'failed'}
