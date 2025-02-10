@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, request, session, flash
+from flask import Blueprint, render_template, request, session, flash, redirect, url_for
 
 from service.admin_service import AdminService
 from tools.user_tools import UserTools
@@ -25,27 +25,25 @@ class AdminViews:
             status, admin = self.admin_service.find_admin(email, password)
             print(status)
             if status == 'success':
+                admin = admin.dict_form()
+                print(admin)
                 if admin['desactive_admin'] == 1:
-                    flash('Votre Compte est Désactivé', 'error')
-                    return {'status': 'failed'}
+                    return {'status': 'failed', 'message': 'Votre Compte est Désactivé'}
                 if admin['marked_as_deleted'] == 1:
-                    flash('Votre Compte est Supprimé', 'error')
-                    return {'status': 'failed'}
+                    return {'status': 'failed', 'message': 'Utilisateur Non Trouvé'}
                 print("ok", admin)
-                session['admin'] = admin.dict_form()
+                session['admin'] = admin
                 return {'status': 'success'}
             elif status == 'failed':
                 print("no")
-                flash('Utilisateur Non Trouvé', 'error')
-                return {'status': 'failed'}
+                return {'status': 'failed', 'message': 'Utilisateur Non Trouvé'}
             else:
-                flash('Erreur Serveur', 'error')
-                return {'status': 'error'}
+                return {'status': 'Error'}
 
         @self.admin_bp.route('/logout', methods=['GET'])
         def logout():
             session['admin'] = None
-            return render_template('admin-login.html')
+            return redirect(url_for('admin.login'))
 
         @self.admin_bp.route('/change-details', methods=['PUT'])
         def change_details():
@@ -76,6 +74,15 @@ class AdminViews:
                 status = self.admin_service.desactivate_admin(ida)
                 if status == 'success':
                     socketio.emit('close_admin_session', {'message': 'success', 'id_admin': ida})
+                    return {'status': 'success'}
+                return {'status': 'failed'}
+            return {'status': 'failed'}
+
+        @self.admin_bp.route('/activate-admin/<int:ida>', methods=['PUT'])
+        def activate_admin(ida):
+            if self.user_tools.check_user_in_session('admin'):
+                status = self.admin_service.activate_admin(ida)
+                if status == 'success':
                     return {'status': 'success'}
                 return {'status': 'failed'}
             return {'status': 'failed'}

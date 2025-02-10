@@ -22,7 +22,7 @@ class AdminService:
             if data is None:
                 return 'failed', 'Admin not found'
             else:
-                admin = Admin(data[0], data[1], data[2], data[3], 'None', data[5], data[5], data[6])
+                admin = Admin(data[0], data[1], data[2], data[3], 'None', data[5], data[6], data[7])
             return 'success', admin
         except Exception as e:
             return 'error', e
@@ -39,7 +39,7 @@ class AdminService:
             if data is None:
                 return 'failed', 'Admin not found'
             else:
-                admin = Admin(data[0], data[1], data[2], data[3], 'None', data[5], data[5], data[6])
+                admin = Admin(data[0], data[1], data[2], data[3], 'None', data[5], data[6], data[7])
             return 'success', admin.dict_form()
         except Exception as e:
             return 'error', e
@@ -82,6 +82,18 @@ class AdminService:
             self.connection, self.cursor = self.database_tools.find_connection()
             self.cursor.execute(
                 f"""UPDATE admin SET Desactive = 1 WHERE IDAdmin = {ida}""")
+            self.connection.commit()
+            self.cursor.close()
+            self.connection.close()
+            return 'success'
+        except Exception as e:
+            return 'error', e
+
+    def activate_admin(self, ida):
+        try:
+            self.connection, self.cursor = self.database_tools.find_connection()
+            self.cursor.execute(
+                f"""UPDATE admin SET Desactive = -1 WHERE IDAdmin = {ida}""")
             self.connection.commit()
             self.cursor.close()
             self.connection.close()

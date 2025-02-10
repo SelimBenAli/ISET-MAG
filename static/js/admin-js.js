@@ -23,8 +23,11 @@ function login_request(email, password) {
             if (response.status === 'success') {
                 window.location.href = "/dashboard/fournisseur";
             } else {
-                alert('Email ou mot de passe incorrect');
+                alert(response.message);
             }
+        }
+        else {
+            console.log('error')
         }
     };
     xhr.send(JSON.stringify({email: email, password: password}));
@@ -193,10 +196,10 @@ socket.on('close_admin_session', function (data) {
     user_element = document.querySelector('userdata').textContent;
     user_element = user_element.replaceAll("\'", "\"");
     user_data = JSON.parse(user_element);
-    if (data.id_admin == user_data.id_admin) {
+    if (data.id_admin === user_data.id_admin) {
         console.log("closed session 5 : ", "ok")
         console.log("closed session : ", data)
         alert("Session Fermé par l'administrateur")
-        window.location.href = "/auth/logout";
+        window.location.href = "/admin/logout";
     }
 });

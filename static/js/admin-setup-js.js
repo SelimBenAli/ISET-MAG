@@ -16,13 +16,17 @@ function load_page_admins() {
                                     <th>Supprimer</th>
                                 </tr>`;
             admins.forEach(function (admin) {
+                action_button = `<button class="btn btn-warning" onclick="desactivate_admin(${admin.id_admin})">Desactiver</button>`
+                if (admin.desactive_admin === 1) {
+                    action_button = `<button class="btn btn-success" onclick="activate_admin(${admin.id_admin})">Activer</button>`
+                }
                 table.innerHTML += `<tr>
                                         <td>${admin.id_admin}</td>
                                         <td>${admin.nom_admin}</td>
                                         <td>${admin.prenom_admin}</td>
                                         <td>${admin.email_admin}</td>
                                         <td>
-                                            <button class="btn btn-warning" onclick="desactivate_admin(${admin.id_admin})">Desactiver</button>
+                                            ${action_button}
                                         </td>
                                         <td>
                                                                                     <button class="btn btn-danger" onclick="delete_admin(${admin.id_admin})">Supprimer</button>
@@ -40,6 +44,21 @@ function desactivate_admin(id_admin) {
     {
         var xhr = new XMLHttpRequest();
         xhr.open('PUT', `/admin/desactivate-admin/${id_admin}`, true);
+        xhr.onreadystatechange = function () {
+            if (xhr.readyState === 4 && xhr.status === 200) {
+                openPageAdminUtilisateur();
+            }
+        };
+        xhr.send();
+    }
+}
+
+function activate_admin(id_admin) {
+    conf = confirm("Voulez-vous vraiment activer cet admin ?");
+    if (conf)
+    {
+        var xhr = new XMLHttpRequest();
+        xhr.open('PUT', `/admin/activate-admin/${id_admin}`, true);
         xhr.onreadystatechange = function () {
             if (xhr.readyState === 4 && xhr.status === 200) {
                 openPageAdminUtilisateur();
