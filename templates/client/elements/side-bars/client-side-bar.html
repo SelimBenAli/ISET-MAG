@@ -1,14 +1,17 @@
+<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js"></script>
+<script src="{{ url_for('static', filename='js/client-script.js') }}"></script>
 <script src="{{ url_for('static', filename='js/auth.js') }}"></script>
+<clientdata hidden>{{ user }}</clientdata>
 <nav class="navbar navbar-expand-md fixed-top navbar-shrink py-3" id="mainNav">
     <div class="container"><a class="navbar-brand d-flex align-items-center"><span>ISET MAG</span></a>
         <button data-bs-toggle="collapse" class="navbar-toggler" data-bs-target="#navcol-1"><span
                 class="visually-hidden">Toggle navigation</span><span class="navbar-toggler-icon"></span></button>
         <div class="collapse navbar-collapse" id="navcol-1">
             <ul class="navbar-nav mx-auto">
-            {% if user['role_utilisateur']['id_role'] == 2 %}
-                <li class="nav-item"><a
-                        class="nav-link {% if page_name == 'openPageReclamationActive' %} fw-bold underline {% endif %} "
-                        onclick="openPageReclamationActiveClient()">Réclamations en Cour</a></li>
+                {% if user['role_utilisateur']['id_role'] == 2 %}
+                    <li class="nav-item"><a
+                            class="nav-link {% if page_name == 'openPageReclamationActiveClient' %} fw-bold underline {% endif %} "
+                            onclick="openPageReclamationActiveClient()">Réclamations en Cour</a></li>
                 {% endif %}
                 <li class="nav-item"><a
                         class="nav-link {% if page_name == 'openPageLocationClient' %} fw-bold underline {% endif %} "

@@ -165,7 +165,7 @@ function envoyer_message() {
 }
 
 function envoyer_fermeture_reclamation(idr) {
-     var message = document.getElementById("comment").value;
+    var message = document.getElementById("comment").value;
 
     var xhr = new XMLHttpRequest();
     xhr.open('PUT', '/user/fermer-reclamation/' + idr, true);
@@ -183,3 +183,22 @@ function envoyer_fermeture_reclamation(idr) {
     };
     xhr.send(JSON.stringify({message: message}));
 }
+
+
+var socket = io();
+socket.on('desactivate_client_account_by_id', function (data) {
+    user_element = document.querySelector('clientdata').textContent;
+    user_element = user_element.replaceAll("\'", "\"");
+    user_data = JSON.parse(user_element);
+    if (data.id_utilisateur === user_data.id_utilisateur) {
+        console.log("closed session 5 : ", "ok")
+        console.log("closed session : ", data)
+        alert("Session Fermé par l'administrateur")
+        window.location.href = "/auth/logout";
+    }
+});
+
+socket.on('desactivate_all_client_accounts', function (data) {
+    alert("Session Fermé par l'administrateur")
+    window.location.href = "/auth/logout";
+})

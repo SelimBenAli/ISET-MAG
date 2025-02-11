@@ -136,6 +136,7 @@ class UserViews:
         def desactiver_compte(id_utilisateur):
             if self.user_tools.check_user_in_session('admin'):
                 status = self.user_service.desactiver_compte(id_utilisateur)
+                socketio.emit('desactivate_client_account_by_id', {'message': 'success', 'id_utilisateur': id_utilisateur})
                 if status == 'success':
                     return jsonify({'status': 'success'})
                 return jsonify({'status': 'failed'})
@@ -145,6 +146,7 @@ class UserViews:
         def activer_compte(id_utilisateur):
             if self.user_tools.check_user_in_session('admin'):
                 status = self.user_service.activer_compte(id_utilisateur)
+
                 if status == 'success':
                     return jsonify({'status': 'success'})
                 return jsonify({'status': 'failed'})
@@ -163,6 +165,7 @@ class UserViews:
         def desactiver_tous_compte():
             if self.user_tools.check_user_in_session('admin'):
                 status = self.user_service.desactiver_tous_compte()
+                socketio.emit('desactivate_all_client_accounts', {'message': 'success'})
                 if status == 'success':
                     return jsonify({'status': 'success'})
                 return jsonify({'status': 'failed'})

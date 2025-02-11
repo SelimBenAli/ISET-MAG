@@ -13,15 +13,15 @@ class UtilisateurService:
         try:
             self.connection, self.cursor = self.database_tools.find_connection()
             req = (
-                f"""SELECT IDUtilisateur, Nom, Prenom, Mail, Tel, MDP, Role, Code, Compte
-                 FROM utilisateur WHERE {add}""")
+                f"""SELECT IDUtilisateur, Nom, Prenom, Mail, Tel, MDP, Role, Code, Compte, MarkedAsDeleted
+                 FROM utilisateur WHERE {add} AND MarkedAsDeleted = -1""")
             self.cursor.execute(req)
             data = self.cursor.fetchall()
             liste_utilisateur = []
             for element in data:
                 status, role = RoleService().find_role_by_id(element[6])
                 utilisateur = Utilisateur(element[0], element[1], element[2], element[3], element[4],
-                                          element[5], element[7], role[0], element[8])
+                                          element[5], element[7], role[0], element[8], element[9])
                 liste_utilisateur.append(utilisateur.dict_form())
             try:
                 self.cursor.close()
@@ -65,7 +65,7 @@ class UtilisateurService:
 
     def delete_utilisateur(self, id_utilisateur):
         return self.database_tools.execute_request(
-            f"""DELETE FROM utilisateur WHERE IDUtilisateur = {id_utilisateur}""")
+            f"""UPDATE utilisateur SET MarkedAsDeleted = 1, Mail = NULL WHERE IDUtilisateur = {id_utilisateur}""")
 
     def update_utilisateur(self, id_utilisateur, nom, prenom, mail, tel, role, code):
         return self.database_tools.execute_request(

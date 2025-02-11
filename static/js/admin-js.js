@@ -25,8 +25,7 @@ function login_request(email, password) {
             } else {
                 alert(response.message);
             }
-        }
-        else {
+        } else {
             console.log('error')
         }
     };

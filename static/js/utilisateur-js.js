@@ -46,7 +46,7 @@ function load_table_utilisateur_parameters() {
         else if (utilisateur.compte_utilisateur === "Banni") {
             bouton_compte = "<button class='btn btn-outline-info' onclick='activer_compte(" + utilisateur.id_utilisateur + ")'>Activer</button>"
         }
-        body.push("<tr><td>" + utilisateur.code_utilisateur + "</td><td>" + utilisateur.nom_utilisateur + "</td><td>" + utilisateur.prenom_utilisateur + "</td><td>" + utilisateur.mail_utilisateur + "</td><td>" + utilisateur.telephone_utilisateur + "</td><td>" + utilisateur.role_utilisateur.nom_role + "</td><td>" + bouton_compte + "</td><td><button class='btn btn-outline-secondary' onclick='openPageUtilisateurUpdate(" + utilisateur.id_utilisateur + ")'>Modifier</button></td><td><button class='btn btn-outline-danger' onclick=''>Supprimer</button></td></tr>")
+        body.push("<tr><td>" + utilisateur.id_utilisateur + "</td><td>" + utilisateur.nom_utilisateur + "</td><td>" + utilisateur.prenom_utilisateur + "</td><td>" + utilisateur.mail_utilisateur + "</td><td>" + utilisateur.telephone_utilisateur + "</td><td>" + utilisateur.role_utilisateur.nom_role + "</td><td>" + bouton_compte + "</td><td><button class='btn btn-outline-secondary' onclick='openPageUtilisateurUpdate(" + utilisateur.id_utilisateur + ")'>Modifier</button></td><td><button class='btn btn-outline-danger' onclick=''>Supprimer</button></td></tr>")
     });
     division_table = 7
     load_table_utilisateur(header, footer, body, division_table)
