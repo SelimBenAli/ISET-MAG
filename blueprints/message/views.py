@@ -68,3 +68,12 @@ class MessageViews:
                 print(alertes)
                 return jsonify({'status': 'success', 'alertes': alertes})
             return {'status': 'failed'}
+
+        @self.message_bp.route('/client-alerts', methods=['GET'])
+        def client_alerts():
+            status, reclamations = self.reclamation_service.find_reclamation_by_not_finished()
+            print(status, reclamations)
+            if status != 'success':
+                return jsonify({'status': 'failed'})
+            reclamations.sort(key=lambda x: x['date_reclamation'], reverse=True)
+            return jsonify({'status': 'success', 'alerts': len(reclamations)})

@@ -38,6 +38,7 @@ class UserViews:
                                                                   description)
                 if status == 'success':
                     socketio.emit('update_admin_alert', {'message': 'success'})
+                    socketio.emit('update_client_alerts', {'message': 'success'})
                     return jsonify({'status': 'success'})
                 return jsonify({'status': 'failed'})
             return jsonify({'status': 'failed'})

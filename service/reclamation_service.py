@@ -42,8 +42,11 @@ class ReclamationService:
                     self.date_tools.convert_date_time(element[4]), element[7], technicien, description_technicien,
                     self.date_tools.convert_date_time(element[10]))
                 liste_reclamation.append(reclamation.dict_form())
-            self.cursor.close()
-            self.connection.close()
+            try:
+                self.cursor.close()
+                self.connection.close()
+            except Exception as e:
+                print(e)
             return 'success', liste_reclamation
         except Exception as e:
             return 'error', e

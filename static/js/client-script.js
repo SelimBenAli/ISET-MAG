@@ -184,6 +184,26 @@ function envoyer_fermeture_reclamation(idr) {
     xhr.send(JSON.stringify({message: message}));
 }
 
+function load_client_alerts() {
+    var xhr = new XMLHttpRequest();
+    xhr.open('GET', '/message/client-alerts', true);
+    xhr.setRequestHeader('Content-Type', 'application/json');
+    xhr.onreadystatechange = function () {
+        if (xhr.readyState === 4 && xhr.status === 200) {
+            var response = JSON.parse(xhr.responseText);
+            console.log(response)
+            if (response.status === 'success') {
+                var alerts = response.alerts;
+                var alert_list = document.getElementById("client-alert-number");
+                alert_list.innerHTML = alerts + "+";
+            } else {
+                alert('Erreur lors du chargement des alertes');
+            }
+        }
+    };
+    xhr.send();
+}
+
 
 var socket = io();
 socket.on('desactivate_client_account_by_id', function (data) {

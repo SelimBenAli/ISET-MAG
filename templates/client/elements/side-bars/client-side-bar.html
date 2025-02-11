@@ -1,6 +1,7 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js"></script>
 <script src="{{ url_for('static', filename='js/client-script.js') }}"></script>
 <script src="{{ url_for('static', filename='js/auth.js') }}"></script>
+
 <clientdata hidden>{{ user }}</clientdata>
 <nav class="navbar navbar-expand-md fixed-top navbar-shrink py-3" id="mainNav">
     <div class="container"><a class="navbar-brand d-flex align-items-center"><span>ISET MAG</span></a>
@@ -9,9 +10,25 @@
         <div class="collapse navbar-collapse" id="navcol-1">
             <ul class="navbar-nav mx-auto">
                 {% if user['role_utilisateur']['id_role'] == 2 %}
+                    <audio id="sound-alert-client" src="{{ url_for('static', filename='sound/message.wav') }}"></audio>
+                    <script>load_client_alerts()</script>
+                    <script>
+
+                        socket.on('update_client_alerts', function (data) {
+                            load_client_alerts()
+                            var audio = document.getElementById("sound-alert-client")
+                            audio.play();
+                        })
+
+                    </script>
                     <li class="nav-item"><a
                             class="nav-link {% if page_name == 'openPageReclamationActiveClient' %} fw-bold underline {% endif %} "
-                            onclick="openPageReclamationActiveClient()">Réclamations en Cour</a></li>
+                            onclick="openPageReclamationActiveClient()">Réclamations en Cour <span
+                            id="client-alert-number" class="badge bg-danger badge-counter">1+</span><i
+                            class="fas fa-bell fa-fw"></i>
+                    </a>
+
+                    </li>
                 {% endif %}
                 <li class="nav-item"><a
                         class="nav-link {% if page_name == 'openPageLocationClient' %} fw-bold underline {% endif %} "

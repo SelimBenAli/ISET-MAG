@@ -7,7 +7,7 @@ from tools.user_tools import UserTools
 
 class AuthViews:
     def __init__(self):
-        self.user_tools = UserTools()
+        self.user_tools = UserTools('dashboard')
         self.utilisateur_service = UtilisateurService()
         self.cryption_tools = CryptionTools()
         self.admin_bp = Blueprint('auth', __name__, template_folder='templates')

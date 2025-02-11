@@ -10,7 +10,7 @@ from tools.user_tools import UserTools
 
 class ClientViews:
     def __init__(self):
-        self.user_tools = UserTools()
+        self.user_tools = UserTools('dashboard')
         self.client_service = UtilisateurService()
         self.intervention_service = InterventionService()
         self.hardware_service = HardwareService()

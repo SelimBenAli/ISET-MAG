@@ -19,7 +19,7 @@ from tools.user_tools import UserTools
 
 class DashboardViews:
     def __init__(self):
-        self.user_tools = UserTools()
+        self.user_tools = UserTools('dashboard')
         self.fournisseur_service = FournisseurService()
         self.bloc_service = BlocService()
         self.salle_service = SalleService()

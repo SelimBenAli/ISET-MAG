@@ -6,7 +6,8 @@ from tools.database_tools import DatabaseConnection
 
 
 class UserTools:
-    def __init__(self):
+    def __init__(self, given_type='api'):
+        self.type = given_type
         self.connection_tools = DatabaseConnection()
         self.admin_service = AdminService()
         self.utilisateur_service = UtilisateurService()
@@ -26,11 +27,15 @@ class UserTools:
         return user[0]
 
     def check_user_in_session(self, user):
+        print("zz : ", user)
         if user not in session or not session[user] or session[user] == "" or session[user] is None:
             return False
         print(user, session[user])
         if user == 'admin':
-            na = self.refresh_session_admin(session[user])
+            if self.type == 'dashboard':
+                na = self.refresh_session_admin(session[user])
+            else:
+                na = session['admin']
             print("na", na)
             if na is None:
                 return False
@@ -39,8 +44,11 @@ class UserTools:
             if na['desactive_admin'] == 1:
                 return False
         else:
-            na = self.refresh_session_user(session[user])
-            print("na", na)
+            if self.type == 'dashboard':
+                na = self.refresh_session_user(session[user])
+            else:
+                na = session['user']
+            print("nu", na)
             if na is None:
                 return False
             if na['marked_as_deleted'] == 1:
