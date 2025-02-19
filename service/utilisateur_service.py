@@ -1,6 +1,8 @@
 from entities.utilisateur import Utilisateur
 from service.role_service import RoleService
+from tools.cryption_tools import CryptionTools
 from tools.database_tools import DatabaseConnection
+from tools.mail_tools import MailTools
 
 
 class UtilisateurService:
@@ -8,12 +10,14 @@ class UtilisateurService:
         self.cursor = None
         self.connection = None
         self.database_tools = DatabaseConnection()
+        self.cryption_tools = CryptionTools()
+        self.mail_tools = MailTools()
 
     def find_utilisateur_by_something(self, add):
         try:
             self.connection, self.cursor = self.database_tools.find_connection()
             req = (
-                f"""SELECT IDUtilisateur, Nom, Prenom, Mail, Tel, MDP, Role, Code, Compte, MarkedAsDeleted
+                f"""SELECT IDUtilisateur, Nom, Prenom, Mail, Tel, MDP, Role, Code, Compte, MarkedAsDeleted, CodeBarre
                  FROM utilisateur WHERE {add} AND MarkedAsDeleted = -1""")
             self.cursor.execute(req)
             data = self.cursor.fetchall()
@@ -21,7 +25,7 @@ class UtilisateurService:
             for element in data:
                 status, role = RoleService().find_role_by_id(element[6])
                 utilisateur = Utilisateur(element[0], element[1], element[2], element[3], element[4],
-                                          element[5], element[7], role[0], element[8], element[9])
+                                          element[5], element[7], element[10], role[0], element[8], element[9])
                 liste_utilisateur.append(utilisateur.dict_form())
             try:
                 self.cursor.close()
@@ -59,9 +63,32 @@ class UtilisateurService:
     def find_utilisateur_by_code(self, code):
         return self.find_utilisateur_by_something(f" Code LIKE '%{code}%'")
 
+    def find_utilisateur_by_code_barre(self, code_barre):
+        return self.find_utilisateur_by_something(f" CodeBarre = '{code_barre}'")
+
     def add_utilisateur(self, nom, prenom, mail, tel, mdp, role, code):
-        return self.database_tools.execute_request(f"""INSERT INTO utilisateur (Nom, Prenom, Mail, Tel, MDP, Role, Code) 
-                VALUES ('{nom}', '{prenom}', '{mail}', '{tel}', '{mdp}', '{role}', '{code}')""")
+        try:
+            self.connection, self.cursor = self.database_tools.find_connection()
+            self.cursor.execute(f"""INSERT INTO utilisateur (Nom, Prenom, Mail, Tel, MDP, Role, Code, CodeBarre) 
+                    VALUES ('{nom}', '{prenom}', '{mail}', '{tel}', NULL, '{role}', '{code}', '{self.cryption_tools.generate_code_barre_utilisateur(code)}')""")
+            lid = self.cursor.lastrowid
+            mdp = self.cryption_tools.generate_user_password(lid)
+            self.cursor.execute(f"""UPDATE utilisateur SET MDP = '{mdp}' WHERE IDUtilisateur = {lid}""")
+            try:
+                self.mail_tools.send_user_add_verification_mail(mail, mdp)
+            except Exception as e:
+                print('aaaaa', e)
+                return 'error', e
+            self.connection.commit()
+            try:
+                self.cursor.close()
+                self.connection.close()
+            except Exception as e:
+                ...
+            return 'success'
+        except Exception as e:
+            print('bbbb', e)
+            return 'error', e
 
     def delete_utilisateur(self, id_utilisateur):
         return self.database_tools.execute_request(

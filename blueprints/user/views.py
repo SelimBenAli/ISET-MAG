@@ -104,6 +104,12 @@ class UserViews:
                 tel = data.get('telephone_utilisateur')
                 role = data.get('role_utilisateur')
                 code = data.get('code_utilisateur')
+                status, user = self.user_service.find_utilisateur_by_mail(mail)
+                if status == 'success' and user != []:
+                    return jsonify({'status': 'failed', 'message': 'email already used'})
+                status, user = self.user_service.find_utilisateur_by_code(code)
+                if status == 'success' and user != []:
+                    return jsonify({'status': 'failed', 'message': 'code already used'})
                 status = self.user_service.add_utilisateur(nom, prenom, mail, tel, "", role, code)
                 if status == 'success':
                     return jsonify({'status': 'success'})

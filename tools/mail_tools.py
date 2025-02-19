@@ -12,7 +12,7 @@ class MailTools:
         self.password = 'npzd ncfk epzc ljfj'  # Use App Password if 2FA is enabled
         self.smtp_server = "smtp.gmail.com"
         self.smtp_port = 587
-        self.lien = "http://127.0.0.1:5000"
+        self.lien = "http://192.168.1.16:5000"
 
     def send_mail(self, receiver, subject, message):
         try:
@@ -36,9 +36,11 @@ class MailTools:
             print(f"Error: {e}")
         return False
 
+    # ADMIN
+
     def get_admin_add_verification_mail_data(self):
-        subject = self.config_tools.subject
-        message = self.config_tools.message
+        subject = self.config_tools.subject_admin
+        message = self.config_tools.message_admin
         return subject, message
 
     def prepare_admin_add_verification_mail(self, message, mail, password):
@@ -51,6 +53,25 @@ class MailTools:
     def send_admin_add_verification_mail(self, receiver_email, receiver_pwd):
         subject, message = self.get_admin_add_verification_mail_data()
         message = self.prepare_admin_add_verification_mail(message, receiver_email, receiver_pwd)
+        self.send_mail(receiver_email, subject, message)
+
+    # USER
+
+    def get_user_add_verification_mail_data(self):
+        subject = self.config_tools.subject_user
+        message = self.config_tools.message_user
+        return subject, message
+
+    def prepare_user_add_verification_mail(self, message, mail, password):
+        message = message.replace("{password}", password)
+        message = message.replace("{email}", mail)
+        message = message.replace('\\n', '\n')
+        message = message.replace("{lien_user}", self.lien + '/')
+        return message
+
+    def send_user_add_verification_mail(self, receiver_email, receiver_pwd):
+        subject, message = self.get_user_add_verification_mail_data()
+        message = self.prepare_user_add_verification_mail(message, receiver_email, receiver_pwd)
         self.send_mail(receiver_email, subject, message)
 
 
