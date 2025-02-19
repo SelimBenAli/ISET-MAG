@@ -33,12 +33,14 @@ class UserViews:
                 user = session['user']
                 hardware = session['hardware_reclamation']
                 description = description.replace('"', "'")
-                status = self.reclamation_service.add_reclamation(hardware['id_hardware'],
-                                                                  user['id_utilisateur'], 'NULL',
-                                                                  description)
+                status, id_reclamation = self.reclamation_service.add_reclamation(hardware['id_hardware'],
+                                                                                  user['id_utilisateur'], 'NULL',
+                                                                                  description)
                 if status == 'success':
+                    status, r = self.reclamation_service.find_reclamation_by_id(id_reclamation)
+                    print('my rec : ', r)
                     socketio.emit('update_admin_alert', {'message': 'success'})
-                    socketio.emit('update_client_alerts', {'message': 'success'})
+                    socketio.emit('update_client_alerts', {'message': 'success', 'reclamation': r[0]})
                     return jsonify({'status': 'success'})
                 return jsonify({'status': 'failed'})
             return jsonify({'status': 'failed'})
@@ -137,7 +139,8 @@ class UserViews:
         def desactiver_compte(id_utilisateur):
             if self.user_tools.check_user_in_session('admin'):
                 status = self.user_service.desactiver_compte(id_utilisateur)
-                socketio.emit('desactivate_client_account_by_id', {'message': 'success', 'id_utilisateur': id_utilisateur})
+                socketio.emit('desactivate_client_account_by_id',
+                              {'message': 'success', 'id_utilisateur': id_utilisateur})
                 if status == 'success':
                     return jsonify({'status': 'success'})
                 return jsonify({'status': 'failed'})
@@ -174,12 +177,14 @@ class UserViews:
 
         @self.user_bp.route('/fermer-reclamation/<int:idr>', methods=['PUT'])
         def fermer_reclamation(idr):
-            if self.user_tools.check_user_in_session('admin'):
+            if self.user_tools.check_user_in_session('user'):
                 data = request.get_json()
-                description = data.get('description')
+                description = data.get('message')
                 technicien = session['user']
+                print('**************', technicien)
                 status = self.reclamation_service.finish_reclamation(idr, technicien['id_utilisateur'], description)
                 if status == 'success':
+                    socketio.emit('delete_reclamation_alert', {'message': 'success', 'id_reclamation': idr})
                     return jsonify({'status': 'success'})
                 return jsonify({'status': 'failed'})
             return jsonify({'status': 'failed'})

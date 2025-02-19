@@ -204,6 +204,47 @@ function load_client_alerts() {
     xhr.send();
 }
 
+function show_client_reclamation(reclamation) {
+    var reclamation_list = document.getElementById("client-reclamation-list");
+    reclamation_list.innerHTML += `
+    
+    <div class="col" data-aos="fade-up" data-aos-once="true" id="reclamation-bloc-${reclamation.id_reclamation}">
+                    <div class="card border-0 h-100">
+                        <div class="card-body d-flex flex-column justify-content-between p-4">
+                            <div>
+                                <h6 class="fw-bold text-muted">${reclamation.date_reclamation}</h6>
+                                <h4 class="display-5 fw-bold mb-4">${reclamation.hardware_reclamation.modele_hardware.nom_modele} ${reclamation.hardware_reclamation.modele_hardware.marque_modele.nom_marque}</h4>
+                                <h5 class="display-5 fw-bold mb-4">${reclamation.hardware_reclamation.numero_inventaire_hardware} </h5>
+
+                                <ul class="list-unstyled">
+                                    <li class="d-flex mb-2">
+                                        <span>Salle : ${reclamation.hardware_reclamation.salle_hardware.nom_salle} .</span>
+                                    </li>
+                                    <li class="d-flex mb-2">
+                                        <span>Par : ${reclamation.utilisateur_reclamation.nom_utilisateur} ${reclamation.utilisateur_reclamation.prenom_utilisateur} .</span>
+                                    </li>
+                                    <li class="d-flex mb-2">
+                                        <span>Description : ${reclamation.description_reclamation} .</span>
+                                    </li>
+
+                                </ul>
+                            </div>
+                            <button class="btn btn-primary" role="button" onclick="openPageFermerReclamationClient('${reclamation.id_reclamation}')">Terminer Cette Réclamation.
+                            </button>
+                            <!--<button class="btn btn-warning" style="margin-top: 10px;" role="button" onclick="">Réclamation Fausse.</button>-->
+                            <hr>
+                        </div>
+                    </div>
+                </div>
+    
+    `
+}
+
+function delete_client_reclamation(idr) {
+    d = document.getElementById("reclamation-bloc-" + idr);
+    d.style.display = "none";
+}
+
 
 var socket = io();
 socket.on('desactivate_client_account_by_id', function (data) {

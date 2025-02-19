@@ -1,5 +1,4 @@
 from entities.reclamation import Reclamation
-from service.etat_service import EtatService
 from service.hardware_service import HardwareService
 from service.intervention_service import InterventionService
 from service.utilisateur_service import UtilisateurService
@@ -70,16 +69,29 @@ class ReclamationService:
         return self.find_reclamation_by_something(f" IDTechnicien IS NULL ")
 
     def add_reclamation(self, id_hardware, id_utilisateur, id_intervention, description):
-        return self.database_tools.execute_request(
-            f"""INSERT INTO reclamation_hardware (IDHardware, IDUtilisateur, IDIntervention, 
-             Description, IDEtat, Vu) 
-            VALUES ({id_hardware}, {id_utilisateur}, {id_intervention}, "{description}",
-             NULL, '')""")
+        try:
+            self.connection, self.cursor = self.database_tools.find_connection()
+            self.cursor.execute(
+                f"""INSERT INTO reclamation_hardware (IDHardware, IDUtilisateur, IDIntervention, 
+                 Description, IDEtat, Vu) 
+                VALUES ({id_hardware}, {id_utilisateur}, {id_intervention}, "{description}",
+                 NULL, '')""")
+            self.connection.commit()
+            lid = self.cursor.lastrowid
+            try:
+                self.cursor.close()
+                self.connection.close()
+            except Exception as e:
+                print(e)
+            return 'success', lid
+        except Exception as e:
+            return 'error', e
 
     def finish_reclamation(self, id_reclamation, id_technicien, description):
         return self.database_tools.execute_request(
             f""" UPDATE reclamation_hardware SET IDTechnicien = '{id_technicien}',
-             DescriptionTechnicien = '{description}', DateTechnicien = NOW() WHERE IDReclamation = '{id_reclamation}' """
+             DescriptionTechnicien = '{description}', DateTechnicien = NOW() 
+             WHERE IDReclamation = '{id_reclamation}' AND IDTechnicien IS NULL"""
         )
 
     def update_reclamation(self, id_reclamation, id_hardware, id_utilisateur, id_intervention, date_reclamation,

@@ -27,7 +27,7 @@ class AuthViews:
             password = data.get('password')
             status, user = self.utilisateur_service.find_utilisateur_by_mail(email)
             print("user", user)
-            if status == 'success':
+            if status == 'success' and user is not None and user != []:
                 if (user[0]['compte_utilisateur'] == 'Active'
                         and user[0]['mdp_utilisateur'] != self.cryption_tools.crypt_sha256(password)):
                     return {'status': 'failed', 'message': 'Utilisateur Non Trouvé'}
