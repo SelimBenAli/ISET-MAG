@@ -47,7 +47,7 @@ class MailTools:
         message = message.replace("{password}", password)
         message = message.replace("{email}", mail)
         message = message.replace('\\n', '\n')
-        message = message.replace("{lien_admin}", self.lien + '/admin')
+        message = message.replace("{link}", self.lien + '/admin')
         return message
 
     def send_admin_add_verification_mail(self, receiver_email, receiver_pwd):
@@ -66,7 +66,7 @@ class MailTools:
         message = message.replace("{password}", password)
         message = message.replace("{email}", mail)
         message = message.replace('\\n', '\n')
-        message = message.replace("{lien_user}", self.lien + '/')
+        message = message.replace("{link}", self.lien + '/')
         return message
 
     def send_user_add_verification_mail(self, receiver_email, receiver_pwd):

@@ -120,6 +120,10 @@ function openPageAdminUtilisateur() {
     window.location.href = "/dashboard/admin-utilisateur";
 }
 
+function openPageAdminSettings() {
+    window.location.href = "/dashboard/settings";
+}
+
 function openPageAddAdmin() {
     window.location.href = "/dashboard/add-admin";
 }

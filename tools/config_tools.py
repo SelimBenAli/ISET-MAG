@@ -5,11 +5,11 @@ class ConfigTools:
         self.message_admin = """Félicitations, vous avez été ajouté à notre équipe ISETN - MAG.
          Vous pouvez maintenant accéder à votre compte en utilisant les informations suivantes:
          \n\nNom d'utilisateur: {email}\nMot de passe: {password}\n
-         Vous pouvez accéder à dashboard admin à partir de ce lien : {lien_admin}\n\nCordialement,\nISETN - MAG"""
+         Vous pouvez accéder à dashboard admin à partir de ce lien : {link}\n\nCordialement,\nISETN - MAG"""
 
         # USER
         self.subject_user = "Confirmation de votre compte ISETN - MAG"
         self.message_user = """Félicitations, votre compte ISETN - MAG a été créé avec succès.
          Vous pouvez maintenant accéder à votre compte en utilisant les informations suivantes:
          \n\nNom d'utilisateur: {email}\nMot de passe: {password}\n
-         Vous pouvez accéder à dashboard utilisateur à partir de ce lien : {lien_user}\n\nCordialement,\nISETN - MAG"""
+         Vous pouvez accéder à dashboard utilisateur à partir de ce lien : {link}\n\nCordialement,\nISETN - MAG"""

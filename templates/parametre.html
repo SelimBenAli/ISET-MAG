@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html data-bs-theme="light" lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+    <title>Dashboard - Paramètres</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/assets/bootstrap/css/bootstrap.min.css') }}">
+    <link rel="stylesheet"
+          href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i&amp;display=swap">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/assets/fonts/fontawesome-all.min.css') }}">
+</head>
+
+<body id="page-top" onload="">
+<div id="wrapper">
+    {% include "elements/side-bars/side-bar-admin.html" %}
+    <div class="d-flex flex-column" id="content-wrapper">
+        <div id="content">
+            {% include "elements/headers/header-admin.html" %}
+            <div class="container-fluid">
+                <h3 class="text-dark mb-4">Paramètres</h3>
+                <div class="card shadow">
+                    <div class="card-header py-3" style="display: flex; flex-direction: column;justify-content: space-between;">
+                        <p class="text-primary m-0 fw-bold" style="border-color: rgb(78,223,92);color: rgb(78,223,92);">
+                            paramètres des utilisateurs</p>
+                        <div style="display: flex; flex-direction: column; align-items: stretch">
+                            <button class="btn btn-outline-dark" type="button" data-bs-toggle="modal" style="margin-top: 15px"
+                                    data-bs-target="#modal-utilisateur" onclick="desactiver_tous()">Désactiver tous les
+                                utilisateurs
+                            </button>
+                            <button class="btn btn-outline-info" type="button" data-bs-toggle="modal" style="margin-top: 15px"
+                                    data-bs-target="#modal-utilisateur" onclick="activer_tous()">Activer tous les
+                                utilisateurs
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <!--<div class="card shadow" style="margin-top: 15px">
+                    <div class="card-header py-3" style="display: flex;  flex-direction: column;justify-content: space-between;">
+                        <p class="text-primary m-0 fw-bold" style="border-color: rgb(78,223,92);color: rgb(78,223,92);">
+                            paramètres des e-mails des utilisateurs</p>
+                        <div style="display: flex; flex-direction: column; align-items: flex-end">
+                            <label for="email-message" style="margin-top: 15px; width: 100%">E-mail de l'ajout : </label>
+                            <label style="margin-top: 15px; width: 100%">Mots prédéfinies : { email }, { password },
+                                { link } </label>
+                            <input type="text" class="form-control" style="margin-top: 15px" placeholder="Entrez l'objet de l'e-mail"
+                                   id="email-object">
+                            <textarea class="form-control" style="margin-top: 15px" placeholder="Entrez le message de l'e-mail"
+                                      id="email-message"></textarea>
+                            <button class="btn btn-outline-primary" type="button" data-bs-toggle="modal" style="margin-top: 15px"
+                                    data-bs-target="#modal-utilisateur">Enregistrer.
+                            </button>
+
+                        </div>
+                    </div>
+                </div>-->
+            </div>
+        </div>
+        {% include "elements/footers/footer-admin.html" %}
+    </div>
+</div>
+<script src="{{ url_for('static', filename='css/assets/bootstrap/js/bootstrap.min.js') }}"></script>
+<script src="{{ url_for('static', filename='css/assets/js/theme.js') }}"></script>
+<script src="{{ url_for('static', filename='js/utilisateur-js.js') }}"></script>
+<script src="{{ url_for('static', filename='js/script.js') }}"></script>
+</body>
+
+</html>

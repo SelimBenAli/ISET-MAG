@@ -10,6 +10,7 @@ from service.magasin_service import MagasinService
 from service.marque_service import MarqueService
 from service.message_service import MessageService
 from service.modele_service import ModeleService
+from service.parametre_email_service import ParametreEmailService
 from service.reclamation_service import ReclamationService
 from service.role_service import RoleService
 from service.salle_service import SalleService
@@ -34,6 +35,7 @@ class DashboardViews:
         self.utilisateur_service = UtilisateurService()
         self.role_service = RoleService()
         self.reclamation_service = ReclamationService()
+        self.parametre_email_service = ParametreEmailService()
         self.dashboard_bp = Blueprint('dashboard', __name__, template_folder='templates')
         self.dashboard_fournisseur_routes()
         self.dashboard_salle_bloc_routes()
@@ -300,6 +302,19 @@ class DashboardViews:
                 user = session['admin']
                 print("99", user)
                 return render_template('profile.html', user=user)
+            else:
+                return redirect(url_for('admin.login'))
+
+        @self.dashboard_bp.route('/settings', methods=['GET'])
+        def settings_template():
+            if self.user_tools.check_user_in_session('admin'):
+                user = session['admin']
+                parametre_email_add_admin = None  # self.parametre_email_service.find_marametre_add_admin_email()[1][0]
+                parametre_email_add_user = None
+                parametre_email_forgot_password_user = None
+                return render_template('parametre.html', user=user, parametre_email_add_admin=parametre_email_add_admin,
+                                       parametre_email_add_user=parametre_email_add_user,
+                                       parametre_email_forgot_password_user=parametre_email_forgot_password_user)
             else:
                 return redirect(url_for('admin.login'))
 
