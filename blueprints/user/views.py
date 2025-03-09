@@ -121,6 +121,8 @@ class UserViews:
             if self.user_tools.check_user_in_session('admin'):
                 status = self.user_service.delete_utilisateur(id_utilisateur)
                 if status == 'success':
+                    socketio.emit('desactivate_client_account_by_id',
+                                  {'message': 'success', 'id_utilisateur': id_utilisateur})
                     return jsonify({'status': 'success'})
                 return jsonify({'status': 'failed'})
             return jsonify({'status': 'failed'})

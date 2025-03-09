@@ -38,10 +38,9 @@ class AuthViews:
                 user[0].pop('mdp_utilisateur')
                 session['user'] = user[0]
                 return {'status': 'success', 'user': user[0]}
-            elif status == 'failed':
+            elif status == 'failed' or user is None or user == []:
                 return {'status': 'failed', 'message': 'Utilisateur Non Trouvé'}
             else:
-                flash('Erreur Serveur', 'error')
                 return {'status': 'error'}
 
         @self.admin_bp.route('/logout', methods=['GET'])

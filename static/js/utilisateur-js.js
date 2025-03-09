@@ -46,7 +46,7 @@ function load_table_utilisateur_parameters() {
         else if (utilisateur.compte_utilisateur === "Banni") {
             bouton_compte = "<button class='btn btn-outline-info' onclick='activer_compte(" + utilisateur.id_utilisateur + ")'>Activer</button>"
         }
-        body.push("<tr><td>" + utilisateur.code_utilisateur + "</td><td>" + utilisateur.nom_utilisateur + "</td><td>" + utilisateur.prenom_utilisateur + "</td><td>" + utilisateur.mail_utilisateur + "</td><td>" + utilisateur.telephone_utilisateur + "</td><td>" + utilisateur.role_utilisateur.nom_role + "</td><td>" + bouton_compte + "</td><td><button class='btn btn-outline-secondary' onclick='openPageUtilisateurUpdate(" + utilisateur.id_utilisateur + ")'>Modifier</button></td><td><button class='btn btn-outline-danger' onclick=''>Supprimer</button></td></tr>")
+        body.push("<tr><td>" + utilisateur.code_utilisateur + "</td><td>" + utilisateur.nom_utilisateur + "</td><td>" + utilisateur.prenom_utilisateur + "</td><td>" + utilisateur.mail_utilisateur + "</td><td>" + utilisateur.telephone_utilisateur + "</td><td>" + utilisateur.role_utilisateur.nom_role + "</td><td>" + bouton_compte + "</td><td><button class='btn btn-outline-secondary' onclick='openPageUtilisateurUpdate(" + utilisateur.id_utilisateur + ")'>Modifier</button></td><td><button class='btn btn-outline-danger' onclick='supprimer_utilisateur(" + utilisateur.id_utilisateur + ")'>Supprimer</button></td></tr>")
     });
     division_table = 7
     load_table_utilisateur(header, footer, body, division_table)
@@ -253,6 +253,27 @@ function activer_tous() {
     {
         var xhr = new XMLHttpRequest();
         xhr.open('PUT', '/user/activer-tous-compte', true);
+        xhr.setRequestHeader('Content-Type', 'application/json');
+        xhr.onreadystatechange = function () {
+            if (xhr.readyState === 4 && xhr.status === 200) {
+                var response = JSON.parse(xhr.responseText);
+                console.log(response)
+                if (response.status === 'success') {
+                    openPageUtilisateur()
+                } else {
+                    alert('Erreur');
+                }
+            }
+        };
+        xhr.send();
+    }
+}
+
+function supprimer_utilisateur(id_utilisateur) {
+    if (confirm("Voulez-vous vraiment supprimer cet utilisateur?"))
+    {
+        var xhr = new XMLHttpRequest();
+        xhr.open('DELETE', '/user/delete-utilisateur/' + id_utilisateur, true);
         xhr.setRequestHeader('Content-Type', 'application/json');
         xhr.onreadystatechange = function () {
             if (xhr.readyState === 4 && xhr.status === 200) {
