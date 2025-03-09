@@ -13,3 +13,7 @@ class ConfigTools:
          Vous pouvez maintenant accéder à votre compte en utilisant les informations suivantes:
          \n\nNom d'utilisateur: {email}\nMot de passe: {password}\n
          Vous pouvez accéder à dashboard utilisateur à partir de ce lien : {link}\n\nCordialement,\nISETN - MAG"""
+
+        # RECOVERY
+        self.subject_recovery = "Récupération de votre compte ISET - MAG"
+        self.message_recovery = """ Votre nouveau mot de passe est : {password} \n\n Cordialement,\nISETN - MAG"""

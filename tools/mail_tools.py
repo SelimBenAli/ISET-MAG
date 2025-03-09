@@ -74,6 +74,23 @@ class MailTools:
         message = self.prepare_user_add_verification_mail(message, receiver_email, receiver_pwd)
         self.send_mail(receiver_email, subject, message)
 
+    # RECOVERY
+
+    def get_user_password_recovery_mail_data(self):
+        subject = self.config_tools.subject_recovery
+        message = self.config_tools.message_recovery
+        return subject, message
+
+    def prepare_user_password_recovery_mail(self, message, password):
+        message = message.replace("{password}", password)
+        message = message.replace('\\n', '\n')
+        return message
+
+    def send_user_password_recovery_mail(self, receiver_email, receiver_pwd):
+        subject, message = self.get_user_password_recovery_mail_data()
+        message = self.prepare_user_password_recovery_mail(message, receiver_pwd)
+        self.send_mail(receiver_email, subject, message)
+
 
 # Usage Example
 if __name__ == "__main__":

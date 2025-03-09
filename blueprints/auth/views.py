@@ -10,17 +10,17 @@ class AuthViews:
         self.user_tools = UserTools('dashboard')
         self.utilisateur_service = UtilisateurService()
         self.cryption_tools = CryptionTools()
-        self.admin_bp = Blueprint('auth', __name__, template_folder='templates')
+        self.auth_bp = Blueprint('auth', __name__, template_folder='templates')
         self.auth_routes()
 
     def auth_routes(self):
-        @self.admin_bp.route('/login', methods=['GET'])
+        @self.auth_bp.route('/login', methods=['GET'])
         def login():
             if self.user_tools.check_user_in_session('user'):
                 return redirect(url_for('client.location_client'))
             return render_template('client/login.html')
 
-        @self.admin_bp.route('/client-login-request', methods=['POST'])
+        @self.auth_bp.route('/client-login-request', methods=['POST'])
         def login_post():
             data = request.get_json()
             email = data.get('email')
@@ -43,7 +43,11 @@ class AuthViews:
             else:
                 return {'status': 'error'}
 
-        @self.admin_bp.route('/logout', methods=['GET'])
+        @self.auth_bp.route('/logout', methods=['GET'])
         def logout():
             session['user'] = None
             return redirect(url_for('auth.login'))
+
+        @self.auth_bp.route('/mot-de-passe-oublie', methods=['GET'])
+        def forgot_password():
+            return render_template('client/forgotten-password.html')

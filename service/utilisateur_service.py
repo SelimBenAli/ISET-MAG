@@ -114,3 +114,19 @@ class UtilisateurService:
     def desactiver_tous_compte(self):
         return self.database_tools.execute_request(
             f"""UPDATE utilisateur SET Compte = 2 WHERE Compte = 1""")
+
+    def envoyer_email_recuperation(self, mail):
+        status, user = self.find_utilisateur_by_mail(mail)
+        if status == 'success' and user is not None and user != []:
+            mdp = self.cryption_tools.generate_user_password(user[0]['id_utilisateur'])
+            status = self.database_tools.execute_request(
+                f"""UPDATE utilisateur SET MDP = '{mdp}' WHERE IDUtilisateur = {user[0]['id_utilisateur']}""")
+            if status != 'success':
+                return 'error', status
+            try:
+                self.mail_tools.send_user_password_recovery_mail(mail, mdp)
+            except Exception as e:
+                print('aaaaa', e)
+                return 'error', e
+            return 'success'
+        return 'error', 'Utilisateur Non Trouvé'

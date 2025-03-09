@@ -196,3 +196,15 @@ class UserViews:
                     return jsonify({'status': 'success'})
                 return jsonify({'status': 'failed'})
             return jsonify({'status': 'failed'})
+
+        @self.user_bp.route('/envoyer-email-recuperation', methods=['PUT'])
+        def envoyer_email_recuperation():
+            data = request.get_json()
+            email = data.get('email')
+            status, user = self.user_service.find_utilisateur_by_mail(email)
+            if status == 'success' and user != []:
+                status = self.user_service.envoyer_email_recuperation(email)
+                if status == 'success':
+                    return jsonify({'status': 'success'})
+                return jsonify({'status': 'error'})
+            return jsonify({'status': 'failed', 'message': 'Utilisateur Non Trouvé'})
