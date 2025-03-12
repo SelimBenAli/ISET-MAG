@@ -1,5 +1,5 @@
 from flask_cors import CORS
-from flask import Flask, url_for, redirect
+from flask import Flask, url_for, redirect, session
 from flask_socketio import SocketIO
 
 # Import Blueprints
@@ -18,6 +18,7 @@ from blueprints.modele import modele_bp
 from blueprints.reclamation import reclamation_bp
 from blueprints.salle_bloc import salle_bloc_bp
 from blueprints.user import user_bp
+from blueprints.parametre import parametre_bp
 
 from extensions import socketio
 
@@ -26,6 +27,15 @@ CORS(app)
 app.secret_key = 'secret_key'
 
 socketio.init_app(app)
+
+
+def current_scan_ending():
+    if 'scan_ending' not in session or session['scan_ending'] is None:
+        return 'Enter'
+    return session['scan_ending']
+
+
+app.jinja_env.globals['current_scan_ending'] = current_scan_ending
 
 # Register Blueprints
 app.register_blueprint(admin_bp, url_prefix='/admin')
@@ -43,6 +53,7 @@ app.register_blueprint(auth_bp, url_prefix='/auth')
 app.register_blueprint(client_bp, url_prefix='/client')
 app.register_blueprint(user_bp, url_prefix='/user')
 app.register_blueprint(message_bp, url_prefix='/message')
+app.register_blueprint(parametre_bp, url_prefix='/parameter')
 
 
 @app.route('/')

@@ -35,6 +35,23 @@
                         </div>
                     </div>
                 </div>
+                <div class="card shadow" style="margin-top: 15px">
+                    <div class="card-header py-3" style="display: flex; flex-direction: column;justify-content: space-between;">
+                        <p class="text-primary m-0 fw-bold" style="border-color: rgb(78,223,92);color: rgb(78,223,92);">
+                            paramètres des scanners</p>
+                        <div style="display: flex; flex-direction: column; align-items: flex-end">
+                            <label class="form-label" style="width: 100%; margin-top: 5px" >Scan Ending : </label>
+
+                            <select class="form-select" id="scan-ending-select">
+                                {% for e in scanner_endings_list %}
+                                    <option value="{{ e }}" {% if e == scanner_ending %} selected {% endif %} >{{ e }}</option>
+                                {% endfor %}
+                            </select>
+                            <button class="btn btn-outline-primary" type="button" data-bs-toggle="modal" style="margin-top: 15px"
+                                    data-bs-target="#modal-utilisateur" onclick="save_scanner_ending()">Enregistrer.
+                        </div>
+                    </div>
+                </div>
                 <!--<div class="card shadow" style="margin-top: 15px">
                     <div class="card-header py-3" style="display: flex;  flex-direction: column;justify-content: space-between;">
                         <p class="text-primary m-0 fw-bold" style="border-color: rgb(78,223,92);color: rgb(78,223,92);">
@@ -62,6 +79,7 @@
 <script src="{{ url_for('static', filename='css/assets/bootstrap/js/bootstrap.min.js') }}"></script>
 <script src="{{ url_for('static', filename='css/assets/js/theme.js') }}"></script>
 <script src="{{ url_for('static', filename='js/utilisateur-js.js') }}"></script>
+<script src="{{ url_for('static', filename='js/parameter-js.js') }}"></script>
 <script src="{{ url_for('static', filename='js/script.js') }}"></script>
 </body>
 

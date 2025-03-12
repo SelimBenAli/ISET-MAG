@@ -1,15 +1,33 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js"></script>
 <script src="{{ url_for('static', filename='js/admin-js.js') }}"></script>
+<script src="{{ url_for('static', filename='js/scanner-js.js') }}"></script>
 <audio id="sound-alert" src="{{ url_for('static', filename='sound/message.wav') }}"></audio>
 <audio id="sound-message" src="{{ url_for('static', filename='sound/alert.wav') }}"></audio>
+<link rel="stylesheet" href="{{ url_for('static', filename='css/toggle-button.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/client-assets/css/aos.min.css') }}">
 <script>load_messages_notifications()</script>
 <script>load_alerts_notifications()</script>
+<script>getEnding('{{ current_scan_ending() }}')</script>
 <userdata hidden>{{ user }}</userdata>
 
 <nav class="navbar navbar-expand bg-white shadow mb-4 topbar">
     <div class="container-fluid">
         <button class="btn btn-link d-md-none rounded-circle me-3" id="sidebarToggleTop" type="button"><i
                 class="fas fa-bars"></i></button>
+        <label style="margin-right: 5px"> Interventien </label>
+        <label class="switch">
+            <input class="switch__input" type="checkbox" id="toggle-intervention" onclick="showInterventionParameters()" role="switch">
+            <svg class="switch__check" viewBox="0 0 16 16" width="16px" height="16px">
+                <polyline class="switch__check-line" fill="none" stroke="hsl(var(--hue),10%,50%)" stroke-dasharray="9 9"
+                          stroke-dashoffset="3.01" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                          points="5,8 11,8 11,11"/>
+            </svg>
+            <span class="switch__sr">Power</span>
+        </label>
+        <div id="intervention-parameters" style="display: flex;justify-content: space-between">
+
+
+        </div>
         <!--<form class="d-none d-sm-inline-block me-auto ms-md-3 my-2 my-md-0 mw-100 navbar-search">
             <div class="input-group"><input class="bg-light form-control border-0 small" type="text"
                                             placeholder="Search for ...">

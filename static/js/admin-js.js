@@ -175,6 +175,25 @@ function alert_alert_number(number) {
     alert.innerHTML = number + '+';
 }
 
+function showInterventionParameters() {
+    var toggle = document.getElementById('toggle-intervention');
+    var parameters = document.getElementById('intervention-parameters');
+    if (toggle.checked) {
+        parameters.innerHTML = `
+        <input class="form-control form-control-user" type="text" 
+                       id="codde-ajout-interventien-utilisateur" style="margin-left: 15px"
+                       placeholder="Code Utilisateur...">
+
+            <input class="form-control form-control-user" type="text" 
+                   id="codde-ajout-interventien-hardware" style="margin-left: 15px"
+                   placeholder="Code Hardware...">
+        `
+    }
+    else {
+        parameters.innerHTML = ''
+    }
+}
+
 //window.onload = load_messages_notifications;
 
 

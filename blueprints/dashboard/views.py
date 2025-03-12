@@ -15,6 +15,7 @@ from service.reclamation_service import ReclamationService
 from service.role_service import RoleService
 from service.salle_service import SalleService
 from service.utilisateur_service import UtilisateurService
+from tools.scanner_tools import ScannerTools
 from tools.user_tools import UserTools
 
 
@@ -36,6 +37,7 @@ class DashboardViews:
         self.role_service = RoleService()
         self.reclamation_service = ReclamationService()
         self.parametre_email_service = ParametreEmailService()
+        self.scanner_tools = ScannerTools()
         self.dashboard_bp = Blueprint('dashboard', __name__, template_folder='templates')
         self.dashboard_fournisseur_routes()
         self.dashboard_salle_bloc_routes()
@@ -314,7 +316,9 @@ class DashboardViews:
                 parametre_email_forgot_password_user = None
                 return render_template('parametre.html', user=user, parametre_email_add_admin=parametre_email_add_admin,
                                        parametre_email_add_user=parametre_email_add_user,
-                                       parametre_email_forgot_password_user=parametre_email_forgot_password_user)
+                                       parametre_email_forgot_password_user=parametre_email_forgot_password_user,
+                                       scanner_endings_list=self.scanner_tools.scan_endings,
+                                       scanner_ending=self.scanner_tools.get_scan_ending())
             else:
                 return redirect(url_for('admin.login'))
 

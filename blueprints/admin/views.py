@@ -1,6 +1,7 @@
 from flask import Blueprint, render_template, request, session, redirect, url_for
 
 from service.admin_service import AdminService
+from tools.scanner_tools import ScannerTools
 from tools.user_tools import UserTools
 from extensions import socketio
 
@@ -9,6 +10,7 @@ class AdminViews:
     def __init__(self):
         self.admin_service = AdminService()
         self.user_tools = UserTools()
+        self.scan_tools = ScannerTools()
         self.admin_bp = Blueprint('admin', __name__, template_folder='templates')
         self.admin_routes()
 
@@ -33,6 +35,7 @@ class AdminViews:
                     return {'status': 'failed', 'message': 'Utilisateur Non Trouvé'}
                 print("ok", admin)
                 session['admin'] = admin
+                self.scan_tools.switch_scan_ending('doubleEnter')
                 return {'status': 'success'}
             elif status == 'failed':
                 print("no")
@@ -43,6 +46,7 @@ class AdminViews:
         @self.admin_bp.route('/logout', methods=['GET'])
         def logout():
             session['admin'] = None
+            self.scan_tools.clear_scan_ending()
             return redirect(url_for('admin.login'))
 
         @self.admin_bp.route('/change-details', methods=['PUT'])
