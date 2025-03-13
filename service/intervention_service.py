@@ -19,7 +19,7 @@ class InterventionService:
             self.connection, self.cursor = self.database_tools.find_connection()
             self.cursor.execute(
                 f"""SELECT `IDIntervention`, `IDUtilisateur`, `DateDebut`, `DateFin`, `IDSalle`,
-                 `IDHardware`, `IDAdmin` FROM `intervention` WHERE {add}""")
+                 `IDHardware`, `IDAdmin` FROM `intervention` WHERE {add} ORDER BY DateDebut DESC""")
             data = self.cursor.fetchall()
             liste_intervention = []
             for element in data:
@@ -62,7 +62,7 @@ class InterventionService:
     def add_intervention(self, id_user, date_debut, date_fin, id_salle, id_hardware, id_admin):
         return self.database_tools.execute_request(
             f"""INSERT INTO intervention (IDUtilisateur, DateDebut, DateFin, IDSalle, IDHardware, IDAdmin) 
-            VALUES ({id_user}, '{date_debut}', '{date_fin}', {id_salle}, {id_hardware}, {id_admin})""")
+            VALUES ({id_user}, NOW(), NULL, NULL, {id_hardware}, {id_admin})""")
 
     def update_intervention(self, id_intervention, id_user, date_debut, id_salle, id_hardware):
         return self.database_tools.execute_request(

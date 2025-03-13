@@ -20,21 +20,50 @@
             <div class="container-fluid">
                 <h3 class="text-dark mb-4">Intervention</h3>
                 <div class="card shadow">
-                    <div class="card-header py-3" style="display: flex; justify-content: space-between; align-items: center;">
+                    <div class="card-header py-3"
+                         style="display: flex; justify-content: space-between; align-items: center;">
                         <p class="text-primary m-0 fw-bold" style="border-color: rgb(78,223,92);color: rgb(78,223,92);">
                             Liste des interventions</p>
                         <button class="btn btn-primary" type="button" data-bs-toggle="modal"
-                                data-bs-target="#modal-intervention" onclick="openAddInterventionMode()">Ajouter une intervention</button>
+                                data-bs-target="#modal-intervention" onclick="openAddInterventionMode()">Ajouter une
+                            intervention
+                        </button>
                     </div>
                     <div class="card-body">
                         <div class="row">
 
-                            <div class="col-md-6">
-                                <div class=" dataTables_filter" id="dataTable_filter"><label
-                                        class="form-label"><input type="search" id="nom"
+                            <div class="col-md-6" style="display: flex; justify-content: space-around">
+                                <div class=" dataTables_filter" id="dataTable_filter" style="margin-right: 15px"><label
+                                        class="form-label"><input type="search" id="code-hardware-search"
                                                                   class="form-control form-control-sm"
                                                                   aria-controls="dataTable"
-                                                                  placeholder="Search" oninput=""></label></div>
+                                                                  placeholder="Code Hardware"
+                                                                  oninput="search_intervention()"></label>
+                                </div>
+
+                                <div class=" dataTables_filter" id="dataTable_filter" style="margin-right: 15px"><label
+                                        class="form-label"><input type="search" id="code-user-search"
+                                                                  class="form-control form-control-sm"
+                                                                  aria-controls="dataTable"
+                                                                  placeholder="Code Utilisateur"
+                                                                  oninput="search_intervention()"></label>
+                                </div>
+
+                                <div class=" dataTables_filter" id="dataTable_filter" style="margin-right: 15px"><label
+                                        class="form-label"><input type="search" id="num-hardware-search"
+                                                                  class="form-control form-control-sm"
+                                                                  aria-controls="dataTable"
+                                                                  placeholder="Num Inventaire"
+                                                                  oninput="search_intervention()"></label>
+                                </div>
+
+                                <div class=" dataTables_filter" id="dataTable_filter" style="margin-right: 15px"><label
+                                        class="form-label"><select class="form-select" id="status-int"
+                                                                   onchange="search_intervention()">
+                                    <option value="ALL">Tous</option>
+                                    <option value="CURRENT">En cours</option>
+                                    <option value="CLOSED">Terminé</option>
+                                </select> </label></div>
                             </div>
                             <div class="col-md-6" style="text-align: right">
                                 <!--<button class="btn btn-primary" type="button" data-bs-toggle="modal"
@@ -46,12 +75,12 @@
                             <table class="table my-0" id="table-intervention">
 
 
-
                             </table>
                         </div>
                         <div class="row">
                             <div class="col-md-6 align-self-center">
-                                <p id="dataTable_info_intervention" class="dataTables_info" role="status" aria-live="polite">Showing
+                                <p id="dataTable_info_intervention" class="dataTables_info" role="status"
+                                   aria-live="polite">Showing
                                     1 to 10 of 27</p>
                             </div>
                             <div class="col-md-6">

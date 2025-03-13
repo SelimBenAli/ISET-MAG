@@ -31,11 +31,21 @@ socketio.init_app(app)
 
 def current_scan_ending():
     if 'scan_ending' not in session or session['scan_ending'] is None:
+        session['scan_ending'] = 'Enter'
         return 'Enter'
     return session['scan_ending']
 
 
+def current_scan_mode():
+    # mode 1: open, mode 2: close
+    if 'scan_mode' not in session or session['scan_mode'] is None:
+        session['scan_mode'] = 1
+        return 1
+    return session['scan_mode']
+
+
 app.jinja_env.globals['current_scan_ending'] = current_scan_ending
+app.jinja_env.globals['current_scan_mode'] = current_scan_mode
 
 # Register Blueprints
 app.register_blueprint(admin_bp, url_prefix='/admin')

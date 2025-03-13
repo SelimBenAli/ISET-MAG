@@ -3,7 +3,7 @@ from flask import session
 
 class ScannerTools:
     def __init__(self):
-        self.scan_endings = ['Enter', 'doubleEnter', 'Tab', 'Exit', 'doubleExit', 'DownArrow']
+        self.scan_endings = ['Enter', 'doubleEnter', 'Tab', 'DownArrow']
 
     def switch_scan_ending(self, ending_type):
         session['scan_ending'] = ending_type

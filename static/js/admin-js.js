@@ -179,19 +179,39 @@ function showInterventionParameters() {
     var toggle = document.getElementById('toggle-intervention');
     var parameters = document.getElementById('intervention-parameters');
     if (toggle.checked) {
+        mode = 1
         parameters.innerHTML = `
         <input class="form-control form-control-user" type="text" 
-                       id="codde-ajout-interventien-utilisateur" style="margin-left: 15px"
-                       placeholder="Code Utilisateur...">
+                       id="code-ajout-interventien-utilisateur" style="margin-left: 15px" autofocus
+                       placeholder="Code Utilisateur..." >
 
             <input class="form-control form-control-user" type="text" 
-                   id="codde-ajout-interventien-hardware" style="margin-left: 15px"
-                   placeholder="Code Hardware...">
+                   id="code-ajout-interventien-hardware" style="margin-left: 15px"
+                   placeholder="Code Hardware..." >
         `
-    }
-    else {
+    } else {
+        mode = 2
         parameters.innerHTML = ''
     }
+    change_scan_mode(mode)
+    getScannMode(mode)
+}
+
+function change_scan_mode(mode) {
+    var xhr = new XMLHttpRequest();
+    xhr.open('PUT', '/parameter/change-scan-mode/' + mode, true);
+    xhr.setRequestHeader('Content-Type', 'application/json');
+    xhr.onreadystatechange = function () {
+        if (xhr.readyState === 4 && xhr.status === 200) {
+            var response = JSON.parse(xhr.responseText);
+            if (response.status === 'success') {
+                console.log('scan mode changed')
+            } else {
+                alert('Error');
+            }
+        }
+    };
+    xhr.send();
 }
 
 //window.onload = load_messages_notifications;
