@@ -13,6 +13,7 @@ class AdminViews:
         self.scan_tools = ScannerTools()
         self.admin_bp = Blueprint('admin', __name__, template_folder='templates')
         self.admin_routes()
+        # commentaire
 
     def admin_routes(self):
         @self.admin_bp.route('/login', methods=['GET'])
