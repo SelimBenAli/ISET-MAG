@@ -25,15 +25,18 @@ function load_page_intervention() {
 }
 
 function load_table_intervention_parameters() {
-    header = "<thead><tr><th>Code</th><th>Nom</th><th>Prénom</th><th>Date Début</th><th>Date Fin</th><th>Hardware</th><th>Admin</th><th>Fermer</th><th>Modifier</th><th>Supprimer</th></tr></thead>"
-    footer = "<tfoot><tr><th>Code</th><th>Nom</th><th>Prénom</th><th>Date Début</th><th>Date Fin</th><th>Hardware</th><th>Admin</th><th>Fermer</th><th>Modifier</th><th>Supprimer</th></tr></tfoot>"
+    header = "<thead><tr><th>Code</th><th>Nom</th><th>Prénom</th><th>Date Début</th><th>Date Fin</th><th>Hardware</th><th>Admin d'ajout</th><th>Admin de fermeture</th><th>Fermer</th><th>Supprimer</th></tr></thead>"
+    footer = "<tfoot><tr><th>Code</th><th>Nom</th><th>Prénom</th><th>Date Début</th><th>Date Fin</th><th>Hardware</th><th>Admin d'ajout</th><th>Admin de fermeture</th><th>Fermer</th><th>Supprimer</th></tr></tfoot>"
     body = []
     liste_intervention.forEach(intervention => {
         add_fermeture = "<button class='btn btn-outline-success' disabled>Fermer</button>"
         if (intervention.date_fin_intervention === null) {
             add_fermeture = "<button class='btn btn-outline-success' onclick='fermer_intervention(" + intervention.id_intervention + ")'>Fermer</button>"
+            add_admin_fermeture = "Pas Encore"
+        } else {
+            add_admin_fermeture = intervention.admin_fermeture_intervention.nom_admin + " " + intervention.admin_fermeture_intervention.prenom_admin
         }
-        body.push("<tr><td>" + intervention.id_intervention + "</td><td>" + intervention.utilisateur_intervention.nom_utilisateur + "</td><td>" + intervention.utilisateur_intervention.prenom_utilisateur + "</td><td>" + intervention.date_debut_intervention + "</td><td>" + intervention.date_fin_intervention + "</td><td>" + intervention.hardware_intervention.numero_inventaire_hardware + "</td><td>" + intervention.admin_intervention.nom_admin + " " + intervention.admin_intervention.prenom_admin + "</td><td>" + add_fermeture + "</td><td><button class='btn btn-outline-secondary' onclick=''>Modifier</button></td><td><button class='btn btn-outline-danger' onclick='supprimer_intervention(" + intervention.id_intervention + ")'>Supprimer</button></td></tr>")
+        body.push("<tr><td>" + intervention.id_intervention + "</td><td>" + intervention.utilisateur_intervention.nom_utilisateur + "</td><td>" + intervention.utilisateur_intervention.prenom_utilisateur + "</td><td>" + intervention.date_debut_intervention + "</td><td>" + intervention.date_fin_intervention + "</td><td>" + intervention.hardware_intervention.numero_inventaire_hardware + "</td><td>" + intervention.admin_intervention.nom_admin + " " + intervention.admin_intervention.prenom_admin + "</td><td>" + add_admin_fermeture + "</td><td>" + add_fermeture + "</td><td><button class='btn btn-outline-danger' onclick='supprimer_intervention(" + intervention.id_intervention + ")'>Supprimer</button></td></tr>")
     });
     division_table = 7
     load_table_intervention(header, footer, body, division_table)
@@ -51,8 +54,7 @@ function search_intervention() {
         liste_intervention = liste_intervention_tous
     } else if (status === 'CURRENT') {
         liste_intervention = liste_intervention_tous.filter(intervention => intervention.date_fin_intervention === null)
-    }
-    else {
+    } else {
         liste_intervention = liste_intervention_tous.filter(intervention => intervention.date_fin_intervention !== null)
     }
     let code_hard = document.getElementById('code-hardware-search').value
@@ -74,6 +76,32 @@ function fermer_intervention(id_intervention) {
     enter_loading_mode()
     var xhr = new XMLHttpRequest();
     xhr.open('PUT', '/intervention/close-intervention/' + id_intervention, true);
+    xhr.setRequestHeader('Content-Type', 'application/json');
+    xhr.onreadystatechange = function () {
+        if (xhr.readyState === 4 && xhr.status === 200) {
+            var response = JSON.parse(xhr.responseText);
+            console.log(response)
+            if (response.status === 'success') {
+                quit_loading_mode()
+                load_page_intervention()
+            } else {
+                alert('Erreur');
+            }
+        }
+    };
+    xhr.send();
+}
+
+function supprimer_intervention(id_intervention) {
+    if (confirm('Voulez-vous vraiment supprimer cette intervention?')) {
+        supprimer_intervention_request(id_intervention)
+    }
+}
+
+function supprimer_intervention_request(id_intervention) {
+    enter_loading_mode()
+    var xhr = new XMLHttpRequest();
+    xhr.open('DELETE', '/intervention/delete-intervention/' + id_intervention, true);
     xhr.setRequestHeader('Content-Type', 'application/json');
     xhr.onreadystatechange = function () {
         if (xhr.readyState === 4 && xhr.status === 200) {

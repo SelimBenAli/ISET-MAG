@@ -19,7 +19,7 @@ class InterventionService:
             self.connection, self.cursor = self.database_tools.find_connection()
             self.cursor.execute(
                 f"""SELECT `IDIntervention`, `IDUtilisateur`, `DateDebut`, `DateFin`, `IDSalle`,
-                 `IDHardware`, `IDAdmin` FROM `intervention` WHERE {add} ORDER BY DateDebut DESC""")
+                 `IDHardware`, `IDAdmin`, `IDAdminFermeture` FROM `intervention` WHERE {add} ORDER BY DateDebut DESC""")
             data = self.cursor.fetchall()
             liste_intervention = []
             for element in data:
@@ -31,9 +31,12 @@ class InterventionService:
                     salle = SalleService.create_none().dict_form()
                 status, hardware = HardwareService().find_hardware_by_id(element[5])
                 status, admin = AdminService().find_admin_by_id(element[6])
+                admin_fermeture = None
+                if element[7] is not None:
+                    status, admin_fermeture = AdminService().find_admin_by_id(element[7])
                 intervention = Intervention(element[0], utilisateur[0], salle, hardware[0], admin,
                                             self.date_tools.convert_date_time(element[2]),
-                                            self.date_tools.convert_date_time(element[3]))
+                                            self.date_tools.convert_date_time(element[3]), admin_fermeture)
                 liste_intervention.append(intervention.dict_form())
             self.cursor.close()
             self.connection.close()
@@ -56,6 +59,9 @@ class InterventionService:
     def find_intervention_by_hardware(self, id_hardware):
         return self.find_intervention_by_something(f' IDHardware = {id_hardware}')
 
+    def find_intervention_by_used_hardware(self, id_hardware):
+        return self.find_intervention_by_something(f' IDHardware = {id_hardware} AND DateFin IS NULL')
+
     def find_intervention_by_admin(self, id_admin):
         return self.find_intervention_by_something(f' IDAdmin = {id_admin}')
 
@@ -74,6 +80,6 @@ class InterventionService:
         return self.database_tools.execute_request(f"""DELETE FROM intervention 
         WHERE IDIntervention = {id_intervention}""")
 
-    def close_intervention(self, id_intervention):
+    def close_intervention(self, id_intervention, id_admin):
         return self.database_tools.execute_request(
-            f"""UPDATE intervention SET DateFin = NOW() WHERE IDIntervention = {id_intervention}""")
+            f"""UPDATE intervention SET DateFin = NOW(), IDAdminFermeture = '{id_admin}' WHERE IDIntervention = {id_intervention}""")

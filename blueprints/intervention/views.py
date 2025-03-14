@@ -36,7 +36,7 @@ class InterventionViews:
                 else:
                     return {'status': 'failed'}
                 print('Int ajout : ', id_user, id_hardware)
-                status, i = self.intervention_service.find_intervention_by_hardware(id_hardware)
+                status, i = self.intervention_service.find_intervention_by_used_hardware(id_hardware)
                 print('currrrrrr', i)
                 if len(i) > 0:
                     return {'status': 'failed', 'message': 'Hardware déjà pris en intervention'}
@@ -83,7 +83,8 @@ class InterventionViews:
         @self.intervention_bp.route('/close-intervention/<int:id_intervention>', methods=['PUT'])
         def close_intervention(id_intervention):
             if self.user_tools.check_user_in_session('admin'):
-                status = self.intervention_service.close_intervention(id_intervention)
+                admin = session['admin']['id_admin']
+                status = self.intervention_service.close_intervention(id_intervention, admin)
                 if status != 'failed':
                     return {'status': 'success'}
             return {'status': 'failed'}
