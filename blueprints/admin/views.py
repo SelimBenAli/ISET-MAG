@@ -15,6 +15,8 @@ class AdminViews:
         self.admin_routes()
         # commentaire
 
+        # autre test
+
     def admin_routes(self):
         @self.admin_bp.route('/login', methods=['GET'])
         def login():
