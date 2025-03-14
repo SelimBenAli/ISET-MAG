@@ -83,8 +83,14 @@ class InterventionViews:
         @self.intervention_bp.route('/close-intervention/<int:id_intervention>', methods=['PUT'])
         def close_intervention(id_intervention):
             if self.user_tools.check_user_in_session('admin'):
+                status, i = self.intervention_service.find_intervention_by_id(id_intervention)
+                print('Intervention à fermer : ', i)
+                if len(i) == 0:
+                    return {'status': 'failed', 'message': 'Intervetion introuvable'}
+                if i[0]['date_fin_intervention'] is not None:
+                    return {'status': 'failed', 'message': 'Intervention déjà fermée'}
                 admin = session['admin']['id_admin']
                 status = self.intervention_service.close_intervention(id_intervention, admin)
                 if status != 'failed':
                     return {'status': 'success'}
-            return {'status': 'failed'}
+            return {'status': 'failed', 'message': 'Erreur de session'}

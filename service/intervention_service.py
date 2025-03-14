@@ -82,4 +82,5 @@ class InterventionService:
 
     def close_intervention(self, id_intervention, id_admin):
         return self.database_tools.execute_request(
-            f"""UPDATE intervention SET DateFin = NOW(), IDAdminFermeture = '{id_admin}' WHERE IDIntervention = {id_intervention}""")
+            f"""UPDATE intervention SET DateFin = NOW(), IDAdminFermeture = '{id_admin}' 
+            WHERE IDIntervention = {id_intervention}""")

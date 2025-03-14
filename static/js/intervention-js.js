@@ -85,7 +85,9 @@ function fermer_intervention(id_intervention) {
                 quit_loading_mode()
                 load_page_intervention()
             } else {
-                alert('Erreur');
+                alert(response.message);
+                quit_loading_mode()
+                load_page_intervention()
             }
         }
     };
