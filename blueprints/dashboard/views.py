@@ -98,6 +98,7 @@ class DashboardViews:
         @self.dashboard_bp.route('/add-fournisseur', methods=['GET'])
         def ajout_fournisseur_template():
             if self.user_tools.check_user_in_session('admin'):
+                session['scan_mode'] = 2
                 return render_template('ajout-fournisseur.html', user=session['admin'])
             else:
                 return redirect(url_for('admin.login'))
@@ -121,6 +122,7 @@ class DashboardViews:
         @self.dashboard_bp.route('/add-marque', methods=['GET'])
         def ajout_marque_template():
             if self.user_tools.check_user_in_session('admin'):
+                session['scan_mode'] = 2
                 return render_template('ajout-marque.html', user=session['admin'])
             else:
                 return redirect(url_for('admin.login'))
@@ -146,6 +148,7 @@ class DashboardViews:
         def ajout_modele_template():
             if self.user_tools.check_user_in_session('admin'):
                 liste_marque = self.marque_service.find_all_marque()[1]
+                session['scan_mode'] = 2
                 return render_template('ajout-modele.html', liste_marque=liste_marque, user=session['admin'])
             else:
                 return redirect(url_for('admin.login'))
@@ -173,6 +176,7 @@ class DashboardViews:
         def ajout_magasin_template():
             if self.user_tools.check_user_in_session('admin'):
                 liste_salle = self.salle_service.find_all_salle()[1]
+                session['scan_mode'] = 2
                 return render_template('ajout-magasin.html', liste_salle=liste_salle, user=session['admin'])
             else:
                 return redirect(url_for('admin.login'))
@@ -191,12 +195,19 @@ class DashboardViews:
         @self.dashboard_bp.route('/hardware', methods=['GET'])
         def hardware_template():
             if self.user_tools.check_user_in_session('admin'):
-                liste_modele = self.modele_service.find_all_modele()[1]
-                liste_fournisseur = self.fournisseur_service.find_all_fournisseur()[1]
-                liste_magasin = self.magasin_service.find_all_magasin()[1]
-                liste_salle = self.salle_service.find_all_salle()[1]
-                liste_etat = self.etat_service.find_all_etat()[1]
-                liste_marque = self.marque_service.find_all_marque()[1]
+                status, liste_modele = self.modele_service.find_all_modele()
+                print("liste_modele", status, liste_modele)
+                status, liste_fournisseur = self.fournisseur_service.find_all_fournisseur()
+                print("liste_fournisseur", status, liste_fournisseur)
+                status, liste_magasin = self.magasin_service.find_all_magasin()
+                print("liste_magasin", status, liste_magasin)
+                status, liste_salle = self.salle_service.find_all_salle()
+                print("liste_salle", status, liste_salle)
+                status, liste_etat = self.etat_service.find_all_etat()
+                print("liste_etat", status, liste_etat)
+                status, liste_marque = self.marque_service.find_all_marque()
+                print("liste_marque", status, liste_marque)
+
                 return render_template('hardware.html', liste_modele=liste_modele, liste_marque=liste_marque,
                                        liste_fournisseur=liste_fournisseur,
                                        liste_magasin=liste_magasin, liste_salle=liste_salle, liste_etat=liste_etat,
@@ -212,6 +223,7 @@ class DashboardViews:
                 liste_magasin = self.magasin_service.find_all_magasin()[1]
                 liste_salle = self.salle_service.find_all_salle()[1]
                 liste_etat = self.etat_service.find_all_etat()[1]
+                session['scan_mode'] = 2
                 return render_template('ajout-hardware.html', liste_modele=liste_modele,
                                        liste_fournisseur=liste_fournisseur,
                                        liste_magasin=liste_magasin, liste_salle=liste_salle, liste_etat=liste_etat,
@@ -274,6 +286,7 @@ class DashboardViews:
         def ajout_utilisateur_template():
             if self.user_tools.check_user_in_session('admin'):
                 status, role = self.role_service.find_all_role()
+                session['scan_mode'] = 2
                 return render_template('ajout-utilisateur.html', liste_role=role, user=session['admin'])
             else:
                 return redirect(url_for('admin.login'))
@@ -332,6 +345,9 @@ class DashboardViews:
         @self.dashboard_bp.route('/add-admin', methods=['GET'])
         def ajout_admin_template():
             if self.user_tools.check_user_in_session('admin'):
+                session['scan_mode'] = 2
                 return render_template('ajout-admin.html')
             else:
                 return redirect(url_for('admin.login'))
+
+

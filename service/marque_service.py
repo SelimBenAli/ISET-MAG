@@ -42,3 +42,6 @@ class MarqueService:
 
     def delete_marque(self, id_marque):
         return self.database_tools.execute_request(f"""DELETE FROM marque WHERE IDMarque = {id_marque}""")
+
+    def create_none(self):
+        return Marque(None, None)

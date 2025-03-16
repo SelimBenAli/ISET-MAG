@@ -12,7 +12,7 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='css/assets/fonts/fontawesome-all.min.css') }}">
 </head>
 
-<body id="page-top" onload="load_page_reclamation()">
+<body id="page-top" onload="load_page_reclamation(1, 0, '', '')">
 <div id="hidden-big-div" class="hidden-big" style="display: none">
     <div id="hidden-reclamation" class="hidden-small-first bg-white" style="width: 80%">
         <div class="close-div" onclick="fermer_reclamation()">x</div>
@@ -42,11 +42,11 @@
                     <div class="card-body">
                         <div class="row">
 
-                            <div class="col-md-12" style="display: flex; justify-content: space-around">
+                            <div class="col-md-12" style="display: flex; justify-content: space-around; align-items: center">
                                 <div class=" dataTables_filter" id="dataTable_filter"><label
                                         class="form-label">Etat de Réclamation :
-                                <select class="form-select" onchange="search_reclamation_by_status()" id="etat_reclamation" >
-                                    <option value="get-all">Tous</option>
+                                <select class="form-select" onchange="search_reclamation()" id="etat_reclamation" >
+                                    <option value="0">Tous</option>
                                     <option value="1">En cours</option>
                                     <option value="2">Fermée</option>
                                 </select>
@@ -59,17 +59,22 @@
                                                                   class="form-control form-control-sm"
                                                                   aria-controls="dataTable"
                                                                   placeholder="Chercher par utilisateur..."
-                                                                  oninput="search_reclamation_by_user()"></label>
+                                                                  oninput=""></label>
                                 </div>
                                 <div class=" dataTables_filter" id="dataTable_filter"><label
                                         class="form-label"><input type="search" id="num-inv-reclamation"
                                                                   class="form-control form-control-sm"
                                                                   aria-controls="dataTable"
                                                                   placeholder="Chercher par numéro d'inventaire..."
-                                                                  oninput="search_reclamation_by_num_inventaire()"></label>
+                                                                  oninput=""></label>
                                 </div>
+                                <button class="btn btn-primary" type="button" style="margin-left: 10px"
+                                    onclick="search_reclamation()">Rechercher</button>
+
                             </div>
+
                         </div>
+
                         <div class="table-responsive table mt-2" id="dataTable" role="grid"
                              aria-describedby="dataTable_info">
                             <table class="table my-0" id="table-reclamation">

@@ -17,14 +17,19 @@ class ModeleService:
             data = self.cursor.fetchall()
             liste_modele = []
             for element in data:
-                status, marque = MarqueService().find_marque_by_id(element[2])
-                modele = Modele(element[0], element[1], marque[0])
+                if element[2] is None:
+                    marque = MarqueService().create_none().dict_form()
+                else:
+                    status, marque = MarqueService().find_marque_by_id(element[2])
+                    marque = marque[0]
+                modele = Modele(element[0], element[1], marque)
                 liste_modele.append(modele.dict_form())
             self.cursor.close()
             self.connection.close()
             return 'success', liste_modele
         except Exception as e:
             return 'error', e
+
 
     def find_all_modele(self):
         return self.find_modele_by_something(' 1')

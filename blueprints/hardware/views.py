@@ -1,12 +1,14 @@
 from flask import Blueprint, request, jsonify, url_for
 from service.hardware_service import HardwareService
 from service.relation_service import RelationService
+from tools.hardware_tools import HardwareTools
 from tools.user_tools import UserTools
 
 
 class HardwareViews:
     def __init__(self):
         self.user_tools = UserTools()
+        self.hardware_tools = HardwareTools()
         self.hardware_service = HardwareService()
         self.relation_service = RelationService()
         self.hardware_bp = Blueprint('hardware', __name__, template_folder='templates')
@@ -15,7 +17,9 @@ class HardwareViews:
     def hardware_routes(self):
         @self.hardware_bp.route('/add-hardware', methods=['POST'])
         def add_hardware():
+            print("add hardware")
             if self.user_tools.check_user_in_session('admin'):
+                print("add hardware 2")
                 data = request.get_json()
                 id_modele = data.get('modele_hardware')
                 id_fournisseur = data.get('fournisseur_hardware')
@@ -24,7 +28,6 @@ class HardwareViews:
                 num_inventaire = data.get('numero_inventaire_hardware')
                 date_achat = data.get('date_achat_hardware')
                 date_mise_en_service = data.get('date_mise_en_service_hardware')
-                code_hardware = data.get('code_hardware')
                 id_etat = data.get('etat_hardware')
                 print("date 1 : ", date_achat, date_mise_en_service)
                 if id_modele is None:
@@ -45,6 +48,12 @@ class HardwareViews:
                     id_salle = 'NULL'
                 if id_magasin == 0 or id_magasin == '0':
                     id_magasin = 'NULL'
+                if not self.hardware_tools.check_num_inventaire(str(num_inventaire)):
+                    return jsonify({'status': 'failed', 'message': 'numero inventaire is not valid'})
+                status, hard = self.hardware_service.find_hardware_by_numero_inventaire(num_inventaire)
+                if len(hard) > 0:
+                    return jsonify({'status': 'failed', 'message': 'numéro inventaire existant'})
+                code_hardware = self.hardware_tools.generate_code_barre_hardware(str(num_inventaire))
                 print("date 2 : ", date_achat, date_mise_en_service)
                 status = self.hardware_service.add_hardware(id_modele, id_fournisseur, id_magasin, id_salle,
                                                             num_inventaire,
@@ -67,9 +76,7 @@ class HardwareViews:
                 num_inventaire = data.get('numero_inventaire_hardware')
                 date_achat = data.get('date_achat_hardware')
                 date_mise_en_service = data.get('date_mise_en_service_hardware')
-                code_hardware = data.get('code_hardware')
                 id_etat = data.get('etat_hardware')
-
                 if id_modele is None:
                     return jsonify({'status': 'failed', 'message': 'modele is required'})
                 if id_fournisseur is None:
@@ -88,6 +95,13 @@ class HardwareViews:
                     id_salle = ' NULL '
                 if id_magasin == 0 or id_magasin == '0':
                     id_magasin = ' NULL '
+                if not self.hardware_tools.check_num_inventaire(str(num_inventaire)):
+                    return jsonify({'status': 'failed', 'message': 'numero inventaire is not valid'})
+                status, hard = self.hardware_service.find_hardware_by_numero_inventaire(num_inventaire)
+                if len(hard) > 0:
+                    return jsonify({'status': 'failed', 'message': 'numéro inventaire existant'})
+                code_hardware = self.hardware_tools.generate_code_barre_hardware(str(num_inventaire))
+                code_hardware = self.hardware_tools.generate_code_barre_hardware(str(num_inventaire))
                 status = self.hardware_service.update_hardware(id_hardware, id_modele, id_fournisseur, id_magasin,
                                                                id_salle,
                                                                num_inventaire,
@@ -110,7 +124,47 @@ class HardwareViews:
         def get_hardwares():
             if self.user_tools.check_user_in_session('admin'):
                 status, hardwares = self.hardware_service.find_all_hardware()
-                return jsonify({'status': 'success', 'hardwares': hardwares})
+                print("hardwares : ", status, hardwares)
+                if status == 'success':
+                    return jsonify({'status': 'success', 'hardwares': hardwares})
+            return {'status': 'failed'}
+
+        @self.hardware_bp.route('/get-hardwares-limit/<int:page>', methods=['GET'])
+        def get_hardwares_with_limit(page):
+            if self.user_tools.check_user_in_session('admin'):
+                number = 20
+                begin = (page - 1) * number
+                status, pages = self.hardware_service.find_number_hardware()
+                status, hardwares = self.hardware_service.find_all_hardware_with_limit(number, begin)
+                print("hardwares : ", status, hardwares)
+                if status == 'success':
+                    if pages % number != 0:
+                        page_number = pages // number + 1
+                    else:
+                        page_number = pages // number
+                    return jsonify(
+                        {'status': 'success', 'hardwares': hardwares, 'pages': page_number, 'current_page': page,
+                         'nombre_totale': pages})
+            return {'status': 'failed'}
+
+        @self.hardware_bp.route('/get-hardwares-by-code/<string:code>', methods=['GET'])
+        def get_hardwares_by_code(code):
+            if self.user_tools.check_user_in_session('admin'):
+                status, hardwares = self.hardware_service.find_hardware_by_code(code)
+                print("hardwares : ", status, hardwares)
+                if status == 'success':
+                    return jsonify(
+                        {'status': 'success', 'hardwares': hardwares})
+            return {'status': 'failed'}
+
+        @self.hardware_bp.route('/get-hardwares-by-inv/<string:inv>', methods=['GET'])
+        def get_hardwares_by_inv(inv):
+            if self.user_tools.check_user_in_session('admin'):
+                status, hardwares = self.hardware_service.find_hardware_by_numero_inventaire(inv)
+                print("hardwares : ", status, hardwares)
+                if status == 'success':
+                    return jsonify(
+                        {'status': 'success', 'hardwares': hardwares})
             return {'status': 'failed'}
 
         @self.hardware_bp.route('/add-hardware-link/<int:id_hardware>', methods=['PUT'])

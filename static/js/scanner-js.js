@@ -5,7 +5,7 @@ const DOUBLE_ENTER_THRESHOLD = 100; // milliseconds between enters
 const SCANNER_SPEED_THRESHOLD = 50; // milliseconds, typical scanner speed
 let currentEnding = 'doubleEnter';
 var userBeginChar = 6;
-var hardwareBeginChar = 'X';
+var hardwareBeginChar = 7;
 var barcodelength = 13;
 var scann_mode = 1;
 
@@ -18,6 +18,26 @@ function getScannMode(mode) {
     scann_mode = mode;
     console.log('Scanner mode set to:', scann_mode);
 }
+
+
+function verify_user_barcode() {
+    let userDiv = document.getElementById('code-ajout-interventien-utilisateur');
+    userValue = userDiv.value;
+    if (userValue.charAt(0) !== userBeginChar.toString() && userValue.charAt(0) !== userBeginChar) {
+        userDiv.value = '';
+    }
+
+}
+
+function verify_hardware_barcode() {
+    let hardwareDiv = document.getElementById('code-ajout-interventien-hardware');
+    hardwareValue = hardwareDiv.value;
+    if (hardwareValue.charAt(0) !== hardwareBeginChar.toString() && hardwareValue.charAt(0) !== hardwareBeginChar) {
+        hardwareDiv.value = '';
+    }
+
+}
+
 
 function verify_user_barcode_place() {
     let userDiv = document.getElementById('code-ajout-interventien-utilisateur');
@@ -44,7 +64,7 @@ function verify_hardware_barcode_place() {
     let hardwareDiv = document.getElementById('code-ajout-interventien-hardware');
     hardwareValue = hardwareDiv.value;
     console.log(hardwareValue, hardwareValue.length !== 0 && (hardwareValue.charAt(0) !== hardwareBeginChar.toString() || hardwareValue.charAt(0) !== hardwareBeginChar))
-    if (hardwareValue.length === 12 && (hardwareValue.charAt(0) === hardwareBeginChar.toString() || hardwareValue.charAt(0) === hardwareBeginChar)) {
+    if (hardwareValue.length === barcodelength && (hardwareValue.charAt(0) === hardwareBeginChar.toString() || hardwareValue.charAt(0) === hardwareBeginChar)) {
         console.log('Hardware barcode scanned:', hardwareValue);
         let userDiv = document.getElementById('code-ajout-interventien-utilisateur');
         userValue = userDiv.value;
@@ -66,7 +86,7 @@ function call_intervention_check_add() {
     hardwareValue = hardwareDiv.value;
     let userDiv = document.getElementById('code-ajout-interventien-utilisateur');
     userValue = userDiv.value;
-    if (hardwareValue.length !== 12 || (hardwareValue.charAt(0) !== hardwareBeginChar.toString() && hardwareValue.charAt(0) !== hardwareBeginChar)) {
+    if (hardwareValue.length !== barcodelength || (hardwareValue.charAt(0) !== hardwareBeginChar.toString() && hardwareValue.charAt(0) !== hardwareBeginChar)) {
         hardwareDiv.value = '';
         return;
     }

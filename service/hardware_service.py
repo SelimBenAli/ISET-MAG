@@ -24,14 +24,13 @@ class HardwareService:
             req = (
                 f"""SELECT IDHardware, IDModel, IDFournisseur, IDMagasin, IDSalle, IDEtat,
                 NumeroInventaire, DateAchat, DateAjout, DateMiseEnService, 
-                Code, HistoriqueRelation FROM hardware WHERE {add}""")
+                Code, HistoriqueRelation FROM hardware WHERE MarkedAsDeleted = -1 AND {add}""")
 
             self.cursor.execute(req)
             data = self.cursor.fetchall()
             liste_hardware = []
             for element in data:
                 status, modele = ModeleService().find_modele_by_id(element[1])
-                status, fournisseur = FournisseurService().find_fournisseur_by_id(element[2])
                 status, relation = RelationService().find_relation_by_hardware(element[0])
                 status, magasin = MagasinService().find_magasin_by_id(element[3])
                 if status == 'error':
@@ -44,8 +43,13 @@ class HardwareService:
                 else:
                     salle = salle[0]
                 status, etat = EtatService().find_etat_by_id(element[5])
+                status, fournisseur = FournisseurService().find_fournisseur_by_id(element[2])
+                if status == 'error':
+                    fournisseur = FournisseurService().create_none().dict_form()
+                else:
+                    fournisseur = fournisseur[0]
 
-                hardware = Hardware(element[0], modele[0], fournisseur[0], magasin, salle, etat[0], element[6],
+                hardware = Hardware(element[0], modele[0], fournisseur, magasin, salle, etat[0], element[6],
                                     self.date_tools.convert_date(element[7]),
                                     self.date_tools.convert_date(element[8]),
                                     self.date_tools.convert_date(element[9]),
@@ -58,8 +62,12 @@ class HardwareService:
         except Exception as e:
             return 'error', e
 
+
     def find_all_hardware(self):
         return self.find_hardware_by_something(" 1")
+
+    def find_all_hardware_with_limit(self, number, begin):
+        return self.find_hardware_by_something(" 1 LIMIT " + str(begin) + ", " + str(number))
 
     def find_hardware_by_id(self, id_hardware):
         return self.find_hardware_by_something(f" IDHardware = {id_hardware} ")
@@ -77,7 +85,7 @@ class HardwareService:
         return self.find_hardware_by_something(f" IDSalle = {id_salle} ")
 
     def find_hardware_by_numero_inventaire(self, numero_inventaire):
-        return self.find_hardware_by_something(f" NumeroInventaire = {numero_inventaire} ")
+        return self.find_hardware_by_something(f" NumeroInventaire = '{numero_inventaire}' ")
 
     def find_hardware_by_date_achat(self, date_achat):
         return self.find_hardware_by_something(f" DateAchat = {date_achat} ")
@@ -122,4 +130,16 @@ class HardwareService:
                    WHERE IDHardware = {id_hardware}""")
 
     def delete_hardware(self, id_hardware):
-        return self.database_tools.execute_request(f"""DELETE FROM hardware WHERE IDHardware = {id_hardware}""")
+        return self.database_tools.execute_request(f"""UPDATE hardware SET MarkedAsDeleted 
+        WHERE IDHardware = {id_hardware}""")
+
+    def find_number_hardware(self):
+        try:
+            self.connection, self.cursor = self.database_tools.find_connection()
+            self.cursor.execute(f"""SELECT COUNT(IDHardware) FROM hardware""")
+            data = self.cursor.fetchall()
+            self.cursor.close()
+            self.connection.close()
+            return 'success', data[0][0]
+        except Exception as e:
+            return 'error', e

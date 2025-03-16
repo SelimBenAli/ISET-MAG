@@ -231,7 +231,7 @@ function load_pagination_show_table(current_page) {
 
 let inputField = document.querySelector("body")
 
-inputField.addEventListener("paste", handlePaste);
+// inputField.addEventListener("paste", handlePaste);
 
 function handlePaste(e) {
     var clipboardData, pastedData;

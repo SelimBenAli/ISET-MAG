@@ -196,6 +196,12 @@ function load_client_alerts() {
                 var alerts = response.alerts;
                 var alert_list = document.getElementById("client-alert-number");
                 alert_list.innerHTML = alerts + "+";
+                if (alerts === 0 || alerts === "0") {
+                    alert_list.hidden = true;
+                }
+                else {
+                    alert_list.hidden = false;
+                }
             } else {
                 alert('Erreur lors du chargement des alertes');
             }

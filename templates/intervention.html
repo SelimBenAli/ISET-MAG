@@ -11,7 +11,7 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='css/assets/fonts/fontawesome-all.min.css') }}">
 </head>
 
-<body id="page-top" onload="load_page_intervention()">
+<body id="page-top" onload="load_page_intervention(1)">
 <div id="wrapper">
     {% include "elements/side-bars/side-bar-admin.html" %}
     <div class="d-flex flex-column" id="content-wrapper">
@@ -38,7 +38,7 @@
                                                                   class="form-control form-control-sm"
                                                                   aria-controls="dataTable"
                                                                   placeholder="Code Hardware"
-                                                                  oninput="search_intervention()"></label>
+                                                                  oninput="search_intervention_code_hard()"></label>
                                 </div>
 
                                 <div class=" dataTables_filter" id="dataTable_filter" style="margin-right: 15px"><label
@@ -46,7 +46,7 @@
                                                                   class="form-control form-control-sm"
                                                                   aria-controls="dataTable"
                                                                   placeholder="Code Utilisateur"
-                                                                  oninput="search_intervention()"></label>
+                                                                  oninput="search_intervention_code_user()"></label>
                                 </div>
 
                                 <div class=" dataTables_filter" id="dataTable_filter" style="margin-right: 15px"><label
@@ -54,20 +54,20 @@
                                                                   class="form-control form-control-sm"
                                                                   aria-controls="dataTable"
                                                                   placeholder="Num Inventaire"
-                                                                  oninput="search_intervention()"></label>
+                                                                  oninput="search_intervention_num_inv()"></label>
                                 </div>
 
                                 <div class=" dataTables_filter" id="dataTable_filter" style="margin-right: 15px"><label
                                         class="form-label"><select class="form-select" id="status-int"
-                                                                   onchange="search_intervention()">
+                                                                   onchange="search_intervention_status()">
                                     <option value="ALL">Tous</option>
                                     <option value="CURRENT">En cours</option>
                                     <option value="CLOSED">Terminé</option>
                                 </select> </label></div>
                             </div>
                             <div class="col-md-6" style="text-align: right">
-                                <!--<button class="btn btn-primary" type="button" data-bs-toggle="modal"
-                                        data-bs-target="#modal-fournisseur" onclick="openPageFournisseurAdd()">Ajouter un fournisseur</button>-->
+                                <button class="btn btn-primary" type="button" data-bs-toggle="modal"
+                                        data-bs-target="#modal-fournisseur" onclick="search_intervention_action()">Chercher</button>
                             </div>
                         </div>
                         <div class="table-responsive table mt-2" id="dataTable" role="grid"

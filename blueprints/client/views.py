@@ -55,7 +55,8 @@ class ClientViews:
             if self.user_tools.check_user_in_session('user'):
                 user = session['user']
                 print(user)
-                status, interventions = self.intervention_service.find_intervention_by_user(user['id_utilisateur'])
+                status, interventions = self.intervention_service.find_intervention_by_user(user['id_utilisateur'],
+                                                                                            'LIMIT 0, 10')
                 if status != 'success':
                     return render_template('client/404.html')
                 print(interventions)

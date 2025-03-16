@@ -12,7 +12,7 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='css/assets/fonts/fontawesome-all.min.css') }}">
 </head>
 
-<body id="page-top" onload="load_page_hardware_liste()">
+<body id="page-top" onload="load_page_hardware_liste(1)">
 <div id="hidden-big-div" class="hidden-big" style="display: none">
     <div id="hidden-reclamation" class="hidden-small-first bg-white" style="width: 80%">
         <div class="close-div" onclick="fermer_hardware()">x</div>
@@ -36,18 +36,19 @@
                         class="form-label" id="hardware-date-ajout">Date d'Ajout : </label></div>
             </div>
 
-            <div >
+            <div>
                 <div style="display: flex; justify-content: space-between"><label
-                        class="form-label" >Hardwares Liés : </label><button onclick="ajout_liason()" class="btn btn-outline-warning" >Ajouter une liaison</button></div>
+                        class="form-label">Hardwares Liés : </label>
+                    <button onclick="ajout_liason()" class="btn btn-outline-warning">Ajouter une liaison</button>
+                </div>
 
                 <div class="table-responsive table mt-2" id="dataTable" role="grid"
-                             aria-describedby="dataTable_info">
-                            <table class="table my-0" id="table-hl">
+                     aria-describedby="dataTable_info">
+                    <table class="table my-0" id="table-hl">
 
 
-
-                            </table>
-                        </div>
+                    </table>
+                </div>
 
             </div>
 
@@ -78,7 +79,8 @@
                         <div class="row">
 
                             <div class="col-md-12">
-                                <div hidden style="display: flex;justify-content: space-between;align-items: center;flex-wrap: wrap;">
+                                <div hidden
+                                     style="display: flex;justify-content: space-between;align-items: center;flex-wrap: wrap;">
                                     <div class=" dataTables_filter" id="dataTable_filter"><label
                                             class="form-label">Modèle : <select id="search-modele"
                                                                                 class="form-select form-select-lg mb-3"
@@ -110,7 +112,8 @@
                                     </select></label>
                                     </div>
                                 </div>
-                                <div hidden style="display: flex;justify-content: space-between;align-items: center;flex-wrap: wrap;">
+                                <div hidden
+                                     style="display: flex;justify-content: space-between;align-items: center;flex-wrap: wrap;">
                                     <div class=" dataTables_filter" id="dataTable_filter"><label
                                             class="form-label">Magasin : <select id="search-magasin"
                                                                                  class="form-select form-select-lg mb-3"
@@ -151,7 +154,7 @@
                                                                                      class="form-control form-control-sm"
                                                                                      aria-controls="dataTable"
                                                                                      placeholder="Chercher Par Code à Barre..."
-                                                                                     oninput="search_hardware_by_code()"></label>
+                                                                                     oninput="verify_hardware_search_code_backend()"></label>
                                     </div>
 
                                     <div class=" dataTables_filter" id="dataTable_filter"><label
@@ -160,10 +163,16 @@
                                                                                             class="form-control form-control-sm"
                                                                                             aria-controls="dataTable"
                                                                                             placeholder="Chercher Par Numéro d'Inventaire..."
-                                                                                            oninput="search_hardware_by_numero_inventaire()"></label>
+                                                                                            oninput="verify_hardware_search_inv_backend()"></label>
+                                    </div>
+                                    <div>
+                                        <button class="btn btn-outline-info" type="button" data-bs-toggle="modal"
+                                                data-bs-target="#modal-hardware" onclick="search_hardware_by_code_inv_backend()">Chercher
+                                        </button>
                                     </div>
                                 </div>
-                                <div hidden style="display: flex;justify-content: space-between;align-items: center;flex-wrap: wrap;">
+                                <div hidden
+                                     style="display: flex;justify-content: space-between;align-items: center;flex-wrap: wrap;">
 
                                     <div class=" dataTables_filter" id="dataTable_filter"><label
                                             class="form-label">Date d'Achat : <input type="date" id="search-date-achat"
@@ -210,6 +219,9 @@
                             <div class="col-md-6">
                                 <nav class="d-lg-flex justify-content-lg-end dataTables_paginate paging_simple_numbers">
                                     <ul class="pagination" id="pagination-hardware">
+
+
+
                                     </ul>
                                 </nav>
                             </div>

@@ -44,4 +44,8 @@ class FournisseurService:
             f"""UPDATE fournisseur SET Nom = '{nom}', Tel = '{tel}' WHERE IDFournisseur = {id_fournisseur}""")
 
     def delete_fournisseur(self, id_fournisseur):
-        return self.database_tools.execute_request(f"""DELETE FROM fournisseur WHERE IDFournisseur = {id_fournisseur}""")
+        return self.database_tools.execute_request(
+            f"""DELETE FROM fournisseur WHERE IDFournisseur = {id_fournisseur}""")
+
+    def create_none(self):
+        return Fournisseur(None, None, None)

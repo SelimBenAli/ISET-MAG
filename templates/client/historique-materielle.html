@@ -15,9 +15,9 @@
 {% include 'client/elements/side-bars/client-side-bar.html' %}
 <section class="py-5 mt-5">
     <div class="container py-4 py-xl-5">
-    <div class="col-md-8 col-xl-6 text-center mx-auto">
-                <h2 class="display-6 fw-bold mb-4"><span class="underline">Historique de matériel</span></h2>
-            </div>
+        <div class="col-md-8 col-xl-6 text-center mx-auto">
+            <h2 class="display-6 fw-bold mb-4"><span class="underline">Interventions en cours</span></h2>
+        </div>
         <div class="row gy-4 row-cols-1 row-cols-md-2 row-cols-lg-3">
 
             {% for intervention in liste_interventions %}
@@ -65,9 +65,13 @@
                     </div>
                 </div>
             {% endfor %}
-
+            <!--<div style="display: flex; align-items: center; justify-content: center">
+                <a class="btn btn-primary" style="width: 60%" role="button" onclick="load_">Afficher Tous</a>
+                </div>-->
         </div>
+
     </div>
+
 </section>
 
 {% include 'client/elements/footers/client-footer.html' %}

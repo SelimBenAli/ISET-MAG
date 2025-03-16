@@ -14,12 +14,12 @@ class InterventionService:
         self.database_tools = DatabaseConnection()
         self.date_tools = DateTools()
 
-    def find_intervention_by_something(self, add):
+    def find_intervention_by_something(self, add, limit=''):
         try:
             self.connection, self.cursor = self.database_tools.find_connection()
             self.cursor.execute(
                 f"""SELECT `IDIntervention`, `IDUtilisateur`, `DateDebut`, `DateFin`, `IDSalle`,
-                 `IDHardware`, `IDAdmin`, `IDAdminFermeture` FROM `intervention` WHERE {add} ORDER BY DateDebut DESC""")
+                 `IDHardware`, `IDAdmin`, `IDAdminFermeture` FROM `intervention` WHERE {add} ORDER BY DateDebut DESC {limit}""")
             data = self.cursor.fetchall()
             liste_intervention = []
             for element in data:
@@ -47,11 +47,18 @@ class InterventionService:
     def find_all_intervention(self):
         return self.find_intervention_by_something(' 1')
 
+    def find_all_intervention_with_limit(self, begin, number):
+        print(begin, number, "aa444")
+        return self.find_intervention_by_something(" 1 ", f"LIMIT {begin}, {number}")
+
     def find_intervention_by_id(self, id_intervention):
         return self.find_intervention_by_something(f' IDIntervention = {id_intervention}')
 
-    def find_intervention_by_user(self, id_user):
-        return self.find_intervention_by_something(f' IDUtilisateur = {id_user}')
+    def find_intervention_by_user(self, id_user, limit=''):
+        return self.find_intervention_by_something(f' IDUtilisateur = {id_user}', limit)
+
+    def find_intervention_not_closed_by_user(self, id_user, limit=''):
+        return self.find_intervention_by_something(f' IDUtilisateur = {id_user} AND DateFin IS NULL', limit)
 
     def find_intervention_by_salle(self, id_salle):
         return self.find_intervention_by_something(f' IDSalle = {id_salle}')
@@ -62,8 +69,14 @@ class InterventionService:
     def find_intervention_by_used_hardware(self, id_hardware):
         return self.find_intervention_by_something(f' IDHardware = {id_hardware} AND DateFin IS NULL')
 
-    def find_intervention_by_admin(self, id_admin):
-        return self.find_intervention_by_something(f' IDAdmin = {id_admin}')
+    def find_intervention_by_admin(self, id_admin, begin, number):
+        return self.find_intervention_by_something(f' IDAdmin = {id_admin}, ', f'LIMIT {begin}, {number}')
+
+    def find_intervention_closed(self):
+        return self.find_intervention_by_something(' DateFin IS NOT NULL')
+
+    def find_intervention_open(self):
+        return self.find_intervention_by_something(' DateFin IS NULL')
 
     def add_intervention(self, id_user, date_debut, date_fin, id_salle, id_hardware, id_admin):
         return self.database_tools.execute_request(
@@ -84,3 +97,42 @@ class InterventionService:
         return self.database_tools.execute_request(
             f"""UPDATE intervention SET DateFin = NOW(), IDAdminFermeture = '{id_admin}' 
             WHERE IDIntervention = {id_intervention}""")
+
+    def find_number_interventions(self):
+        try:
+            self.connection, self.cursor = self.database_tools.find_connection()
+            self.cursor.execute(f"""SELECT COUNT(*) FROM intervention""")
+            data = self.cursor.fetchall()
+            self.cursor.close()
+            self.connection.close()
+            return 'success', data[0][0]
+        except Exception as e:
+            return 'error', e
+
+    def find_number_current_interventions(self):
+        try:
+            self.connection, self.cursor = self.database_tools.find_connection()
+            self.cursor.execute(f"""SELECT COUNT(*) FROM intervention WHERE DateFin IS NULL""")
+            data = self.cursor.fetchall()
+            self.cursor.close()
+            self.connection.close()
+            return 'success', data[0][0]
+        except Exception as e:
+            return 'error', e
+
+    def find_current_intervention_with_limit(self, begin, number):
+        return self.find_intervention_by_something("  DateFin IS NULL ", f"LIMIT {begin}, {number}")
+
+    def find_number_closed_interventions(self):
+        try:
+            self.connection, self.cursor = self.database_tools.find_connection()
+            self.cursor.execute(f"""SELECT COUNT(*) FROM intervention WHERE DateFin IS NOT NULL""")
+            data = self.cursor.fetchall()
+            self.cursor.close()
+            self.connection.close()
+            return 'success', data[0][0]
+        except Exception as e:
+            return 'error', e
+
+    def find_closed_intervention_with_limit(self, begin, number):
+        return self.find_intervention_by_something("  DateFin IS NOT NULL ", f"LIMIT {begin}, {number}")

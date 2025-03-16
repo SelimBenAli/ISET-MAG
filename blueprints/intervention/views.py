@@ -80,6 +80,94 @@ class InterventionViews:
                 return jsonify({'status': 'success', 'interventions': interventions})
             return {'status': 'failed'}
 
+        @self.intervention_bp.route('/get-interventions-user-code/<string:code>', methods=['GET'])
+        def get_interventions_uc(code):
+            if self.user_tools.check_user_in_session('admin'):
+                status, user = self.utilisateur_service.find_utilisateur_by_code(code)
+
+                status, interventions = self.intervention_service.find_intervention_by_user(user[0]['id_utilisateur'])
+                print(interventions)
+                return jsonify({'status': 'success', 'interventions': interventions})
+            return {'status': 'failed'}
+
+        @self.intervention_bp.route('/get-interventions-hard-code/<string:code>', methods=['GET'])
+        def get_interventions_hc(code):
+            if self.user_tools.check_user_in_session('admin'):
+                status, hard = self.hardware_service.find_hardware_by_code(code)
+                status, interventions = self.intervention_service.find_intervention_by_hardware(hard[0]['id_hardware'])
+                print(interventions)
+                return jsonify({'status': 'success', 'interventions': interventions})
+            return {'status': 'failed'}
+
+        @self.intervention_bp.route('/get-interventions-hard-num/<string:code>', methods=['GET'])
+        def get_interventions_hn(code):
+            if self.user_tools.check_user_in_session('admin'):
+                status, hard = self.hardware_service.find_hardware_by_numero_inventaire(code)
+                status, interventions = self.intervention_service.find_intervention_by_hardware(hard[0]['id_hardware'])
+                print(interventions)
+                return jsonify({'status': 'success', 'interventions': interventions})
+            return {'status': 'failed'}
+
+        @self.intervention_bp.route('/get-interventions-closed/<int:page>', methods=['GET'])
+        def get_interventions_closed(page):
+            if self.user_tools.check_user_in_session('admin'):
+                number = 10
+                begin = (page - 1) * number
+                status, pages = self.intervention_service.find_number_closed_interventions()
+                status, interventions = self.intervention_service.find_closed_intervention_with_limit(begin, number)
+                if status == 'success':
+                    if pages % number != 0:
+                        page_number = pages // number + 1
+                    else:
+                        page_number = pages // number
+                    print(interventions)
+                    return jsonify(
+                        {'status': 'success', 'interventions': interventions, 'pages': page_number,
+                         'current_page': page,
+                         'nombre_totale': pages})
+            return {'status': 'failed'}
+
+        @self.intervention_bp.route('/get-interventions-current/<int:page>', methods=['GET'])
+        def get_interventions_current(page):
+            if self.user_tools.check_user_in_session('admin'):
+                number = 10
+                begin = (page - 1) * number
+                status, pages = self.intervention_service.find_number_current_interventions()
+                status, interventions = self.intervention_service.find_current_intervention_with_limit(begin, number)
+                if status == 'success':
+                    if pages % number != 0:
+                        page_number = pages // number + 1
+                    else:
+                        page_number = pages // number
+                    print(interventions)
+                    return jsonify(
+                        {'status': 'success', 'interventions': interventions, 'pages': page_number,
+                         'current_page': page,
+                         'nombre_totale': pages})
+            return {'status': 'failed'}
+
+        @self.intervention_bp.route('/get-interventions-limit/<int:page>', methods=['GET'])
+        def get_interventions_limit(page):
+            if self.user_tools.check_user_in_session('admin'):
+                number = 10
+                begin = (page - 1) * number
+                print("err1")
+                status, pages = self.intervention_service.find_number_interventions()
+                print("err2")
+                status, interventions = self.intervention_service.find_all_intervention_with_limit(begin, number)
+                print("err3", status, interventions)
+                if status == 'success':
+                    if pages % number != 0:
+                        page_number = pages // number + 1
+                    else:
+                        page_number = pages // number
+                    print(interventions)
+                    return jsonify(
+                        {'status': 'success', 'interventions': interventions, 'pages': page_number,
+                         'current_page': page,
+                         'nombre_totale': pages})
+            return {'status': 'failed'}
+
         @self.intervention_bp.route('/close-intervention/<int:id_intervention>', methods=['PUT'])
         def close_intervention(id_intervention):
             if self.user_tools.check_user_in_session('admin'):

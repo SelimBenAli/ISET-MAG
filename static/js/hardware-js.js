@@ -1,12 +1,36 @@
 var liste_hardware_tous = []
 var liste_hardware = []
-var division_table = 7
+var division_table = 20
 var current_hardware = null
 
-function load_page_hardware_liste() {
+function load_page_hardware_liste(page) {
     enter_loading_mode();
     var xhr = new XMLHttpRequest();
-    xhr.open('GET', '/hardware/get-hardwares', true);
+    xhr.open('GET', '/hardware/get-hardwares-limit/' + page, true);
+    xhr.setRequestHeader('Content-Type', 'application/json');
+    xhr.onreadystatechange = function () {
+        if (xhr.readyState === 4 && xhr.status === 200) {
+            var response = JSON.parse(xhr.responseText);
+
+            if (response.status === 'success') {
+                liste_hardware = response.hardwares
+                liste_hardware_tous = response.hardwares
+                load_table_hardware_parameters();
+                load_backend_pagination(response.pages, page, response.nombre_totale, response.hardwares.length);
+                quit_loading_mode();
+            } else {
+                alert('Erreur');
+            }
+        }
+    };
+    xhr.send();
+
+}
+
+function load_page_hardware_search_by_code(code) {
+    enter_loading_mode();
+    var xhr = new XMLHttpRequest();
+    xhr.open('GET', '/hardware/get-hardwares-by-code/' + code, true);
     xhr.setRequestHeader('Content-Type', 'application/json');
     xhr.onreadystatechange = function () {
         if (xhr.readyState === 4 && xhr.status === 200) {
@@ -25,6 +49,30 @@ function load_page_hardware_liste() {
     xhr.send();
 
 }
+
+function load_page_hardware_search_by_inv(inv) {
+    enter_loading_mode();
+    var xhr = new XMLHttpRequest();
+    xhr.open('GET', '/hardware/get-hardwares-by-inv/' + inv, true);
+    xhr.setRequestHeader('Content-Type', 'application/json');
+    xhr.onreadystatechange = function () {
+        if (xhr.readyState === 4 && xhr.status === 200) {
+            var response = JSON.parse(xhr.responseText);
+
+            if (response.status === 'success') {
+                liste_hardware = response.hardwares
+                liste_hardware_tous = response.hardwares
+                load_table_hardware_parameters();
+                quit_loading_mode();
+            } else {
+                alert('Erreur');
+            }
+        }
+    };
+    xhr.send();
+
+}
+
 
 function search_hardware_by_modele() {
     modele = document.getElementById("search-modele").value
@@ -96,6 +144,34 @@ function search_hardware_by_numero_inventaire() {
     load_table_hardware_parameters()
 }
 
+function search_hardware_by_code_inv_backend() {
+    code_div = document.getElementById("search-code")
+    numero_inventaire_div = document.getElementById("search-numero-inventaire")
+    code = code_div.value
+    numero_inventaire = numero_inventaire_div.value
+    if (code === "" && numero_inventaire === "") {
+        load_page_hardware_liste(1)
+    } else {
+        if (code !== "") {
+            load_page_hardware_search_by_code(code)
+        }
+        if (numero_inventaire !== "") {
+            load_page_hardware_search_by_inv(numero_inventaire)
+        }
+    }
+
+}
+
+function verify_hardware_search_code_backend() {
+    numero_inventaire = document.getElementById("search-numero-inventaire")
+    numero_inventaire.value = ""
+}
+
+function verify_hardware_search_inv_backend() {
+    code = document.getElementById("search-code")
+    code.value = ""
+}
+
 function search_hardware_by_date_achat() {
     date_achat = document.getElementById("search-date-achat").value
     if (date_achat === "") {
@@ -159,14 +235,16 @@ function load_table_hardware_parameters() {
     liste_hardware.forEach(hardware => {
         body.push("<tr><td>" + hardware.id_hardware + "</td><td>" + hardware.modele_hardware.nom_modele + "</td><td>" + hardware.modele_hardware.marque_modele.nom_marque + "</td><td>" + hardware.magasin_hardware.nom_magasin + "</td><td>" + hardware.salle_hardware.nom_salle + "</td><td>" + hardware.numero_inventaire_hardware + "</td><td>" + hardware.etat_hardware.nom_etat + "</td><td>" + hardware.code_hardware + "</td><td><button class='btn btn-outline-info' onclick='openPageHardwareConsult(" + hardware.id_hardware + ")'>Consulter</button></td><td><button class='btn btn-outline-secondary' onclick='openPageHardwareUpdate(" + hardware.id_hardware + ")'>Modifier</button></td><td><button class='btn btn-outline-danger' onclick='supprimer_hardware(" + hardware.id_hardware + ")'>Supprimer</button></td></tr>")
     });
-    division_table = 7
+    division_table = 20
     load_table_hardware(header, footer, body, division_table)
 }
 
 
 function load_table_hardware(header, footer, body, division_table) {
     get_data_ready_load_table("table-hardware", header, footer, body, division_table)
-    get_data_ready_pagination("pagination-hardware", liste_hardware.length, division_table, "dataTable_info_hardware", "hardwares")
+    //load_backend_pagination()
+
+
 }
 
 function ajout_hardware() {
@@ -186,10 +264,10 @@ function ajout_hardware() {
         alert("Veuillez entrer un numéro d'inventaire")
         return
     }
-    if (document.getElementById("code-hardware").value === "") {
+    /*if (document.getElementById("code-hardware").value === "") {
         alert("Veuillez entrer un code à barre")
         return
-    }
+    }*/
     if (document.getElementById("etat-hardware").value === "") {
         alert("Veuillez choisir un état")
         return
@@ -212,7 +290,7 @@ function ajout_hardware_request() {
                     openPageHardware()
                 }
             } else {
-                alert('Erreur lors de l\'ajout');
+                alert('Erreur lors de l\'ajout' + response.message);
             }
         }
     };
@@ -224,7 +302,7 @@ function ajout_hardware_request() {
         numero_inventaire_hardware: document.getElementById("numero-inventaire-hardware").value,
         date_achat_hardware: document.getElementById("date-achat-hardware").value,
         date_mise_en_service_hardware: document.getElementById("date-mise-en-service-hardware").value,
-        code_hardware: document.getElementById("code-hardware").value,
+        // code_hardware: document.getElementById("code-hardware").value,
         etat_hardware: document.getElementById("etat-hardware").value
     }));
 }
@@ -246,10 +324,10 @@ function modifier_hardware(idh) {
         alert("Veuillez entrer un numéro d'inventaire")
         return
     }
-    if (document.getElementById("code-hardware").value === "") {
+    /*if (document.getElementById("code-hardware").value === "") {
         alert("Veuillez entrer un code à barre")
         return
-    }
+    }*/
     if (document.getElementById("etat-hardware").value === "") {
         alert("Veuillez choisir un état")
         return
@@ -297,7 +375,7 @@ function supprimer_hardware(idh) {
 }
 
 function supprimer_hardware_request(idh) {
-    /*var xhr = new XMLHttpRequest();
+    var xhr = new XMLHttpRequest();
     xhr.open('DELETE', '/hardware/delete-hardware/' + idh, true);
     xhr.setRequestHeader('Content-Type', 'application/json');
     xhr.onreadystatechange = function () {
@@ -315,7 +393,7 @@ function supprimer_hardware_request(idh) {
             }
         }
     };
-    xhr.send();*/
+    xhr.send();
 }
 
 function openPageHardwareConsult(idh) {
@@ -329,7 +407,7 @@ function openPageHardwareConsult(idh) {
     document.getElementById("hardware-modele").innerHTML = "Modèle : " + hardware.modele_hardware.nom_modele + " " + hardware.modele_hardware.marque_modele.nom_marque
     document.getElementById("hardware-num-inv").innerHTML = "Numéro d'Inventaire : " + hardware.numero_inventaire_hardware
     document.getElementById("hardware-code").innerHTML = "Code : " + hardware.code_hardware
-    document.getElementById("hardware-etat").innerHTML ="Etat : " +  hardware.etat_hardware.nom_etat
+    document.getElementById("hardware-etat").innerHTML = "Etat : " + hardware.etat_hardware.nom_etat
     document.getElementById("hardware-date-achat").innerHTML = "Date d'Achat : " + hardware.date_achat_hardware
     document.getElementById("hardware-date-mise-service").innerHTML = "Date de Mise en Service : " + hardware.date_mise_service_hardware
     document.getElementById("hardware-date-ajout").innerHTML = "Date d'Ajout : " + hardware.date_ajout_hardware
@@ -352,7 +430,6 @@ function load_table_hl_parameters(liste_hl) {
     t.innerHTML += footer
 
 }
-
 
 
 function fermer_hardware() {
@@ -439,4 +516,45 @@ function supprimer_liaison_request(idh) {
     xhr.send(JSON.stringify({
         id_hardware2: idh
     }));
+}
+
+function get_page_backend(p) {
+    load_page_hardware_liste(p)
+}
+
+function previous_page_backend(p) {
+    load_page_hardware_liste(p)
+}
+
+function next_page_backend(p) {
+    load_page_hardware_liste(p)
+}
+
+function load_backend_pagination(pages, current_page, nombre_totale, len) {
+    var pagination = document.getElementById("pagination-hardware");
+    pagination.innerHTML = ""
+    disable_prev = ''
+    if (current_page === 1) {
+        disable_prev = 'disabled'
+    }
+    pagination.innerHTML += `<li class="page-item"><button class="page-link ${disable_prev}" onclick="previous_page_backend(${current_page - 1})" aria-label="Previous" ><span aria-hidden="true">«</span></button></li>`
+    for (var i = 1; i <= pages; i++) {
+        active = ''
+        if (i === current_page) {
+            active = 'active'
+        }
+        pagination.innerHTML += `<li id="button-pagination-${i}" class="page-item ${active}"><button onclick="get_page_backend(${i})" class="page-link">${i}</button></li>`
+    }
+    disable_next = ''
+    if (current_page === pages) {
+        disable_next = 'disabled'
+    }
+    pagination.innerHTML += `<li class="page-item"><button class="page-link ${disable_next}" onclick="next_page_backend(${current_page + 1})" aria-label="Next" ><span aria-hidden="true">»</span></button></li>`
+    load_pagination_backend_status(20, nombre_totale, current_page, len)
+}
+
+function load_pagination_backend_status(dt, nombre_totale, current_page, len) {
+    var pagination = document.getElementById("dataTable_info_hardware");
+    pagination.innerHTML = ""
+    pagination.innerHTML += `Affichage de ${dt * (current_page - 1) + 1} à ${(dt * current_page) - (20 - len)} sur ${nombre_totale} hardwares`
 }

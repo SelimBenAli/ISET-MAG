@@ -182,10 +182,10 @@ function showInterventionParameters() {
         mode = 1
         parameters.innerHTML = `
         <input class="form-control form-control-user" type="text" 
-                       id="code-ajout-interventien-utilisateur" style="margin-left: 15px" autofocus
+                       id="code-ajout-interventien-utilisateur" style="margin-left: 15px" autofocus oninput="verify_user_barcode()"
                        placeholder="Code Utilisateur..." >
 
-            <input class="form-control form-control-user" type="text" 
+            <input class="form-control form-control-user" type="text"  oninput="verify_hardware_barcode()"
                    id="code-ajout-interventien-hardware" style="margin-left: 15px"
                    placeholder="Code Hardware..." >
         `
