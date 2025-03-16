@@ -41,7 +41,8 @@ function load_hardware_model_list() {
             if (response.status === 'success') {
                 types = response.types;
                 marques = response.marques;
-                load_marques();
+                // load_marques();
+                load_types()
             } else {
                 alert('Erreur lors du chargement des modèles');
             }
@@ -54,9 +55,25 @@ function check_data_changed() {
     date_debut = document.getElementById("date_debut").value;
     date_fin = document.getElementById("date_fin").value;
     select_type = document.getElementById("select-type").value;
+    select_marque = document.getElementById("select-marque").value;
     quantite = document.getElementById("quantite").value;
+    date_debut = new Date(date_debut);
+    date_fin = new Date(date_fin);
+    const now = new Date();
+    if (date_debut < now ) {
+        alert("La date de début doit être supérieure à la date actuelle");
+        return false;
+    }
+    console.log(date_debut, date_fin)
+    if (date_debut > date_fin) {
+        alert("La date de fin doit être supérieure à la date de début");
+        return false;
+    }
     if (date_debut !== "" && date_fin !== "" && select_type !== "" && quantite !== "" && quantite > 0) {
         envoyer_location()
+    }
+    else {
+        alert("Veuillez remplir tous les champs");
     }
 }
 
@@ -66,6 +83,17 @@ function envoyer_location() {
     select_type = document.getElementById("select-type").value;
     select_marque = document.getElementById("select-marque").value;
     quantite = document.getElementById("quantite").value;
+    id_modele = -1;
+    console.log(select_type, select_marque)
+    console.log(types)
+    types.forEach(function (type) {
+        if (type.nom_modele === select_type && type.marque_modele.id_marque.toString() === select_marque) {
+            id_modele = type.id_modele;
+        }
+    })
+    if (id_modele === -1) {
+        alert("Erreur lors de la selection du modèle");
+    }
     var xhr = new XMLHttpRequest();
     xhr.open('POST', '/user/add-location', true);
     xhr.setRequestHeader('Content-Type', 'application/json');
@@ -83,7 +111,7 @@ function envoyer_location() {
     xhr.send(JSON.stringify({
         date_debut: date_debut,
         date_fin: date_fin,
-        id_modele: select_type,
+        id_modele: id_modele,
         id_marque: select_marque,
         quantite: quantite
     }));
@@ -119,15 +147,29 @@ function check_quantity() {
     xhr.send(JSON.stringify({date_debut: date_debut, date_fin: date_fin, id_modele: select_type}));
 }
 
+function load_brands() {
+    var select_type = document.getElementById("select-type").value;
+    var select_marque = document.getElementById("select-marque");
+    select_marque.innerHTML = "";
+    types.forEach(function (type) {
+        if (type.nom_modele === select_type) {
+            select_marque.innerHTML += `<option value="${type.marque_modele.id_marque}">${type.marque_modele.nom_marque}</option>`;
+        }
+    })
+}
+
 
 function load_types() {
+    let l = [];
     var select_type = document.getElementById("select-type");
     select_type.innerHTML = "";
     types.forEach(function (type) {
-        if (type.marque_modele.id_marque === parseInt(document.getElementById("select-marque").value)) {
-            select_type.innerHTML += `<option value="${type.id_modele}">${type.nom_modele}</option>`;
+        if (!l.includes(type.nom_modele)) {
+            l.push(type.nom_modele)
+            select_type.innerHTML += `<option value="${type.nom_modele}">${type.nom_modele}</option>`;
         }
     })
+    load_brands()
 }
 
 function load_marques() {
@@ -198,8 +240,7 @@ function load_client_alerts() {
                 alert_list.innerHTML = alerts + "+";
                 if (alerts === 0 || alerts === "0") {
                     alert_list.hidden = true;
-                }
-                else {
+                } else {
                     alert_list.hidden = false;
                 }
             } else {

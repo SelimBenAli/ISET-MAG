@@ -32,16 +32,19 @@
                         <div class="mb-3"><label class="text-primary mb-2">Date Fin : </label><input
                                 class="shadow form-control" type="datetime-local" id="date_fin" name="date_fin"
                         ></div>
-                        <div class="mb-3"><label class="text-primary mb-2" >Marque : </label>
-                            <select id="select-marque" class="form-select" onchange="load_types()">
 
-                            </select>
-                        </div>
                         <div class="mb-3"><label class="text-primary mb-2" >Type : </label>
-                            <select id="select-type" class="form-select">
+                            <select id="select-type" class="form-select" onchange="load_brands()">
 
                             </select>
                         </div>
+
+                        <div class="mb-3"><label class="text-primary mb-2" >Marque : </label>
+                            <select id="select-marque" class="form-select" onchange="">
+
+                            </select>
+                        </div>
+
 
 
                         <div class="mb-3"><label class="text-primary mb-2">Quantité : </label><input
