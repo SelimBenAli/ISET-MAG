@@ -47,9 +47,9 @@ class InterventionService:
     def find_all_intervention(self):
         return self.find_intervention_by_something(' 1')
 
-    def find_all_intervention_with_limit(self, begin, number):
+    def find_all_intervention_with_limit(self, conditions, begin, number):
         print(begin, number, "aa444")
-        return self.find_intervention_by_something(" 1 ", f"LIMIT {begin}, {number}")
+        return self.find_intervention_by_something(f" 1 {conditions} ", f"LIMIT {begin}, {number}")
 
     def find_intervention_by_id(self, id_intervention):
         return self.find_intervention_by_something(f' IDIntervention = {id_intervention}')
@@ -98,10 +98,10 @@ class InterventionService:
             f"""UPDATE intervention SET DateFin = NOW(), IDAdminFermeture = '{id_admin}' 
             WHERE IDIntervention = {id_intervention}""")
 
-    def find_number_interventions(self):
+    def find_number_interventions(self, conditions):
         try:
             self.connection, self.cursor = self.database_tools.find_connection()
-            self.cursor.execute(f"""SELECT COUNT(*) FROM intervention""")
+            self.cursor.execute(f"""SELECT COUNT(*) FROM intervention WHERE 1 {conditions}""")
             data = self.cursor.fetchall()
             self.cursor.close()
             self.connection.close()

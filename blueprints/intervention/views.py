@@ -146,15 +146,43 @@ class InterventionViews:
                          'nombre_totale': pages})
             return {'status': 'failed'}
 
-        @self.intervention_bp.route('/get-interventions-limit/<int:page>', methods=['GET'])
-        def get_interventions_limit(page):
+        @self.intervention_bp.route(
+            '/get-interventions-limit/<int:page>/<string:status>/<string:code_hard>/<string:code_user>/<string:num_hard>',
+            methods=['GET'])
+        def get_interventions_limit(page, status, code_hard, code_user, num_hard):
             if self.user_tools.check_user_in_session('admin'):
+                print("current stat : ", status, code_hard, code_user, num_hard)
+                code_hard = code_hard.replace('code_hard_', '')
+                code_user = code_user.replace('code_user_', '')
+                num_hard = num_hard.replace('num_hard_', '')
+                status = status.replace('status_', '')
+                ch = ''
+                if status == '1':
+                    ch += ' AND DateFin IS NULL '
+                elif status == '2':
+                    ch += ' AND DateFin IS NOT NULL '
+                if code_hard != '':
+                    status, hard = self.hardware_service.find_hardware_by_code(code_hard)
+                    if status == 'success' and len(hard) > 0:
+                        hard = hard[0]['id_hardware']
+                        ch += f' AND IDHardware = {hard} '
+                if code_user != '':
+                    status, user = self.utilisateur_service.find_utilisateur_by_code(code_user)
+                    if status == 'success' and len(user) > 0:
+                        user = user[0]['id_utilisateur']
+                        ch += f' AND IDUtilisateur = {user} '
+                if num_hard != '':
+                    status, hard = self.hardware_service.find_hardware_by_numero_inventaire(num_hard)
+                    if status == 'success' and len(hard) > 0:
+                        hard = hard[0]['id_hardware']
+                        ch += f' AND IDHardware = {hard} '
+                print(ch)
                 number = 10
                 begin = (page - 1) * number
                 print("err1")
-                status, pages = self.intervention_service.find_number_interventions()
+                status, pages = self.intervention_service.find_number_interventions(ch)
                 print("err2")
-                status, interventions = self.intervention_service.find_all_intervention_with_limit(begin, number)
+                status, interventions = self.intervention_service.find_all_intervention_with_limit(ch, begin, number)
                 print("err3", status, interventions)
                 if status == 'success':
                     if pages % number != 0:

@@ -55,7 +55,7 @@ class ReclamationViews:
                     if status == 'success' and len(hardware) > 0:
                         hardware = hardware[0]['id_hardware']
                         ch += f' AND IDHardware = {hardware} '
-                status, pages = self.reclamation_service.find_hardware_number(ch)
+                status, pages = self.reclamation_service.find_reclamation_number(ch)
                 status, reclamations = self.reclamation_service.find_all_reclamation_with_limit(ch, number, begin)
                 print(reclamations)
                 if status == 'success':

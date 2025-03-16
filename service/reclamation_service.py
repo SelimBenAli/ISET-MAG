@@ -129,7 +129,7 @@ class ReclamationService:
         self.cursor.close()
         self.connection.close()
 
-    def find_hardware_number(self, conditions):
+    def find_reclamation_number(self, conditions):
         try:
             self.connection, self.cursor = self.database_tools.find_connection()
             self.cursor.execute(f"""SELECT COUNT(IDReclamation) FROM reclamation_hardware WHERE 1 {conditions}""")

@@ -2,10 +2,10 @@ var liste_intervention_tous = []
 var liste_intervention = []
 var division_table = 10
 
-function load_page_intervention(page) {
+function load_page_intervention(page, status, code_hard, code_user, num_hard) {
     enter_loading_mode()
     var xhr = new XMLHttpRequest();
-    xhr.open('GET', '/intervention/get-interventions-limit/' + page, true);
+    xhr.open('GET', '/intervention/get-interventions-limit/' + page + '/status_' + status + '/code_hard_' + code_hard + '/code_user_' + code_user + '/num_hard_' + num_hard, true);
     xhr.setRequestHeader('Content-Type', 'application/json');
     xhr.onreadystatechange = function () {
         if (xhr.readyState === 4 && xhr.status === 200) {
@@ -93,43 +93,6 @@ function load_table_intervention_parameters() {
 function load_table_intervention(header, footer, body, division_table) {
     get_data_ready_load_table("table-intervention", header, footer, body, division_table)
     get_data_ready_pagination("pagination-intervention", liste_intervention.length, division_table, "dataTable_info_intervention", "interventions")
-}
-
-function search_intervention_status() {
-    document.getElementById('code-hardware-search').value = ''
-    document.getElementById('code-user-search').value = ''
-    document.getElementById('num-hardware-search').value = ''
-    search_intervention_by_status()
-}
-
-function search_intervention_by_status() {
-    let status = document.getElementById('status-int').value
-    if (status === 'ALL') {
-        load_page_intervention(1)
-    } else if (status === 'CURRENT') {
-        load_page_intervention_current(1)
-    } else {
-        load_page_intervention_closed(1)
-    }
-}
-
-function search_intervention_action() {
-    ch_div = document.getElementById('code-hardware-search')
-    cu_div = document.getElementById('code-user-search')
-    nh_div = document.getElementById('num-hardware-search')
-    if (ch_div.value === '' && cu_div.value === '' && nh_div.value === '') {
-        search_intervention_by_status()
-        return
-    } else if (ch_div.value === '' && cu_div.value === '' && nh_div.value !== '') {
-        search_intervention_by_num_hard(nh_div.value)
-        return
-    } else if (ch_div.value === '' && cu_div.value !== '' && nh_div.value === '') {
-        search_intervention_by_code_user(cu_div.value)
-        return
-    } else if (ch_div.value !== '' && cu_div.value !== '' && nh_div.value === '') {
-        search_intervention_by_code_hard(ch_div.value)
-        return
-    }
 }
 
 function search_intervention_by_code_user(p) {
@@ -251,11 +214,11 @@ function fermer_intervention(id_intervention) {
             console.log(response)
             if (response.status === 'success') {
                 quit_loading_mode()
-                load_page_intervention()
+                load_page_intervention(1, 0, '', '', '')
             } else {
                 alert(response.message);
                 quit_loading_mode()
-                load_page_intervention()
+                load_page_intervention(1, 0, '', '', '')
             }
         }
     };
@@ -279,7 +242,7 @@ function supprimer_intervention_request(id_intervention) {
             console.log(response)
             if (response.status === 'success') {
                 quit_loading_mode()
-                load_page_intervention()
+                load_page_intervention(1, 0, '', '', '')
             } else {
                 alert('Erreur');
             }
@@ -288,24 +251,20 @@ function supprimer_intervention_request(id_intervention) {
     xhr.send();
 }
 
+function search_intervention_status() {
+    let status = document.getElementById('status-int').value
+    let code_hard = document.getElementById('code-hardware-search').value
+    let code_user = document.getElementById('code-user-search').value
+    let num_hard = document.getElementById('num-hardware-search').value
+    load_page_intervention(1, status, code_hard, code_user, num_hard)
+}
+
 function get_page_backend(p) {
-    load_page_intervention(p)
-}
-
-function previous_page_backend(p) {
-    load_page_intervention(p)
-}
-
-function next_page_backend(p) {
-    load_page_intervention(p)
-}
-
-function get_page_backend_current(p) {
-    load_page_intervention_current(p)
-}
-
-function get_page_backend_closed(p) {
-    load_page_intervention_closed(p)
+    let status = document.getElementById('status-int').value
+    let code_hard = document.getElementById('code-hardware-search').value
+    let code_user = document.getElementById('code-user-search').value
+    let num_hard = document.getElementById('num-hardware-search').value
+    load_page_intervention(p, status, code_hard, code_user, num_hard)
 }
 
 function load_backend_pagination(pages, current_page, nombre_totale, len) {
@@ -315,7 +274,7 @@ function load_backend_pagination(pages, current_page, nombre_totale, len) {
     if (current_page === 1) {
         disable_prev = 'disabled'
     }
-    pagination.innerHTML += `<li class="page-item"><button class="page-link ${disable_prev}" onclick="previous_page_backend(${current_page - 1})" aria-label="Previous" ><span aria-hidden="true">«</span></button></li>`
+    pagination.innerHTML += `<li class="page-item"><button class="page-link ${disable_prev}" onclick="get_page_backend(${current_page - 1})" aria-label="Previous" ><span aria-hidden="true">«</span></button></li>`
     for (var i = 1; i <= pages; i++) {
         active = ''
         if (i === current_page) {
@@ -327,58 +286,12 @@ function load_backend_pagination(pages, current_page, nombre_totale, len) {
     if (current_page === pages) {
         disable_next = 'disabled'
     }
-    pagination.innerHTML += `<li class="page-item"><button class="page-link ${disable_next}" onclick="next_page_backend(${current_page + 1})" aria-label="Next" ><span aria-hidden="true">»</span></button></li>`
-    load_pagination_backend_status(10, nombre_totale, current_page, len)
+    pagination.innerHTML += `<li class="page-item"><button class="page-link ${disable_next}" onclick="get_page_backend(${current_page + 1})" aria-label="Next" ><span aria-hidden="true">»</span></button></li>`
+    load_pagination_backend(10, nombre_totale, current_page, len)
 }
 
-function load_pagination_backend_status(dt, nombre_totale, current_page, len) {
+function load_pagination_backend(dt, nombre_totale, current_page, len) {
     var pagination = document.getElementById("dataTable_info_intervention");
     pagination.innerHTML = ""
     pagination.innerHTML += `Affichage de ${dt * (current_page - 1) + 1} à ${(dt * current_page) - (10 - len)} sur ${nombre_totale} interventions`
-}
-
-function load_backend_pagination_current(pages, current_page, nombre_totale, len) {
-    var pagination = document.getElementById("pagination-intervention");
-    pagination.innerHTML = ""
-    disable_prev = ''
-    if (current_page === 1) {
-        disable_prev = 'disabled'
-    }
-    pagination.innerHTML += `<li class="page-item"><button class="page-link ${disable_prev}" onclick="get_page_backend_current(${current_page - 1})" aria-label="Previous" ><span aria-hidden="true">«</span></button></li>`
-    for (var i = 1; i <= pages; i++) {
-        active = ''
-        if (i === current_page) {
-            active = 'active'
-        }
-        pagination.innerHTML += `<li id="button-pagination-${i}" class="page-item ${active}"><button onclick="get_page_backend_current(${i})" class="page-link">${i}</button></li>`
-    }
-    disable_next = ''
-    if (current_page === pages) {
-        disable_next = 'disabled'
-    }
-    pagination.innerHTML += `<li class="page-item"><button class="page-link ${disable_next}" onclick="get_page_backend_current(${current_page + 1})" aria-label="Next" ><span aria-hidden="true">»</span></button></li>`
-    load_pagination_backend_status(10, nombre_totale, current_page, len)
-}
-
-function load_backend_pagination_closed(pages, current_page, nombre_totale, len) {
-    var pagination = document.getElementById("pagination-intervention");
-    pagination.innerHTML = ""
-    disable_prev = ''
-    if (current_page === 1) {
-        disable_prev = 'disabled'
-    }
-    pagination.innerHTML += `<li class="page-item"><button class="page-link ${disable_prev}" onclick="get_page_backend_closed(${current_page - 1})" aria-label="Previous" ><span aria-hidden="true">«</span></button></li>`
-    for (var i = 1; i <= pages; i++) {
-        active = ''
-        if (i === current_page) {
-            active = 'active'
-        }
-        pagination.innerHTML += `<li id="button-pagination-${i}" class="page-item ${active}"><button onclick="get_page_backend_closed(${i})" class="page-link">${i}</button></li>`
-    }
-    disable_next = ''
-    if (current_page === pages) {
-        disable_next = 'disabled'
-    }
-    pagination.innerHTML += `<li class="page-item"><button class="page-link ${disable_next}" onclick="get_page_backend_closed(${current_page + 1})" aria-label="Next" ><span aria-hidden="true">»</span></button></li>`
-    load_pagination_backend_status(10, nombre_totale, current_page, len)
 }

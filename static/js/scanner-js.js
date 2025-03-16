@@ -111,7 +111,7 @@ function add_intervention_request(userValue, hardwareValue) {
                 const pageName = document.location.pathname.split('/').pop();
                 console.log(pageName);
                 if (pageName === 'intervention') {
-                    load_page_intervention();
+                    load_page_intervention(1, 0, '', '', '');
                 }
                 document.getElementById('code-ajout-interventien-utilisateur').value = '';
                 document.getElementById('code-ajout-interventien-hardware').value = '';
