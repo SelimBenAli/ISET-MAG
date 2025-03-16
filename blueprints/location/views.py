@@ -16,15 +16,25 @@ class LocationViews:
         def confirm_location(id_location):
             if self.user_tools.check_user_in_session('admin'):
                 admin = session['admin']
+                status, reservation = self.location_service.find_location_by_id(id_location)
+                if status == 'failed' or reservation is None or len(reservation) == 0:
+                    return {'status': 'failed', 'message': 'Réservartion non trouvée'}
+                if reservation[0]['confirmation_location'] != 0 and reservation[0]['confirmation_location'] != '0':
+                    return {'status': 'failed', 'message': 'Réservation déjà répondu'}
                 status = self.location_service.confirm_location(1, id_location, admin['id_admin'])
                 if status != 'failed':
                     return {'status': 'success'}
-            return {'status': 'failed'}
+            return {'status': 'failed', 'message': 'Erreur'}
 
         @self.location_bp.route('/refuser-location/<int:id_location>', methods=['PUT'])
         def refuse_location(id_location):
             if self.user_tools.check_user_in_session('admin'):
                 admin = session['admin']
+                status, reservation = self.location_service.find_location_by_id(id_location)
+                if status == 'failed' or reservation is None or len(reservation) == 0:
+                    return {'status': 'failed', 'message': 'Location not found'}
+                if reservation[0]['confirmation_location'] != 0 and reservation[0]['confirmation_location'] != '0':
+                    return {'status': 'failed', 'message': 'Réserver déjà répondu'}
                 status = self.location_service.confirm_location(-1, id_location, admin['id_admin'])
                 if status != 'failed':
                     return {'status': 'success'}

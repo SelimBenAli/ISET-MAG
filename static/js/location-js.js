@@ -109,7 +109,7 @@ function confirmer_demande(id_location) {
                 if (response.status === 'success') {
                     load_page_location()
                 } else {
-                    alert('Erreur');
+                    alert(response.message);
                 }
             }
         };
@@ -131,7 +131,7 @@ function refuser_demande(id_location) {
                 if (response.status === 'success') {
                     load_page_location()
                 } else {
-                    alert('Erreur');
+                    alert(response.message);
                 }
             }
         };
