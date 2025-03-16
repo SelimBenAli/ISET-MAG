@@ -1,11 +1,13 @@
 from flask import Blueprint, request, jsonify
 from service.marque_service import MarqueService
+from tools.sql_injection_tools import SQLInjectionTools
 from tools.user_tools import UserTools
 
 
 class MarqueViews:
     def __init__(self):
         self.user_tools = UserTools()
+        self.sql_injection_tools = SQLInjectionTools()
         self.marque_service = MarqueService()
         self.marque_bp = Blueprint('marque', __name__, template_folder='templates')
         self.marque_routes()
@@ -16,6 +18,8 @@ class MarqueViews:
             if self.user_tools.check_user_in_session('admin'):
                 data = request.get_json()
                 nom = data.get('nom_marque')
+                if self.sql_injection_tools.detect_sql_injection([nom]):
+                    return {'status': 'error', 'message': 'Problème de sécurité détecté'}
                 status = self.marque_service.add_marque(nom)
                 if status != 'failed':
                     return {'status': 'success'}
@@ -27,6 +31,8 @@ class MarqueViews:
                 data = request.get_json()
                 id_marque = data.get('id_marque')
                 nom = data.get('nom_marque')
+                if self.sql_injection_tools.detect_sql_injection([id_marque, nom]):
+                    return {'status': 'error', 'message': 'Problème de sécurité détecté'}
                 status = self.marque_service.update_marque(id_marque, nom)
                 if status != 'failed':
                     return {'status': 'success'}
@@ -37,6 +43,8 @@ class MarqueViews:
             if self.user_tools.check_user_in_session('admin'):
                 data = request.get_json()
                 id_marque = data.get('id_marque')
+                if self.sql_injection_tools.detect_sql_injection([id_marque]):
+                    return {'status': 'error', 'message': 'Problème de sécurité détecté'}
                 status = self.marque_service.delete_marque(id_marque)
                 if status != 'failed':
                     return {'status': 'success'}
@@ -54,6 +62,8 @@ class MarqueViews:
             if self.user_tools.check_user_in_session('admin'):
                 data = request.get_json()
                 id_marque = data.get('id_marque')
+                if self.sql_injection_tools.detect_sql_injection([id_marque]):
+                    return {'status': 'error', 'message': 'Problème de sécurité détecté'}
                 status, marque = self.marque_service.find_marque_by_id(id_marque)
                 return jsonify({'status': 'success', 'marque': marque})
             return {'status': 'failed'}

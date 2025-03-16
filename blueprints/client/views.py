@@ -5,6 +5,7 @@ from service.intervention_service import InterventionService
 from service.location_service import LocationService
 from service.reclamation_service import ReclamationService
 from service.utilisateur_service import UtilisateurService
+from tools.sql_injection_tools import SQLInjectionTools
 from tools.user_tools import UserTools
 
 
@@ -16,6 +17,7 @@ class ClientViews:
         self.hardware_service = HardwareService()
         self.reclamation_service = ReclamationService()
         self.location_service = LocationService()
+        self.sql_injection_tools = SQLInjectionTools()
         self.client_bp = Blueprint('client', __name__, template_folder='templates')
         self.client_routes()
 
@@ -35,6 +37,8 @@ class ClientViews:
         @self.client_bp.route('/reclamation/<string:numero_inventaire_hardware>', methods=['GET'])
         def reclamation_client(numero_inventaire_hardware):
             if self.user_tools.check_user_in_session('user'):
+                if self.sql_injection_tools.detect_sql_injection([numero_inventaire_hardware]):
+                    return render_template('client/404.html')
                 new = False
                 if numero_inventaire_hardware is not None and numero_inventaire_hardware != "":
                     if numero_inventaire_hardware == 'new':

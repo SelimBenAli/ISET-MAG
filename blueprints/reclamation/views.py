@@ -3,6 +3,7 @@ from flask import Blueprint, jsonify
 from service.hardware_service import HardwareService
 from service.reclamation_service import ReclamationService
 from service.utilisateur_service import UtilisateurService
+from tools.sql_injection_tools import SQLInjectionTools
 from tools.user_tools import UserTools
 
 
@@ -11,6 +12,7 @@ class ReclamationViews:
         self.hardware_service = HardwareService()
         self.utitlisateur_service = UtilisateurService()
         self.user_tools = UserTools()
+        self.sql_injection_tools = SQLInjectionTools()
         self.reclamation_service = ReclamationService()
         self.reclamation_bp = Blueprint('reclamation', __name__, template_folder='templates')
         self.reclamation_routes()
@@ -19,6 +21,8 @@ class ReclamationViews:
         @self.reclamation_bp.route('/delete-reclamation/<int:id_reclamation>', methods=['DELETE'])
         def delete_reclamation(id_reclamation):
             if self.user_tools.check_user_in_session('admin'):
+                if self.sql_injection_tools.detect_sql_injection([id_reclamation]):
+                    return {'status': 'error', 'message': 'Problème de sécurité détecté'}
                 status = self.reclamation_service.delete_reclamation(id_reclamation)
                 if status != 'failed':
                     return {'status': 'success'}
@@ -35,6 +39,8 @@ class ReclamationViews:
         @self.reclamation_bp.route('/get-reclamations-limit/<int:page>/<int:status>/<string:user>/<string:inv>', methods=['GET'])
         def get_reclamations_limit(page, status, user, inv):
             if self.user_tools.check_user_in_session('admin'):
+                if self.sql_injection_tools.detect_sql_injection([page, status, user, inv]):
+                    return {'status': 'error', 'message': 'Problème de sécurité détecté'}
                 print("current stat : ", status, user, inv)
                 number = 10
                 begin = (page - 1) * number

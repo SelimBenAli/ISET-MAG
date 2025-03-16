@@ -2,6 +2,7 @@ from flask import Blueprint, request, jsonify, url_for
 from service.hardware_service import HardwareService
 from service.relation_service import RelationService
 from tools.hardware_tools import HardwareTools
+from tools.sql_injection_tools import SQLInjectionTools
 from tools.user_tools import UserTools
 
 
@@ -9,6 +10,7 @@ class HardwareViews:
     def __init__(self):
         self.user_tools = UserTools()
         self.hardware_tools = HardwareTools()
+        self.sql_injection_tools = SQLInjectionTools()
         self.hardware_service = HardwareService()
         self.relation_service = RelationService()
         self.hardware_bp = Blueprint('hardware', __name__, template_folder='templates')
@@ -29,6 +31,10 @@ class HardwareViews:
                 date_achat = data.get('date_achat_hardware')
                 date_mise_en_service = data.get('date_mise_en_service_hardware')
                 id_etat = data.get('etat_hardware')
+                if self.sql_injection_tools.detect_sql_injection(
+                        [id_modele, id_fournisseur, id_magasin, id_salle, num_inventaire, date_achat,
+                         date_mise_en_service, id_etat]):
+                    return {'status': 'error', 'message': 'Problème de sécurité détecté'}
                 print("date 1 : ", date_achat, date_mise_en_service)
                 if id_modele is None:
                     return jsonify({'status': 'failed', 'message': 'modele is required'})
@@ -77,6 +83,10 @@ class HardwareViews:
                 date_achat = data.get('date_achat_hardware')
                 date_mise_en_service = data.get('date_mise_en_service_hardware')
                 id_etat = data.get('etat_hardware')
+                if self.sql_injection_tools.detect_sql_injection(
+                        [id_hardware, id_modele, id_fournisseur, id_magasin, id_salle, num_inventaire, date_achat,
+                         date_mise_en_service, id_etat]):
+                    return {'status': 'error', 'message': 'Problème de sécurité détecté'}
                 if id_modele is None:
                     return jsonify({'status': 'failed', 'message': 'modele is required'})
                 if id_fournisseur is None:
@@ -115,6 +125,8 @@ class HardwareViews:
         @self.hardware_bp.route('/delete-hardware/<int:id_hardware>', methods=['DELETE'])
         def delete_hardware(id_hardware):
             if self.user_tools.check_user_in_session('admin'):
+                if self.sql_injection_tools.detect_sql_injection([id_hardware]):
+                    return {'status': 'error', 'message': 'Problème de sécurité détecté'}
                 status = self.hardware_service.delete_hardware(id_hardware)
                 if status != 'failed':
                     return {'status': 'success'}
@@ -132,6 +144,8 @@ class HardwareViews:
         @self.hardware_bp.route('/get-hardwares-limit/<int:page>', methods=['GET'])
         def get_hardwares_with_limit(page):
             if self.user_tools.check_user_in_session('admin'):
+                if self.sql_injection_tools.detect_sql_injection([page]):
+                    return {'status': 'error', 'message': 'Problème de sécurité détecté'}
                 number = 20
                 begin = (page - 1) * number
                 status, pages = self.hardware_service.find_number_hardware()
@@ -150,6 +164,8 @@ class HardwareViews:
         @self.hardware_bp.route('/get-hardwares-by-code/<string:code>', methods=['GET'])
         def get_hardwares_by_code(code):
             if self.user_tools.check_user_in_session('admin'):
+                if self.sql_injection_tools.detect_sql_injection([code]):
+                    return {'status': 'error', 'message': 'Problème de sécurité détecté'}
                 status, hardwares = self.hardware_service.find_hardware_by_code(code)
                 print("hardwares : ", status, hardwares)
                 if status == 'success':
@@ -160,6 +176,8 @@ class HardwareViews:
         @self.hardware_bp.route('/get-hardwares-by-inv/<string:inv>', methods=['GET'])
         def get_hardwares_by_inv(inv):
             if self.user_tools.check_user_in_session('admin'):
+                if self.sql_injection_tools.detect_sql_injection([inv]):
+                    return {'status': 'error', 'message': 'Problème de sécurité détecté'}
                 status, hardwares = self.hardware_service.find_hardware_by_numero_inventaire(inv)
                 print("hardwares : ", status, hardwares)
                 if status == 'success':
@@ -172,6 +190,8 @@ class HardwareViews:
             if self.user_tools.check_user_in_session('admin'):
                 data = request.get_json()
                 id_hardware2 = data.get('id_hardware2')
+                if self.sql_injection_tools.detect_sql_injection([id_hardware, id_hardware2]):
+                    return {'status': 'error', 'message': 'Problème de sécurité détecté'}
                 status, hw2 = self.hardware_service.find_hardware_by_code(id_hardware2)
                 if status != 'success':
                     return {'status': 'failed', 'message': 'hardware non trouvé'}
@@ -192,6 +212,8 @@ class HardwareViews:
             if self.user_tools.check_user_in_session('admin'):
                 data = request.get_json()
                 id_hardware2 = data.get('id_hardware2')
+                if self.sql_injection_tools.detect_sql_injection([id_hardware, id_hardware2]):
+                    return {'status': 'error', 'message': 'Problème de sécurité détecté'}
                 status, hw2 = self.hardware_service.find_hardware_by_code(id_hardware2)
                 if status != 'success':
                     return {'status': 'failed', 'message': 'hardware non trouvé'}

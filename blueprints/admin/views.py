@@ -2,6 +2,7 @@ from flask import Blueprint, render_template, request, session, redirect, url_fo
 
 from service.admin_service import AdminService
 from tools.scanner_tools import ScannerTools
+from tools.sql_injection_tools import SQLInjectionTools
 from tools.user_tools import UserTools
 from extensions import socketio
 
@@ -11,6 +12,7 @@ class AdminViews:
         self.admin_service = AdminService()
         self.user_tools = UserTools()
         self.scan_tools = ScannerTools()
+        self.sql_injection_tools = SQLInjectionTools()
         self.admin_bp = Blueprint('admin', __name__, template_folder='templates')
         self.admin_routes()
 
@@ -24,6 +26,8 @@ class AdminViews:
             data = request.get_json()
             email = data.get('email')
             password = data.get('password')
+            if self.sql_injection_tools.detect_sql_injection([email, password]):
+                return {'status': 'error', 'message': 'Problème de sécurité détecté'}
             status, admin = self.admin_service.find_admin(email, password)
             print(status)
             if status == 'success':
@@ -57,6 +61,8 @@ class AdminViews:
                 email = data.get('email')
                 prenom = data.get('prenom')
                 nom = data.get('nom')
+                if self.sql_injection_tools.detect_sql_injection([email, prenom, nom]):
+                    return {'status': 'error', 'message': 'Problème de sécurité détecté'}
                 status = self.admin_service.change_details(id_admin, prenom, nom, email)
                 if status == 'success':
                     return {'status': 'success'}
@@ -98,6 +104,8 @@ class AdminViews:
                 nom = data.get('nom_admin')
                 prenom = data.get('prenom_admin')
                 email = data.get('email_admin')
+                if self.sql_injection_tools.detect_sql_injection([nom, prenom, email]):
+                    return {'status': 'error', 'message': 'Problème de sécurité détecté'}
                 status = self.admin_service.add_admin(nom, prenom, email, 2)
                 if status == 'success':
                     return {'status': 'success'}

@@ -3,6 +3,7 @@ from flask import Blueprint, render_template, request, session, flash, url_for, 
 from service.parametre_email_service import ParametreEmailService
 from tools.cryption_tools import CryptionTools
 from tools.scanner_tools import ScannerTools
+from tools.sql_injection_tools import SQLInjectionTools
 from tools.user_tools import UserTools
 
 
@@ -11,6 +12,7 @@ class ParametreViews:
         self.user_tools = UserTools('dashboard')
         self.cryption_tools = CryptionTools()
         self.scanner_tools = ScannerTools()
+        self.sql_injection_tools = SQLInjectionTools()
         self.parametre_email_service = ParametreEmailService()
         self.parametre_bp = Blueprint('parametre', __name__, template_folder='templates')
         self.parametre_email_routes()
@@ -21,6 +23,8 @@ class ParametreViews:
         def parametre_email_update(id_parametre_email):
             if not self.user_tools.check_user_in_session('admin'):
                 return {'status': 'error', 'message': 'Token Error'}
+            if self.sql_injection_tools.detect_sql_injection([id_parametre_email]):
+                return {'status': 'error', 'message': 'Problème de sécurité détecté'}
             data = request.get_json()
             nom = data.get('nom')
             objet = data.get('objet')

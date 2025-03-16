@@ -3,12 +3,14 @@ from flask import Blueprint, request, jsonify, session
 from service.hardware_service import HardwareService
 from service.intervention_service import InterventionService
 from service.utilisateur_service import UtilisateurService
+from tools.sql_injection_tools import SQLInjectionTools
 from tools.user_tools import UserTools
 
 
 class InterventionViews:
     def __init__(self):
         self.user_tools = UserTools()
+        self.sql_injection_tools = SQLInjectionTools()
         self.intervention_service = InterventionService()
         self.utilisateur_service = UtilisateurService()
         self.hardware_service = HardwareService()
@@ -22,6 +24,8 @@ class InterventionViews:
                 data = request.get_json()
                 code_user = data.get('user')
                 code_hardware = data.get('hardware')
+                if self.sql_injection_tools.detect_sql_injection([code_user, code_hardware]):
+                    return {'status': 'error', 'message': 'Problème de sécurité détecté'}
                 # date_debut = data.get('date_debut')
                 # id_salle = data.get('id_salle')
                 # if id_salle is None or id_salle == '' or id_salle == 0 or id_salle == '0':
@@ -57,6 +61,8 @@ class InterventionViews:
                 if id_salle is None or id_salle == '' or id_salle == 0 or id_salle == '0':
                     id_salle = ' NULL '
                 id_hardware = data.get('id_hardware')
+                if self.sql_injection_tools.detect_sql_injection([id_intervention, id_user, date_debut, id_salle, id_hardware]):
+                    return {'status': 'error', 'message': 'Problème de sécurité détecté'}
                 status = self.intervention_service.update_intervention(id_intervention, id_user, date_debut,
                                                                        id_salle,
                                                                        id_hardware)
@@ -67,6 +73,8 @@ class InterventionViews:
         @self.intervention_bp.route('/delete-intervention/<int:id_intervention>', methods=['DELETE'])
         def delete_intervention(id_intervention):
             if self.user_tools.check_user_in_session('admin'):
+                if self.sql_injection_tools.detect_sql_injection([id_intervention]):
+                    return {'status': 'error', 'message': 'Problème de sécurité détecté'}
                 status = self.intervention_service.delete_intervention(id_intervention)
                 if status != 'failed':
                     return {'status': 'success'}
@@ -83,8 +91,9 @@ class InterventionViews:
         @self.intervention_bp.route('/get-interventions-user-code/<string:code>', methods=['GET'])
         def get_interventions_uc(code):
             if self.user_tools.check_user_in_session('admin'):
+                if self.sql_injection_tools.detect_sql_injection([code]):
+                    return {'status': 'error', 'message': 'Problème de sécurité détecté'}
                 status, user = self.utilisateur_service.find_utilisateur_by_code(code)
-
                 status, interventions = self.intervention_service.find_intervention_by_user(user[0]['id_utilisateur'])
                 print(interventions)
                 return jsonify({'status': 'success', 'interventions': interventions})
@@ -93,6 +102,8 @@ class InterventionViews:
         @self.intervention_bp.route('/get-interventions-hard-code/<string:code>', methods=['GET'])
         def get_interventions_hc(code):
             if self.user_tools.check_user_in_session('admin'):
+                if self.sql_injection_tools.detect_sql_injection([code]):
+                    return {'status': 'error', 'message': 'Problème de sécurité détecté'}
                 status, hard = self.hardware_service.find_hardware_by_code(code)
                 status, interventions = self.intervention_service.find_intervention_by_hardware(hard[0]['id_hardware'])
                 print(interventions)
@@ -102,6 +113,8 @@ class InterventionViews:
         @self.intervention_bp.route('/get-interventions-hard-num/<string:code>', methods=['GET'])
         def get_interventions_hn(code):
             if self.user_tools.check_user_in_session('admin'):
+                if self.sql_injection_tools.detect_sql_injection([code]):
+                    return {'status': 'error', 'message': 'Problème de sécurité détecté'}
                 status, hard = self.hardware_service.find_hardware_by_numero_inventaire(code)
                 status, interventions = self.intervention_service.find_intervention_by_hardware(hard[0]['id_hardware'])
                 print(interventions)
@@ -111,6 +124,8 @@ class InterventionViews:
         @self.intervention_bp.route('/get-interventions-closed/<int:page>', methods=['GET'])
         def get_interventions_closed(page):
             if self.user_tools.check_user_in_session('admin'):
+                if self.sql_injection_tools.detect_sql_injection([page]):
+                    return {'status': 'error', 'message': 'Problème de sécurité détecté'}
                 number = 10
                 begin = (page - 1) * number
                 status, pages = self.intervention_service.find_number_closed_interventions()
@@ -130,6 +145,8 @@ class InterventionViews:
         @self.intervention_bp.route('/get-interventions-current/<int:page>', methods=['GET'])
         def get_interventions_current(page):
             if self.user_tools.check_user_in_session('admin'):
+                if self.sql_injection_tools.detect_sql_injection([page]):
+                    return {'status': 'error', 'message': 'Problème de sécurité détecté'}
                 number = 10
                 begin = (page - 1) * number
                 status, pages = self.intervention_service.find_number_current_interventions()
@@ -151,6 +168,8 @@ class InterventionViews:
             methods=['GET'])
         def get_interventions_limit(page, status, code_hard, code_user, num_hard):
             if self.user_tools.check_user_in_session('admin'):
+                if self.sql_injection_tools.detect_sql_injection([page, status, code_hard, code_user, num_hard]):
+                    return {'status': 'error', 'message': 'Problème de sécurité détecté'}
                 print("current stat : ", status, code_hard, code_user, num_hard)
                 code_hard = code_hard.replace('code_hard_', '')
                 code_user = code_user.replace('code_user_', '')
@@ -199,6 +218,8 @@ class InterventionViews:
         @self.intervention_bp.route('/close-intervention/<int:id_intervention>', methods=['PUT'])
         def close_intervention(id_intervention):
             if self.user_tools.check_user_in_session('admin'):
+                if self.sql_injection_tools.detect_sql_injection([id_intervention]):
+                    return {'status': 'error', 'message': 'Problème de sécurité détecté'}
                 status, i = self.intervention_service.find_intervention_by_id(id_intervention)
                 print('Intervention à fermer : ', i)
                 if len(i) == 0:

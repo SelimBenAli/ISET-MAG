@@ -16,6 +16,7 @@ from service.role_service import RoleService
 from service.salle_service import SalleService
 from service.utilisateur_service import UtilisateurService
 from tools.scanner_tools import ScannerTools
+from tools.sql_injection_tools import SQLInjectionTools
 from tools.user_tools import UserTools
 
 
@@ -38,6 +39,7 @@ class DashboardViews:
         self.reclamation_service = ReclamationService()
         self.parametre_email_service = ParametreEmailService()
         self.scanner_tools = ScannerTools()
+        self.sql_injection_tools = SQLInjectionTools()
         self.dashboard_bp = Blueprint('dashboard', __name__, template_folder='templates')
         self.dashboard_fournisseur_routes()
         self.dashboard_salle_bloc_routes()
@@ -72,6 +74,8 @@ class DashboardViews:
         @self.dashboard_bp.route('/update-bloc/<int:idb>', methods=['GET'])
         def modifier_bloc_template(idb):
             if self.user_tools.check_user_in_session('admin'):
+                if self.sql_injection_tools.detect_sql_injection([idb]):
+                    return render_template('404.html')
                 status, bloc = self.bloc_service.find_bloc_by_id(idb)
                 return render_template('modifier-bloc.html', bloc=bloc[0], user=session['admin'])
             else:
@@ -80,6 +84,8 @@ class DashboardViews:
         @self.dashboard_bp.route('/update-salle/<int:ids>', methods=['GET'])
         def modifier_salle_template(ids):
             if self.user_tools.check_user_in_session('admin'):
+                if self.sql_injection_tools.detect_sql_injection([ids]):
+                    return render_template('404.html')
                 status, salle = self.salle_service.find_salle_by_id(ids)
                 liste_bloc = self.bloc_service.find_all_bloc()[1]
                 return render_template('modifier-salle.html', salle=salle[0], liste_bloc=liste_bloc,
@@ -106,6 +112,8 @@ class DashboardViews:
         @self.dashboard_bp.route('/update-fournisseur/<int:idf>', methods=['GET'])
         def modifier_fournisseur_template(idf):
             if self.user_tools.check_user_in_session('admin'):
+                if self.sql_injection_tools.detect_sql_injection([idf]):
+                    return render_template('404.html')
                 status, fournisseur = self.fournisseur_service.find_fournisseur_by_id(idf)
                 return render_template('modifier-fournisseur.html', fournisseur=fournisseur[0], user=session['admin'])
             else:
@@ -130,6 +138,8 @@ class DashboardViews:
         @self.dashboard_bp.route('/update-marque/<int:idm>', methods=['GET'])
         def modifier_marque_template(idm):
             if self.user_tools.check_user_in_session('admin'):
+                if self.sql_injection_tools.detect_sql_injection([idm]):
+                    return render_template('404.html')
                 status, marque = self.marque_service.find_marque_by_id(idm)
                 return render_template('modifier-marque.html', marque=marque[0], user=session['admin'])
             else:
@@ -156,6 +166,8 @@ class DashboardViews:
         @self.dashboard_bp.route('/update-modele/<int:idm>', methods=['GET'])
         def modifier_modele_template(idm):
             if self.user_tools.check_user_in_session('admin'):
+                if self.sql_injection_tools.detect_sql_injection([idm]):
+                    return render_template('404.html')
                 status, modele = self.modele_service.find_modele_by_id(idm)
                 liste_marque = self.marque_service.find_all_marque()[1]
                 return render_template('modifier-modele.html', modele=modele[0], liste_marque=liste_marque,
@@ -184,6 +196,8 @@ class DashboardViews:
         @self.dashboard_bp.route('/update-magasin/<int:idm>', methods=['GET'])
         def modifier_magasin_template(idm):
             if self.user_tools.check_user_in_session('admin'):
+                if self.sql_injection_tools.detect_sql_injection([idm]):
+                    return render_template('404.html')
                 status, magasin = self.magasin_service.find_magasin_by_id(idm)
                 liste_salle = self.salle_service.find_all_salle()[1]
                 return render_template('modifier-magasin.html', magasin=magasin[0], liste_salle=liste_salle,
@@ -234,6 +248,8 @@ class DashboardViews:
         @self.dashboard_bp.route('/update-hardware/<int:idh>', methods=['GET'])
         def modifier_hardware_template(idh):
             if self.user_tools.check_user_in_session('admin'):
+                if self.sql_injection_tools.detect_sql_injection([idh]):
+                    return render_template('404.html')
                 status, hardware = self.hardware_service.find_hardware_by_id(idh)
                 liste_modele = self.modele_service.find_all_modele()[1]
                 liste_fournisseur = self.fournisseur_service.find_all_fournisseur()[1]
@@ -294,6 +310,8 @@ class DashboardViews:
         @self.dashboard_bp.route('/update-utilisateur/<int:idu>', methods=['GET'])
         def modifier_utilisateur_template(idu):
             if self.user_tools.check_user_in_session('admin'):
+                if self.sql_injection_tools.detect_sql_injection([idu]):
+                    return render_template('404.html')
                 status, utilisateur = self.utilisateur_service.find_utilisateur_by_id(idu)
                 status, role = self.role_service.find_all_role()
                 return render_template('modifier-utilisateur.html', utilisateur=utilisateur[0], liste_role=role,

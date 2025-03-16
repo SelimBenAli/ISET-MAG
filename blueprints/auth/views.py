@@ -2,6 +2,7 @@ from flask import Blueprint, render_template, request, session, flash, url_for, 
 
 from service.utilisateur_service import UtilisateurService
 from tools.cryption_tools import CryptionTools
+from tools.sql_injection_tools import SQLInjectionTools
 from tools.user_tools import UserTools
 
 
@@ -10,6 +11,7 @@ class AuthViews:
         self.user_tools = UserTools('dashboard')
         self.utilisateur_service = UtilisateurService()
         self.cryption_tools = CryptionTools()
+        self.sql_injection_tools = SQLInjectionTools()
         self.auth_bp = Blueprint('auth', __name__, template_folder='templates')
         self.auth_routes()
 
@@ -25,6 +27,8 @@ class AuthViews:
             data = request.get_json()
             email = data.get('email')
             password = data.get('password')
+            if self.sql_injection_tools.detect_sql_injection([email, password]):
+                return {'status': 'error', 'message': 'Problème de sécurité détecté'}
             status, user = self.utilisateur_service.find_utilisateur_by_mail(email)
             print("user", user)
             if status == 'success' and user is not None and user != []:
@@ -41,7 +45,7 @@ class AuthViews:
             elif status == 'failed' or user is None or user == []:
                 return {'status': 'failed', 'message': 'Utilisateur Non Trouvé'}
             else:
-                return {'status': 'error'}
+                return {'status': 'error', 'message': 'Erreur Serveur'}
 
         @self.auth_bp.route('/logout', methods=['GET'])
         def logout():

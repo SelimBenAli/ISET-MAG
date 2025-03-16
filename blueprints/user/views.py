@@ -7,6 +7,7 @@ from service.message_service import MessageService
 from service.modele_service import ModeleService
 from service.reclamation_service import ReclamationService
 from service.utilisateur_service import UtilisateurService
+from tools.sql_injection_tools import SQLInjectionTools
 from tools.user_tools import UserTools
 from extensions import socketio
 
@@ -14,6 +15,7 @@ from extensions import socketio
 class UserViews:
     def __init__(self):
         self.user_tools = UserTools()
+        self.sql_injection_tools = SQLInjectionTools()
         self.user_service = UtilisateurService()
         self.reclamation_service = ReclamationService()
         self.hardware_service = HardwareService()
@@ -30,6 +32,8 @@ class UserViews:
             if self.user_tools.check_user_in_session('user'):
                 data = request.get_json()
                 description = data.get('description')
+                if self.sql_injection_tools.detect_sql_injection([description]):
+                    return jsonify({'status': 'failed', 'message': 'Problème de sécurité détecté'})
                 user = session['user']
                 hardware = session['hardware_reclamation']
                 description = description.replace('"', "'")
@@ -63,7 +67,8 @@ class UserViews:
                 id_modele = data.get('id_modele')
                 # id_marque = data.get('id_marque')
                 quantite = data.get('quantite')
-
+                if self.sql_injection_tools.detect_sql_injection([date_debut, date_fin, id_modele, quantite]):
+                    return jsonify({'status': 'failed', 'message': 'Problème de sécurité détecté'})
                 status = self.location_service.add_location(date_debut, date_fin, session['user']['id_utilisateur'],
                                                             id_modele, quantite)
 
@@ -79,6 +84,8 @@ class UserViews:
                 data = request.get_json()
                 message = data.get('message')
                 sujet = data.get('sujet')
+                if self.sql_injection_tools.detect_sql_injection([message, sujet]):
+                    return jsonify({'status': 'failed', 'message': 'Problème de sécurité détecté'})
                 user = session['user']
                 status = self.message_service.add_message(user['id_utilisateur'], sujet, message)
                 if status == 'success':
@@ -104,6 +111,8 @@ class UserViews:
                 tel = data.get('telephone_utilisateur')
                 role = data.get('role_utilisateur')
                 code = data.get('code_utilisateur')
+                if self.sql_injection_tools.detect_sql_injection([nom, prenom, mail, tel, role, code]):
+                    return jsonify({'status': 'failed', 'message': 'Problème de sécurité détecté'})
                 status, user = self.user_service.find_utilisateur_by_mail(mail)
                 if status == 'success' and user != []:
                     return jsonify({'status': 'failed', 'message': 'email already used'})
@@ -119,6 +128,8 @@ class UserViews:
         @self.user_bp.route('/delete-utilisateur/<int:id_utilisateur>', methods=['DELETE'])
         def delete_utilisateur(id_utilisateur):
             if self.user_tools.check_user_in_session('admin'):
+                if self.sql_injection_tools.detect_sql_injection([id_utilisateur]):
+                    return jsonify({'status': 'failed', 'message': 'Problème de sécurité détecté'})
                 status = self.user_service.delete_utilisateur(id_utilisateur)
                 if status == 'success':
                     socketio.emit('desactivate_client_account_by_id',
@@ -137,6 +148,8 @@ class UserViews:
                 tel = data.get('telephone_utilisateur')
                 role = data.get('role_utilisateur')
                 code = data.get('code_utilisateur')
+                if self.sql_injection_tools.detect_sql_injection([id_utilisateur, nom, prenom, mail, tel, role, code]):
+                    return jsonify({'status': 'failed', 'message': 'Problème de sécurité détecté'})
                 status = self.user_service.update_utilisateur(id_utilisateur, nom, prenom, mail, tel, role, code)
                 if status == 'success':
                     return jsonify({'status': 'success'})
@@ -146,6 +159,8 @@ class UserViews:
         @self.user_bp.route('/desactiver-compte/<int:id_utilisateur>', methods=['PUT'])
         def desactiver_compte(id_utilisateur):
             if self.user_tools.check_user_in_session('admin'):
+                if self.sql_injection_tools.detect_sql_injection([id_utilisateur]):
+                    return jsonify({'status': 'failed', 'message': 'Problème de sécurité détecté'})
                 status = self.user_service.desactiver_compte(id_utilisateur)
                 socketio.emit('desactivate_client_account_by_id',
                               {'message': 'success', 'id_utilisateur': id_utilisateur})
@@ -157,6 +172,8 @@ class UserViews:
         @self.user_bp.route('/activer-compte/<int:id_utilisateur>', methods=['PUT'])
         def activer_compte(id_utilisateur):
             if self.user_tools.check_user_in_session('admin'):
+                if self.sql_injection_tools.detect_sql_injection([id_utilisateur]):
+                    return jsonify({'status': 'failed', 'message': 'Problème de sécurité détecté'})
                 status = self.user_service.activer_compte(id_utilisateur)
 
                 if status == 'success':
@@ -188,6 +205,8 @@ class UserViews:
             if self.user_tools.check_user_in_session('user'):
                 data = request.get_json()
                 description = data.get('message')
+                if self.sql_injection_tools.detect_sql_injection([description]):
+                    return jsonify({'status': 'failed', 'message': 'Problème de sécurité détecté'})
                 technicien = session['user']
                 print('**************', technicien)
                 status = self.reclamation_service.finish_reclamation(idr, technicien['id_utilisateur'], description)
@@ -201,6 +220,8 @@ class UserViews:
         def envoyer_email_recuperation():
             data = request.get_json()
             email = data.get('email')
+            if self.sql_injection_tools.detect_sql_injection([email]):
+                return jsonify({'status': 'failed', 'message': 'Problème de sécurité détecté'})
             status, user = self.user_service.find_utilisateur_by_mail(email)
             if status == 'success' and user != []:
                 status = self.user_service.envoyer_email_recuperation(email)

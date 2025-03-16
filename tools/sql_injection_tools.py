@@ -25,7 +25,6 @@ class SQLInjectionTools:
         return False
 
     def detect_sql_injection(self, my_list):
-        print("of")
         for value in my_list:
             print(value)
             if value != "" and self.string_contains_sql_injection(value):

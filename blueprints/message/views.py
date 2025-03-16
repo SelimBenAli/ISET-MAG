@@ -2,12 +2,14 @@ from flask import Blueprint, jsonify, session
 from service.location_service import LocationService
 from service.message_service import MessageService
 from service.reclamation_service import ReclamationService
+from tools.sql_injection_tools import SQLInjectionTools
 from tools.user_tools import UserTools
 
 
 class MessageViews:
     def __init__(self):
         self.user_tools = UserTools()
+        self.sql_injection_tools = SQLInjectionTools()
         self.message_service = MessageService()
         self.reclamation_service = ReclamationService()
         self.location_service = LocationService()
@@ -27,6 +29,8 @@ class MessageViews:
         @self.message_bp.route('/delete-message/<int:id_message>', methods=['DELETE'])
         def delete_message(id_message):
             if self.user_tools.check_user_in_session('admin'):
+                if self.sql_injection_tools.detect_sql_injection([id_message]):
+                    return jsonify({'status': 'error', 'message': 'Problème de sécurité détecté'})
                 status = self.message_service.delete_message(id_message)
                 if status == 'success':
                     return jsonify({'status': 'success'})
