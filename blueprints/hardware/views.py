@@ -108,9 +108,9 @@ class HardwareViews:
                 if not self.hardware_tools.check_num_inventaire(str(num_inventaire)):
                     return jsonify({'status': 'failed', 'message': 'numero inventaire is not valid'})
                 status, hard = self.hardware_service.find_hardware_by_numero_inventaire(num_inventaire)
-                if len(hard) > 0:
-                    return jsonify({'status': 'failed', 'message': 'numéro inventaire existant'})
-                code_hardware = self.hardware_tools.generate_code_barre_hardware(str(num_inventaire))
+                if len(hard) == 0:
+                    return jsonify({'status': 'failed', 'message': 'numéro inventaire non existant'})
+                # code_hardware = self.hardware_tools.generate_code_barre_hardware(str(num_inventaire))
                 code_hardware = self.hardware_tools.generate_code_barre_hardware(str(num_inventaire))
                 status = self.hardware_service.update_hardware(id_hardware, id_modele, id_fournisseur, id_magasin,
                                                                id_salle,

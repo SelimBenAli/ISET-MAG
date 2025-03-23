@@ -26,6 +26,11 @@
                                     <h4 class="text-dark mb-4">Modifier Hardware</h4>
                                 </div>
                                 <div>
+                                <div class="mb-3"><label class="text-secondary mb-2">Numéro d'Inventaire
+                                        : </label><input class="form-control form-control-user" type="text"
+                                                         id="numero-inventaire-hardware" readonly disabled value="{{ hardware['numero_inventaire_hardware'] }}"
+                                                         placeholder="Numéro d'inventaire...">
+                                    </div>
                                     <div class="mb-3"><label class="text-secondary mb-2">Modèle : </label>
                                         <select
                                                 id="modele-hardware" class="form-select form-select-lg mb-3">
@@ -60,11 +65,7 @@
                                                         selected {% endif %}>{{ salle['nom_salle'] }}</option>
                                         {% endfor %}
                                     </select></div>
-                                    <div class="mb-3"><label class="text-secondary mb-2">Numéro d'Inventaire
-                                        : </label><input class="form-control form-control-user" type="text"
-                                                         id="numero-inventaire-hardware" value="{{ hardware['numero_inventaire_hardware'] }}"
-                                                         placeholder="Numéro d'inventaire...">
-                                    </div>
+
 
                                     <div class="mb-3"><label class="text-secondary mb-2">Date d'Achat : </label><input
                                             class="form-control form-control-user" type="date" value="{{ hardware['date_achat_hardware'] }}"
@@ -75,9 +76,9 @@
                                                          id="date-mise-en-service-hardware" value="{{ hardware['date_mise_service_hardware'] }}"
                                                          placeholder="Date de Mise en Service...."></div>
 
-                                    <div class="mb-3"><label class="text-secondary mb-2">Code à Barre : </label><input
+                                    <!--<div class="mb-3"><label class="text-secondary mb-2">Code à Barre : </label><input
                                             class="form-control form-control-user" type="text" value="{{ hardware['code_hardware'] }}"
-                                            id="code-hardware" placeholder="Code à Barre...."></div>
+                                            id="code-hardware" placeholder="Code à Barre...."></div>-->
 
                                     <div class="mb-3"><label class="text-secondary mb-2">Etat : </label><select
                                             id="etat-hardware" class="form-select form-select-lg mb-3">

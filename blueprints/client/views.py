@@ -37,8 +37,10 @@ class ClientViews:
         @self.client_bp.route('/reclamation/<string:numero_inventaire_hardware>', methods=['GET'])
         def reclamation_client(numero_inventaire_hardware):
             if self.user_tools.check_user_in_session('user'):
+                numero_inventaire_hardware = numero_inventaire_hardware.replace('/', '0')
                 if self.sql_injection_tools.detect_sql_injection([numero_inventaire_hardware]):
-                    return render_template('client/404.html')
+                    return render_template('client/reclamation.html', hardware=None, new=False,
+                                           page_name='openPageReclamationClient', user=session['user'])
                 new = False
                 if numero_inventaire_hardware is not None and numero_inventaire_hardware != "":
                     if numero_inventaire_hardware == 'new':

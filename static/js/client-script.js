@@ -3,6 +3,7 @@ var marques = [];
 
 function trouver_hardware_reclamation() {
     var numero_inventaire = document.getElementById("numero_inventaire").value;
+    numero_inventaire = numero_inventaire.replaceAll("/", "0")
     window.location.href = "/client/reclamation/" + numero_inventaire;
 }
 

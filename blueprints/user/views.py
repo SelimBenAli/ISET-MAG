@@ -32,7 +32,8 @@ class UserViews:
             if self.user_tools.check_user_in_session('user'):
                 data = request.get_json()
                 description = data.get('description')
-                if self.sql_injection_tools.detect_sql_injection([description]):
+                description = description.replace('"', "'")
+                if self.sql_injection_tools.detect_sql_injection_in_descriptions([description]):
                     return jsonify({'status': 'failed', 'message': 'Problème de sécurité détecté'})
                 user = session['user']
                 hardware = session['hardware_reclamation']
@@ -84,7 +85,9 @@ class UserViews:
                 data = request.get_json()
                 message = data.get('message')
                 sujet = data.get('sujet')
-                if self.sql_injection_tools.detect_sql_injection([message, sujet]):
+                message = message.replace('"', "'")
+                sujet = sujet.replace('"', "'")
+                if self.sql_injection_tools.detect_sql_injection_in_descriptions([message, sujet]):
                     return jsonify({'status': 'failed', 'message': 'Problème de sécurité détecté'})
                 user = session['user']
                 status = self.message_service.add_message(user['id_utilisateur'], sujet, message)
@@ -205,7 +208,9 @@ class UserViews:
             if self.user_tools.check_user_in_session('user'):
                 data = request.get_json()
                 description = data.get('message')
-                if self.sql_injection_tools.detect_sql_injection([description]):
+                description = description.replace('"', "'")
+                if self.sql_injection_tools.detect_sql_injection_in_descriptions([description]):
+                    print("no, msg sec", description)
                     return jsonify({'status': 'failed', 'message': 'Problème de sécurité détecté'})
                 technicien = session['user']
                 print('**************', technicien)

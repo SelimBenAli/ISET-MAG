@@ -229,11 +229,11 @@ function search_hardware_by_all() {
 
 function load_table_hardware_parameters() {
 
-    header = "<thead><tr><th>Code</th><th>Modèle</th><th>Marque</th><th>Magasin</th><th>Salle</th><th>Num Inventaire</th><th>Etat</th><th>Code à Bar</th><th>Consulter</th><th>Modifier</th><th>Supprimer</th></tr></thead>"
-    footer = "<tfoot><tr><th>Code</th><th>Modèle</th><th>Marque</th><th>Magasin</th><th>Salle</th><th>Num Inventaire</th><th>Etat</th><th>Code à Bar</th><th>Consulter</th><th>Modifier</th><th>Supprimer</th></tr></tfoot>"
+    header = "<thead><tr><th>Code</th><th>Modèle</th><th>Marque</th><th>Magasin</th><th>Salle</th><th>Num Inventaire</th><th>Etat</th><th>Code à Bar</th><!--<th>Consulter</th>--><th>Modifier</th><th>Supprimer</th></tr></thead>"
+    footer = "<tfoot><tr><th>Code</th><th>Modèle</th><th>Marque</th><th>Magasin</th><th>Salle</th><th>Num Inventaire</th><th>Etat</th><th>Code à Bar</th><!--<th>Consulter</th>--><th>Modifier</th><th>Supprimer</th></tr></tfoot>"
     body = []
     liste_hardware.forEach(hardware => {
-        body.push("<tr><td>" + hardware.id_hardware + "</td><td>" + hardware.modele_hardware.nom_modele + "</td><td>" + hardware.modele_hardware.marque_modele.nom_marque + "</td><td>" + hardware.magasin_hardware.nom_magasin + "</td><td>" + hardware.salle_hardware.nom_salle + "</td><td>" + hardware.numero_inventaire_hardware + "</td><td>" + hardware.etat_hardware.nom_etat + "</td><td>" + hardware.code_hardware + "</td><td><button class='btn btn-outline-info' onclick='openPageHardwareConsult(" + hardware.id_hardware + ")'>Consulter</button></td><td><button class='btn btn-outline-secondary' onclick='openPageHardwareUpdate(" + hardware.id_hardware + ")'>Modifier</button></td><td><button class='btn btn-outline-danger' onclick='supprimer_hardware(" + hardware.id_hardware + ")'>Supprimer</button></td></tr>")
+        body.push("<tr><td>" + hardware.id_hardware + "</td><td>" + hardware.modele_hardware.nom_modele + "</td><td>" + hardware.modele_hardware.marque_modele.nom_marque + "</td><td>" + hardware.magasin_hardware.nom_magasin + "</td><td>" + hardware.salle_hardware.nom_salle + "</td><td>" + hardware.numero_inventaire_hardware + "</td><td>" + hardware.etat_hardware.nom_etat + "</td><td>" + hardware.code_hardware + "</td><!--<td><button class='btn btn-outline-info' onclick='openPageHardwareConsult(" + hardware.id_hardware + ")'>Consulter</button></td>--><td><button class='btn btn-outline-secondary' onclick='openPageHardwareUpdate(" + hardware.id_hardware + ")'>Modifier</button></td><td><button class='btn btn-outline-danger' onclick='supprimer_hardware(" + hardware.id_hardware + ")'>Supprimer</button></td></tr>")
     });
     division_table = 20
     load_table_hardware(header, footer, body, division_table)
@@ -351,6 +351,7 @@ function modifier_hardware_request(idh) {
                 }
             } else {
                 alert('Erreur lors de la modification');
+                alert(response.message)
             }
         }
     };
@@ -362,7 +363,7 @@ function modifier_hardware_request(idh) {
         numero_inventaire_hardware: document.getElementById("numero-inventaire-hardware").value,
         date_achat_hardware: document.getElementById("date-achat-hardware").value,
         date_mise_en_service_hardware: document.getElementById("date-mise-en-service-hardware").value,
-        code_hardware: document.getElementById("code-hardware").value,
+        // code_hardware: document.getElementById("code-hardware").value,
         etat_hardware: document.getElementById("etat-hardware").value
     }));
 }

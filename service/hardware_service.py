@@ -51,8 +51,8 @@ class HardwareService:
 
                 hardware = Hardware(element[0], modele[0], fournisseur, magasin, salle, etat[0], element[6],
                                     self.date_tools.convert_date(element[7]),
-                                    self.date_tools.convert_date(element[8]),
                                     self.date_tools.convert_date(element[9]),
+                                    self.date_tools.convert_date(element[8]),
                                     element[10], relation)
 
                 liste_hardware.append(hardware.dict_form())
@@ -121,13 +121,23 @@ class HardwareService:
     def update_hardware(self, id_hardware, id_model, id_fournisseur, id_magasin, id_salle, numero_inventaire,
                         date_achat,
                         date_mise_en_service, code, id_etat, historique_relation):
-        return self.database_tools.execute_request(
+        add = ''
+        if date_achat == 'NULL' or date_achat == ' NULL ':
+            add += " DateAchat = NULL, "
+        else:
+            add += f" DateAchat = '{date_achat}', "
+        if date_mise_en_service == 'NULL' or date_mise_en_service == ' NULL ':
+            add += " DateMiseEnService = NULL "
+        else:
+            add += f" DateMiseEnService = '{date_mise_en_service}' "
+        req = (
             f"""UPDATE hardware SET IDModel = {id_model}, IDFournisseur = {id_fournisseur},
-                 IDMagasin = {id_magasin}, IDSalle = {id_salle}, NumeroInventaire = '{numero_inventaire}',
-                  DateAchat = {date_achat},
-                  DateMiseEnService = {date_mise_en_service},Code = '{code}', IDEtat = {id_etat},
+                 IDMagasin = {id_magasin}, IDSalle = {id_salle}, NumeroInventaire = '{numero_inventaire}', {add},
+                 Code = '{code}', IDEtat = {id_etat},
                    HistoriqueRelation = {json.dumps(historique_relation)}
                    WHERE IDHardware = {id_hardware}""")
+        print(req)
+        return self.database_tools.execute_request(req)
 
     def delete_hardware(self, id_hardware):
         return self.database_tools.execute_request(f"""UPDATE hardware SET MarkedAsDeleted 

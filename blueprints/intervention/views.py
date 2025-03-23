@@ -168,6 +168,8 @@ class InterventionViews:
             methods=['GET'])
         def get_interventions_limit(page, status, code_hard, code_user, num_hard):
             if self.user_tools.check_user_in_session('admin'):
+                print("err0")
+                print(page, status, code_hard, code_user, num_hard)
                 if self.sql_injection_tools.detect_sql_injection([page, status, code_hard, code_user, num_hard]):
                     return {'status': 'error', 'message': 'Problème de sécurité détecté'}
                 print("current stat : ", status, code_hard, code_user, num_hard)
