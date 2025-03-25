@@ -204,25 +204,28 @@ function search_intervention() {
 }
 
 function fermer_intervention(id_intervention) {
-    enter_loading_mode()
-    var xhr = new XMLHttpRequest();
-    xhr.open('PUT', '/intervention/close-intervention/' + id_intervention, true);
-    xhr.setRequestHeader('Content-Type', 'application/json');
-    xhr.onreadystatechange = function () {
-        if (xhr.readyState === 4 && xhr.status === 200) {
-            var response = JSON.parse(xhr.responseText);
-            console.log(response)
-            if (response.status === 'success') {
-                quit_loading_mode()
-                load_page_intervention(1, 0, '', '', '')
-            } else {
-                alert(response.message);
-                quit_loading_mode()
-                load_page_intervention(1, 0, '', '', '')
+    if (confirm('Voulez-vous vraiment fermer cette intervention?'))
+    {
+        enter_loading_mode()
+        var xhr = new XMLHttpRequest();
+        xhr.open('PUT', '/intervention/close-intervention/' + id_intervention, true);
+        xhr.setRequestHeader('Content-Type', 'application/json');
+        xhr.onreadystatechange = function () {
+            if (xhr.readyState === 4 && xhr.status === 200) {
+                var response = JSON.parse(xhr.responseText);
+                console.log(response)
+                if (response.status === 'success') {
+                    quit_loading_mode()
+                    load_page_intervention(1, 0, '', '', '')
+                } else {
+                    alert(response.message);
+                    quit_loading_mode()
+                    load_page_intervention(1, 0, '', '', '')
+                }
             }
-        }
-    };
-    xhr.send();
+        };
+        xhr.send();
+    }
 }
 
 function supprimer_intervention(id_intervention) {

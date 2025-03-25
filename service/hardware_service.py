@@ -31,7 +31,7 @@ class HardwareService:
             liste_hardware = []
             for element in data:
                 status, modele = ModeleService().find_modele_by_id(element[1])
-                status, relation = RelationService().find_relation_by_hardware(element[0])
+                # status, relation = RelationService().find_relation_by_hardware(element[0])
                 status, magasin = MagasinService().find_magasin_by_id(element[3])
                 if status == 'error':
                     magasin = MagasinService().create_none().dict_form()
@@ -53,7 +53,7 @@ class HardwareService:
                                     self.date_tools.convert_date(element[7]),
                                     self.date_tools.convert_date(element[9]),
                                     self.date_tools.convert_date(element[8]),
-                                    element[10], relation)
+                                    element[10], None)
 
                 liste_hardware.append(hardware.dict_form())
             self.cursor.close()
