@@ -34,6 +34,7 @@ class AuthViews:
             if status == 'success' and user is not None and user != []:
                 if (user[0]['compte_utilisateur'] == 'Active'
                         and user[0]['mdp_utilisateur'] != self.cryption_tools.crypt_sha256(password)):
+                    print("aazz 1")
                     return {'status': 'failed', 'message': 'Utilisateur Non Trouvé'}
                 if user[0]['compte_utilisateur'] == 'Banni':
                     return {'status': 'failed', 'message': 'Utilisateur Désactivé'}
@@ -43,6 +44,7 @@ class AuthViews:
                 session['user'] = user[0]
                 return {'status': 'success', 'user': user[0]}
             elif status == 'failed' or user is None or user == []:
+                print("aazz 2")
                 return {'status': 'failed', 'message': 'Utilisateur Non Trouvé'}
             else:
                 return {'status': 'error', 'message': 'Erreur Serveur'}

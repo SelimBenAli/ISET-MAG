@@ -7,8 +7,8 @@ class CryptionTools:
         ...
 
     def crypt_sha256(self, text):
-        # crypted_text = hashlib.sha256(text.encode()).hexdigest()
-        return text
+        crypted_text = hashlib.sha256(text.encode()).hexdigest()
+        return crypted_text
 
     def generate_code_barre_utilisateur(self, code):
         ch = ''
@@ -25,7 +25,7 @@ class CryptionTools:
 
     def generate_user_password(self, id_user):
         password = self.genrate_random_string(5) + str(id_user) + self.genrate_random_string(9)
-        return self.crypt_sha256(password)
+        return password, self.crypt_sha256(password)
 
     @staticmethod
     def genrate_random_string(length):

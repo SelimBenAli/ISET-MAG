@@ -10,7 +10,7 @@ class AdminTools:
 
     def generate_admin_password(self, id_admin):
         password = self.genrate_random_string(5) + str(id_admin) + self.genrate_random_string(9)
-        return self.cryption_tools.crypt_sha256(password)
+        return password, self.cryption_tools.crypt_sha256(password)
 
     @staticmethod
     def genrate_random_string(length):

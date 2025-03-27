@@ -1,4 +1,5 @@
 from tools.admin_tools import AdminTools
+from tools.cryption_tools import CryptionTools
 from tools.database_tools import DatabaseConnection
 from entities.admin import Admin
 from tools.mail_tools import MailTools
@@ -11,13 +12,14 @@ class AdminService:
         self.database_tools = DatabaseConnection()
         self.mail_tools = MailTools()
         self.admin_tools = AdminTools()
+        self.cryption_tools = CryptionTools()
 
     def find_admin(self, email, password):
         try:
             self.connection, self.cursor = self.database_tools.find_connection()
             req = (
                 f"""SELECT `IDAdmin`, `Nom`, `Prenom`, `Mail`, `MDP`, `Role`, `Desactive`, `MarkedAsDeleted` FROM admin 
-                WHERE Mail = '{email}' AND MDP = '{password}'""")
+                WHERE Mail = "{email}" AND MDP = "{self.cryption_tools.crypt_sha256(password)}"  """)
             print(req)
             self.cursor.execute(req)
             data = self.cursor.fetchone()
@@ -112,10 +114,10 @@ class AdminService:
                 f"""INSERT INTO admin (Nom, Prenom, Mail, MDP, Role, Desactive, MarkedAsDeleted) 
                 VALUES ('{nom}', '{prenom}', '{email}', '', {role}, -1, -1)""")
             lid = self.cursor.lastrowid
-            pwd = self.admin_tools.generate_admin_password(lid)
+            pwd, crypted = self.admin_tools.generate_admin_password(lid)
             self.mail_tools.send_admin_add_verification_mail(email, pwd)
             self.cursor.execute(
-                f"""UPDATE admin SET MDP = '{pwd}' WHERE IDAdmin = {lid}""")
+                f"""UPDATE admin SET MDP = '{crypted}' WHERE IDAdmin = {lid}""")
             self.connection.commit()
             self.cursor.close()
             self.connection.close()

@@ -18,7 +18,7 @@ class UtilisateurService:
             self.connection, self.cursor = self.database_tools.find_connection()
             req = (
                 f"""SELECT IDUtilisateur, Nom, Prenom, Mail, Tel, MDP, Role, Code, Compte, MarkedAsDeleted, CodeBarre
-                 FROM utilisateur WHERE {add} AND MarkedAsDeleted = -1 AND IDUtilisateur <> 1""")
+                 FROM utilisateur WHERE {add} AND MarkedAsDeleted = -1""")
             self.cursor.execute(req)
             data = self.cursor.fetchall()
             liste_utilisateur = []
@@ -72,8 +72,9 @@ class UtilisateurService:
             self.cursor.execute(f"""INSERT INTO utilisateur (Nom, Prenom, Mail, Tel, MDP, Role, Code, CodeBarre) 
                     VALUES ('{nom}', '{prenom}', '{mail}', '{tel}', NULL, '{role}', '{code}', '{self.cryption_tools.generate_code_barre_utilisateur(code)}')""")
             lid = self.cursor.lastrowid
-            mdp = self.cryption_tools.generate_user_password(lid)
-            self.cursor.execute(f"""UPDATE utilisateur SET MDP = '{mdp}' WHERE IDUtilisateur = {lid}""")
+            mdp, crypted = self.cryption_tools.generate_user_password(lid)
+            print("cryption : ", mdp, crypted)
+            self.cursor.execute(f"""UPDATE utilisateur SET MDP = '{crypted}' WHERE IDUtilisateur = {lid}""")
             try:
                 self.mail_tools.send_user_add_verification_mail(mail, mdp)
             except Exception as e:
@@ -118,9 +119,9 @@ class UtilisateurService:
     def envoyer_email_recuperation(self, mail):
         status, user = self.find_utilisateur_by_mail(mail)
         if status == 'success' and user is not None and user != []:
-            mdp = self.cryption_tools.generate_user_password(user[0]['id_utilisateur'])
+            mdp, crypted = self.cryption_tools.generate_user_password(user[0]['id_utilisateur'])
             status = self.database_tools.execute_request(
-                f"""UPDATE utilisateur SET MDP = '{mdp}' WHERE IDUtilisateur = {user[0]['id_utilisateur']}""")
+                f"""UPDATE utilisateur SET MDP = '{crypted}' WHERE IDUtilisateur = {user[0]['id_utilisateur']}""")
             if status != 'success':
                 return 'error', status
             try:
