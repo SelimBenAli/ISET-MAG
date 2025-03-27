@@ -296,5 +296,5 @@ function load_backend_pagination(pages, current_page, nombre_totale, len) {
 function load_pagination_backend(dt, nombre_totale, current_page, len) {
     var pagination = document.getElementById("dataTable_info_intervention");
     pagination.innerHTML = ""
-    pagination.innerHTML += `Affichage de ${dt * (current_page - 1) + 1} à ${(dt * current_page) - (10 - len)} sur ${nombre_totale} interventions`
+    pagination.innerHTML += `Affichage de ${dt * (current_page - 1) + 1} à ${(dt * current_page) - (10 - len)} sur ${nombre_totale} prêts`
 }
