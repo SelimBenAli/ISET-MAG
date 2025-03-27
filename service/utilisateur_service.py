@@ -18,7 +18,7 @@ class UtilisateurService:
             self.connection, self.cursor = self.database_tools.find_connection()
             req = (
                 f"""SELECT IDUtilisateur, Nom, Prenom, Mail, Tel, MDP, Role, Code, Compte, MarkedAsDeleted, CodeBarre
-                 FROM utilisateur WHERE {add} AND MarkedAsDeleted = -1""")
+                 FROM utilisateur WHERE {add} AND MarkedAsDeleted = -1 AND IDUtilisateur <> 1""")
             self.cursor.execute(req)
             data = self.cursor.fetchall()
             liste_utilisateur = []
@@ -113,7 +113,7 @@ class UtilisateurService:
 
     def desactiver_tous_compte(self):
         return self.database_tools.execute_request(
-            f"""UPDATE utilisateur SET Compte = 2 WHERE Compte = 1""")
+            f"""UPDATE utilisateur SET Compte = 2 WHERE Compte = 1 AND IDUtilisateur <> 1""")
 
     def envoyer_email_recuperation(self, mail):
         status, user = self.find_utilisateur_by_mail(mail)

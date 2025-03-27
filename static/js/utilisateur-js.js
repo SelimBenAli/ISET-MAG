@@ -1,6 +1,6 @@
 var liste_utilisateur_tous = []
 var liste_utilisateur = []
-var division_table = 7
+var division_table = 20
 
 function load_page_utilisateur() {
     enter_loading_mode()
@@ -27,10 +27,21 @@ function load_page_utilisateur() {
 
 function search_utilisateur() {
     var search = document.getElementById("nom-utilisateur").value;
+    var search_code = document.getElementById("code-utilisateur").value = "";
     if (search === "") {
         liste_utilisateur = liste_utilisateur_tous
     }
-    liste_utilisateur = liste_utilisateur_tous.filter(utilisateur => utilisateur.nom_utilisateur.includes(search) || utilisateur.prenom_utilisateur.includes(search))
+    liste_utilisateur = liste_utilisateur_tous.filter(utilisateur => (utilisateur.nom_utilisateur.includes(search.toUpperCase()) || utilisateur.prenom_utilisateur.includes(search.toUpperCase())))
+    load_table_utilisateur_parameters()
+}
+
+function search_utilisateur_code() {
+    var search = document.getElementById("code-utilisateur").value;
+    var search_nom = document.getElementById("nom-utilisateur").value = "";
+    if (search === "") {
+        liste_utilisateur = liste_utilisateur_tous
+    }
+    liste_utilisateur = liste_utilisateur_tous.filter(utilisateur => (utilisateur.code_a_barre_utilisateur.includes(search)))
     load_table_utilisateur_parameters()
 }
 
@@ -48,7 +59,7 @@ function load_table_utilisateur_parameters() {
         }
         body.push("<tr><td>" + utilisateur.code_utilisateur + "</td><td>" + utilisateur.nom_utilisateur + "</td><td>" + utilisateur.prenom_utilisateur + "</td><td>" + utilisateur.mail_utilisateur + "</td><td>" + utilisateur.telephone_utilisateur + "</td><td>" + utilisateur.role_utilisateur.nom_role + "</td><td>" + bouton_compte + "</td><td><button class='btn btn-outline-secondary' onclick='openPageUtilisateurUpdate(" + utilisateur.id_utilisateur + ")'>Modifier</button></td><td><button class='btn btn-outline-danger' onclick='supprimer_utilisateur(" + utilisateur.id_utilisateur + ")'>Supprimer</button></td></tr>")
     });
-    division_table = 7
+    division_table = 20
     load_table_utilisateur(header, footer, body, division_table)
 }
 

@@ -37,14 +37,21 @@
                     <div class="card-body">
                         <div class="row">
 
-                            <div class="col-md-6">
+                            <div class="col-md-6" style="display: flex; justify-content: space-around">
                                 <div class=" dataTables_filter" id="dataTable_filter_utilisateur"><label
                                         class="form-label"><input type="search" id="nom-utilisateur"
                                                                   class="form-control form-control-sm"
                                                                   aria-controls="dataTable"
                                                                   placeholder="Chercher par nom et prenom..."
                                                                   oninput="search_utilisateur()"></label></div>
+                                <div class=" dataTables_filter" id="dataTable_filter_utilisateur"><label
+                                        class="form-label"><input type="search" id="code-utilisateur"
+                                                                  class="form-control form-control-sm"
+                                                                  aria-controls="dataTable"
+                                                                  placeholder="Scannez le code à barre..."
+                                                                  oninput="search_utilisateur_code()"></label></div>
                             </div>
+
                             <div class="col-md-6" style="text-align: right">
                                 <button class="btn btn-primary" type="button" data-bs-toggle="modal"
                                         data-bs-target="#modal-utilisateur" onclick="openPageUtilisateurAdd()">Ajouter
