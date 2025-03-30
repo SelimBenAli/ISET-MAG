@@ -23,6 +23,8 @@ function load_admin_list(admins) {
                                     <th>Nom</th>
                                     <th>Prénom</th>
                                     <th>Email</th>
+                                    <th>Récuperer</th>
+                                    <th>Modifier</th>
                                     <th>Désactiver</th>
                                     <th>Supprimer</th>
                                 </tr>`;
@@ -37,10 +39,16 @@ function load_admin_list(admins) {
                                         <td>${admin.prenom_admin}</td>
                                         <td>${admin.email_admin}</td>
                                         <td>
+                                            <button class="btn btn-info" name="recup-btn" onclick="recuperer_admin(${admin.id_admin})">Récuperer</button>
+                                        </td>
+                                        <td>
+                                            <button class="btn btn-secondary" onclick="modifier_admin(${admin.id_admin})">Modifier</button>
+                                        </td>
+                                        <td>
                                             ${action_button}
                                         </td>
                                         <td>
-                                                                                    <button class="btn btn-danger" onclick="delete_admin(${admin.id_admin})">Supprimer</button>
+                                            <button class="btn btn-danger" onclick="delete_admin(${admin.id_admin})">Supprimer</button>
                                         </td>
                                     </tr>`;
     })
@@ -123,5 +131,56 @@ function delete_admin(id_admin) {
             }
         };
         xhr.send();
+
     }
+}
+
+function modifier_admin(id_admin) {
+    var new_email = prompt("Entrez le nouvel email de l'admin");
+    if (new_email === null) {
+        alert('Opération annulée, email invalid! ');
+        return;
+    }
+    modifier_admin_request(id_admin, new_email);
+}
+
+function modifier_admin_request(id_admin, email){
+    console.log(typeof email)
+    var xhr = new XMLHttpRequest();
+    xhr.open('PUT', '/admin/update-admin/' + id_admin, true);
+    xhr.setRequestHeader('Content-Type', 'application/json');
+    xhr.onreadystatechange = function () {
+        if (xhr.readyState === 4 && xhr.status === 200) {
+            var response = JSON.parse(xhr.responseText);
+            if (response.status === 'success') {
+                openPageAdminUtilisateur();
+            } else {
+                alert('Error' + response.message);
+            }
+        }
+    };
+    xhr.send(JSON.stringify({email_admin: email}));
+}
+
+function recuperer_admin(id_admin) {
+    var xhr = new XMLHttpRequest();
+    var rec = document.getElementsByName('recup-btn');
+    rec.forEach(function (r) {
+        r.disabled = true;
+    });
+    xhr.open('PUT', `/admin/recuperer-admin/${id_admin}`, true);
+    xhr.onreadystatechange = function () {
+        if (xhr.readyState === 4 && xhr.status === 200) {
+            var response = JSON.parse(xhr.responseText);
+            if (response.status === 'success') {
+                alert('Email de récupération envoyé avec succès à \n ' + response.email);
+            } else {
+                alert('Error' + response.message);
+            }
+        }
+        rec.forEach(function (r) {
+            r.disabled = false;
+        });
+    };
+    xhr.send();
 }

@@ -50,6 +50,23 @@ class AdminService:
         except Exception as e:
             return 'error', e
 
+    def find_admin_by_email(self, email):
+        try:
+            self.connection, self.cursor = self.database_tools.find_connection()
+            self.cursor.execute(
+                f"""SELECT `IDAdmin`, `Nom`, `Prenom`, `Mail`, `MDP`, `Role`, `Desactive`, `MarkedAsDeleted` FROM admin 
+                WHERE Mail = '{email}'""")
+            data = self.cursor.fetchone()
+            self.cursor.close()
+            self.connection.close()
+            if data is None:
+                return 'failed', 'Admin not found'
+            else:
+                admin = Admin(data[0], data[1], data[2], data[3], 'None', data[5], data[6], data[7])
+            return 'success', admin.dict_form()
+        except Exception as e:
+            return 'error', e
+
     def change_details(self, id_admin, prenom, nom, email):
         try:
             self.connection, self.cursor = self.database_tools.find_connection()
@@ -134,5 +151,49 @@ class AdminService:
             self.cursor.close()
             self.connection.close()
             return 'success'
+        except Exception as e:
+            return 'error', e
+
+    def update_admin(self, id_admin, email):
+        try:
+            self.connection, self.cursor = self.database_tools.find_connection()
+            self.cursor.execute(
+                f"""UPDATE admin SET Mail = '{email}' WHERE IDAdmin = {id_admin}""")
+            self.connection.commit()
+            self.cursor.close()
+            self.connection.close()
+            return 'success'
+        except Exception as e:
+            return 'error', e
+
+    def change_password(self, id_admin, password):
+        try:
+            self.connection, self.cursor = self.database_tools.find_connection()
+            self.cursor.execute(
+                f"""UPDATE admin SET MDP = '{self.cryption_tools.crypt_sha256(password)}' WHERE IDAdmin = {id_admin}""")
+            self.connection.commit()
+            self.cursor.close()
+            self.connection.close()
+            return 'success'
+        except Exception as e:
+            return 'error', e
+
+    def envoyer_email_recuperation(self, id_admin):
+        try:
+            self.connection, self.cursor = self.database_tools.find_connection()
+            self.cursor.execute(
+                f"""SELECT Mail FROM admin WHERE IDAdmin = {id_admin}""")
+            data = self.cursor.fetchone()
+            if data is None:
+                return 'failed', 'Admin not found'
+            mail = data[0]
+            pwd, crypted = self.admin_tools.generate_admin_password(id_admin)
+            self.cursor.execute(
+                f"""UPDATE admin SET MDP = '{crypted}' WHERE IDAdmin = {id_admin}""")
+            self.connection.commit()
+            self.mail_tools.send_admin_password_recovery_mail(mail, pwd)
+            self.cursor.close()
+            self.connection.close()
+            return 'success', mail
         except Exception as e:
             return 'error', e

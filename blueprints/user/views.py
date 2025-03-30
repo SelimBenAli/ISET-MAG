@@ -122,7 +122,8 @@ class UserViews:
                 status, user = self.user_service.find_utilisateur_by_code(code)
                 if status == 'success' and user != []:
                     return jsonify({'status': 'failed', 'message': 'code already used'})
-                status = self.user_service.add_utilisateur(nom, prenom, mail, tel, "", role, code)
+                status = self.user_service.add_utilisateur(nom.upper(), prenom.upper(), mail, tel, "", role,
+                                                           code.upper())
                 if status == 'success':
                     return jsonify({'status': 'success'})
                 return jsonify({'status': 'failed'})
@@ -153,7 +154,8 @@ class UserViews:
                 code = data.get('code_utilisateur')
                 if self.sql_injection_tools.detect_sql_injection([id_utilisateur, nom, prenom, mail, tel, role, code]):
                     return jsonify({'status': 'failed', 'message': 'Problème de sécurité détecté'})
-                status = self.user_service.update_utilisateur(id_utilisateur, nom, prenom, mail, tel, role, code)
+                status = self.user_service.update_utilisateur(id_utilisateur, nom.upper(), prenom.upper(), mail, tel,
+                                                              role, code.upper())
                 if status == 'success':
                     return jsonify({'status': 'success'})
                 return jsonify({'status': 'failed'})

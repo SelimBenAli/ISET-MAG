@@ -12,7 +12,7 @@ class MailTools:
         self.password = 'npzd ncfk epzc ljfj'  # Use App Password if 2FA is enabled
         self.smtp_server = "smtp.gmail.com"
         self.smtp_port = 587
-        self.lien = "http://192.168.1.16:5000"
+        self.lien = "http://192.168.1.17:5000"
 
     def send_mail(self, receiver, subject, message):
         try:
@@ -55,6 +55,8 @@ class MailTools:
         message = self.prepare_admin_add_verification_mail(message, receiver_email, receiver_pwd)
         self.send_mail(receiver_email, subject, message)
 
+
+
     # USER
 
     def get_user_add_verification_mail_data(self):
@@ -74,7 +76,7 @@ class MailTools:
         message = self.prepare_user_add_verification_mail(message, receiver_email, receiver_pwd)
         self.send_mail(receiver_email, subject, message)
 
-    # RECOVERY
+    # RECOVERY USER
 
     def get_user_password_recovery_mail_data(self):
         subject = self.config_tools.subject_recovery
@@ -87,6 +89,13 @@ class MailTools:
         return message
 
     def send_user_password_recovery_mail(self, receiver_email, receiver_pwd):
+        subject, message = self.get_user_password_recovery_mail_data()
+        message = self.prepare_user_password_recovery_mail(message, receiver_pwd)
+        self.send_mail(receiver_email, subject, message)
+
+    # RECOVERY ADMIN
+
+    def send_admin_password_recovery_mail(self, receiver_email, receiver_pwd):
         subject, message = self.get_user_password_recovery_mail_data()
         message = self.prepare_user_password_recovery_mail(message, receiver_pwd)
         self.send_mail(receiver_email, subject, message)

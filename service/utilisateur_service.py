@@ -92,6 +92,8 @@ class UtilisateurService:
             return 'error', e
 
     def delete_utilisateur(self, id_utilisateur):
+        if id_utilisateur == 1:
+            return 'error', 'Impossible de supprimer le super administrateur'
         return self.database_tools.execute_request(
             f"""UPDATE utilisateur SET MarkedAsDeleted = 1, Mail = NULL WHERE IDUtilisateur = {id_utilisateur}""")
 
