@@ -210,17 +210,17 @@ class DashboardViews:
         def hardware_template():
             if self.user_tools.check_user_in_session('admin'):
                 status, liste_modele = self.modele_service.find_all_modele()
-                print("liste_modele", status, liste_modele)
+
                 status, liste_fournisseur = self.fournisseur_service.find_all_fournisseur()
-                print("liste_fournisseur", status, liste_fournisseur)
+
                 status, liste_magasin = self.magasin_service.find_all_magasin()
-                print("liste_magasin", status, liste_magasin)
+
                 status, liste_salle = self.salle_service.find_all_salle()
-                print("liste_salle", status, liste_salle)
+
                 status, liste_etat = self.etat_service.find_all_etat()
-                print("liste_etat", status, liste_etat)
+
                 status, liste_marque = self.marque_service.find_all_marque()
-                print("liste_marque", status, liste_marque)
+
 
                 return render_template('hardware.html', liste_modele=liste_modele, liste_marque=liste_marque,
                                        liste_fournisseur=liste_fournisseur,
@@ -333,7 +333,7 @@ class DashboardViews:
         def profile_template():
             if self.user_tools.check_user_in_session('admin'):
                 user = session['admin']
-                print("99", user)
+
                 return render_template('profile.html', user=user)
             else:
                 return redirect(url_for('admin.login'))
@@ -369,3 +369,5 @@ class DashboardViews:
                 return redirect(url_for('admin.login'))
 
 
+if __name__ == '__main__':
+    pass

@@ -52,3 +52,7 @@ class MagasinService:
     @staticmethod
     def create_none():
         return Magasin(None, None, None)
+
+
+if __name__ == '__main__':
+    pass

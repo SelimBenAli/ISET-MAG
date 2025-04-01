@@ -6,3 +6,7 @@ class Salle:
 
     def dict_form(self):
         return {'id_salle': self.id_salle, 'nom_salle': self.nom_salle, 'bloc_salle': self.bloc}
+
+
+if __name__ == '__main__':
+    pass

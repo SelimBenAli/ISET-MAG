@@ -6,3 +6,7 @@ class Magasin:
 
     def dict_form(self):
         return {'id_magasin': self.id_magasin, 'nom_magasin': self.nom_magasin, 'salle_magasin': self.salle_magasin}
+
+
+if __name__ == '__main__':
+    pass

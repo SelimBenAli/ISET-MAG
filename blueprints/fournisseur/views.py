@@ -35,7 +35,7 @@ class FournisseurViews:
                 tel = data.get('telephone_fournisseur')
                 if self.sql_injection_tools.detect_sql_injection([id_fournisseur, nom, tel]):
                     return {'status': 'error', 'message': 'Problème de sécurité détecté'}
-                print(id_fournisseur, nom, tel)
+
                 status = self.fournisseur_service.update_fournisseur(id_fournisseur, nom, tel)
                 if status != 'failed':
                     return {'status': 'success'}
@@ -57,7 +57,7 @@ class FournisseurViews:
         def get_fournisseurs():
             if self.user_tools.check_user_in_session('admin'):
                 status, fournisseurs = self.fournisseur_service.find_all_fournisseur()
-                print(fournisseurs)
+
                 return jsonify({'status': 'success', 'fournisseurs': fournisseurs})
             return {'status': 'failed'}
 
@@ -93,3 +93,7 @@ class FournisseurViews:
                 status, fournisseur = self.fournisseur_service.find_fournisseur_by_tel(tel)
                 return {'status': 'success', 'fournisseur': fournisseur}
             return {'status': 'error', 'message': 'Erreur Serveur'}
+
+
+if __name__ == '__main__':
+    pass

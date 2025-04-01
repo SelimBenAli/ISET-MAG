@@ -15,3 +15,7 @@ class ScannerTools:
 
     def clear_scan_ending(self):
         session['scan_ending'] = 'Enter'
+
+
+if __name__ == '__main__':
+    pass

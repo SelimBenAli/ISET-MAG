@@ -9,3 +9,7 @@ class Software:
     def dict_form(self):
         return {'id_software': self.id_software, 'nom_software': self.nom_software, 'date_achat': self.date_achat,
                 'date_ajout': self.date_ajout, 'lien': self.lien}
+
+
+if __name__ == '__main__':
+    pass

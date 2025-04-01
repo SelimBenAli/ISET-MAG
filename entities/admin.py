@@ -14,3 +14,7 @@ class Admin:
         return {'id_admin': self.id_admin, 'nom_admin': self.nom_admin, 'prenom_admin': self.prenom_admin,
                 'email_admin': self.email_admin, 'role_admin': self.role_admin, 'desactive_admin': self.descative,
                 'marked_as_deleted': self.marked_as_deleted}
+
+
+if __name__ == '__main__':
+    pass

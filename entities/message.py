@@ -14,3 +14,7 @@ class Message:
             'sujet_message': self.sujet_message,
             'contenu_message': self.contenu_message
         }
+
+
+if __name__ == '__main__':
+    pass

@@ -10,7 +10,6 @@ function load_page_fournisseur() {
     xhr.onreadystatechange = function () {
         if (xhr.readyState === 4 && xhr.status === 200) {
             var response = JSON.parse(xhr.responseText);
-            console.log(response)
             if (response.status === 'success') {
                 liste_fournisseur = response.fournisseurs
                 liste_fournisseur_tous = response.fournisseurs
@@ -69,7 +68,6 @@ function ajout_fournisseur_request(nom, telephone) {
     xhr.onreadystatechange = function () {
         if (xhr.readyState === 4 && xhr.status === 200) {
             var response = JSON.parse(xhr.responseText);
-            console.log(response)
             if (response.status === 'success') {
                 window.location.href = "/dashboard/fournisseur";
             } else {
@@ -97,7 +95,6 @@ function modifier_fournisseur_request(id_fournisseur, nom, telephone) {
     xhr.onreadystatechange = function () {
         if (xhr.readyState === 4 && xhr.status === 200) {
             var response = JSON.parse(xhr.responseText);
-            console.log(response)
             if (response.status === 'success') {
                 window.location.href = "/dashboard/fournisseur";
             } else {
@@ -122,7 +119,6 @@ function supprimer_fournisseur_request(id_fournisseur) {
     xhr.onreadystatechange = function () {
         if (xhr.readyState === 4 && xhr.status === 200) {
             var response = JSON.parse(xhr.responseText);
-            console.log(response)
             if (response.status === 'success') {
                 window.location.href = "/dashboard/fournisseur";
             } else {

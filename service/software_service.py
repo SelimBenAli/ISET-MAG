@@ -8,3 +8,7 @@ class SoftwareService:
         self.database_tools = DatabaseConnection()
 
     # TO CONTINUE
+
+
+if __name__ == '__main__':
+    pass

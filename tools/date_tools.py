@@ -20,3 +20,7 @@ class DateTools:
             return date.strftime("%Y-%m-%d %H:%M:%S")
         except Exception as e:
             return e, date
+
+
+if __name__ == '__main__':
+    pass

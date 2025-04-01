@@ -64,3 +64,7 @@ class MagasinViews:
                 status, magasin = self.magasin_service.find_magasin_by_id(id_magasin)
                 return jsonify({'status': 'success', 'magasin': magasin})
             return {'status': 'error', 'message': 'Erreur Serveur'}
+
+
+if __name__ == '__main__':
+    pass

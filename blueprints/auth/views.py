@@ -30,11 +30,10 @@ class AuthViews:
             if self.sql_injection_tools.detect_sql_injection([email, password]):
                 return {'status': 'error', 'message': 'Problème de sécurité détecté'}
             status, user = self.utilisateur_service.find_utilisateur_by_mail(email)
-            print("user", user)
             if status == 'success' and user is not None and user != []:
                 if (user[0]['compte_utilisateur'] == 'Active'
                         and user[0]['mdp_utilisateur'] != self.cryption_tools.crypt_sha256(password)):
-                    print("aazz 1")
+
                     return {'status': 'failed', 'message': 'Utilisateur Non Trouvé'}
                 if user[0]['compte_utilisateur'] == 'Banni':
                     return {'status': 'failed', 'message': 'Utilisateur Désactivé'}
@@ -44,7 +43,7 @@ class AuthViews:
                 session['user'] = user[0]
                 return {'status': 'success', 'user': user[0]}
             elif status == 'failed' or user is None or user == []:
-                print("aazz 2")
+
                 return {'status': 'failed', 'message': 'Utilisateur Non Trouvé'}
             else:
                 return {'status': 'error', 'message': 'Erreur Serveur'}
@@ -57,3 +56,7 @@ class AuthViews:
         @self.auth_bp.route('/mot-de-passe-oublie', methods=['GET'])
         def forgot_password():
             return render_template('client/forgotten-password.html')
+
+
+if __name__ == '__main__':
+    pass

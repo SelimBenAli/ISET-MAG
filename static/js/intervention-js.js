@@ -10,7 +10,6 @@ function load_page_intervention(page, status, code_hard, code_user, num_hard) {
     xhr.onreadystatechange = function () {
         if (xhr.readyState === 4 && xhr.status === 200) {
             var response = JSON.parse(xhr.responseText);
-            console.log(response)
             if (response.status === 'success') {
                 liste_intervention = response.interventions
                 liste_intervention_tous = response.interventions
@@ -33,7 +32,6 @@ function load_page_intervention_current(p) {
     xhr.onreadystatechange = function () {
         if (xhr.readyState === 4 && xhr.status === 200) {
             var response = JSON.parse(xhr.responseText);
-            console.log(response)
             if (response.status === 'success') {
                 liste_intervention = response.interventions
                 liste_intervention_tous = response.interventions
@@ -56,7 +54,6 @@ function load_page_intervention_closed(p) {
     xhr.onreadystatechange = function () {
         if (xhr.readyState === 4 && xhr.status === 200) {
             var response = JSON.parse(xhr.responseText);
-            console.log(response)
             if (response.status === 'success') {
                 liste_intervention = response.interventions
                 liste_intervention_tous = response.interventions
@@ -103,7 +100,6 @@ function search_intervention_by_code_user(p) {
     xhr.onreadystatechange = function () {
         if (xhr.readyState === 4 && xhr.status === 200) {
             var response = JSON.parse(xhr.responseText);
-            console.log(response)
             if (response.status === 'success') {
                 liste_intervention = response.interventions
                 liste_intervention_tous = response.interventions
@@ -126,7 +122,6 @@ function search_intervention_by_code_hard(p) {
     xhr.onreadystatechange = function () {
         if (xhr.readyState === 4 && xhr.status === 200) {
             var response = JSON.parse(xhr.responseText);
-            console.log(response)
             if (response.status === 'success') {
                 liste_intervention = response.interventions
                 liste_intervention_tous = response.interventions
@@ -149,7 +144,6 @@ function search_intervention_by_num_hard(p) {
     xhr.onreadystatechange = function () {
         if (xhr.readyState === 4 && xhr.status === 200) {
             var response = JSON.parse(xhr.responseText);
-            console.log(response)
             if (response.status === 'success') {
                 liste_intervention = response.interventions
                 liste_intervention_tous = response.interventions
@@ -213,7 +207,6 @@ function fermer_intervention(id_intervention) {
         xhr.onreadystatechange = function () {
             if (xhr.readyState === 4 && xhr.status === 200) {
                 var response = JSON.parse(xhr.responseText);
-                console.log(response)
                 if (response.status === 'success') {
                     quit_loading_mode()
                     load_page_intervention(1, 0, '', '', '')
@@ -242,7 +235,6 @@ function supprimer_intervention_request(id_intervention) {
     xhr.onreadystatechange = function () {
         if (xhr.readyState === 4 && xhr.status === 200) {
             var response = JSON.parse(xhr.responseText);
-            console.log(response)
             if (response.status === 'success') {
                 quit_loading_mode()
                 load_page_intervention(1, 0, '', '', '')

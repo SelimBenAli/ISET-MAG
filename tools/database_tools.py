@@ -28,6 +28,6 @@ class DatabaseConnection:
         except Exception as e:
             return 'error', e
 
+
 if __name__ == '__main__':
     database_tools = DatabaseConnection()
-    print(database_tools.execute_request("SELECT * FROM admin"))

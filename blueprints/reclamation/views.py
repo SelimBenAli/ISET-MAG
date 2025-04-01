@@ -32,7 +32,7 @@ class ReclamationViews:
         def get_reclamations():
             if self.user_tools.check_user_in_session('admin'):
                 status, reclamations = self.reclamation_service.find_all_reclamation()
-                print(reclamations)
+
                 return jsonify({'status': 'success', 'reclamations': reclamations})
             return {'status': 'failed'}
 
@@ -41,7 +41,7 @@ class ReclamationViews:
             if self.user_tools.check_user_in_session('admin'):
                 if self.sql_injection_tools.detect_sql_injection([page, status, user, inv]):
                     return {'status': 'error', 'message': 'Problème de sécurité détecté'}
-                print("current stat : ", status, user, inv)
+
                 number = 10
                 begin = (page - 1) * number
                 ch = ''
@@ -63,16 +63,18 @@ class ReclamationViews:
                         ch += f' AND IDHardware = {hardware} '
                 status, pages = self.reclamation_service.find_reclamation_number(ch)
                 status, reclamations = self.reclamation_service.find_all_reclamation_with_limit(ch, number, begin)
-                print(reclamations)
+
                 if status == 'success':
                     if pages % number != 0:
                         page_number = pages // number + 1
                     else:
                         page_number = pages // number
-                    print(page_number, page)
+
                     return jsonify(
                         {'status': 'success', 'reclamations': reclamations, 'pages': page_number, 'current_page': page,
                          'nombre_totale': pages})
             return {'status': 'failed'}
 
 
+if __name__ == '__main__':
+    pass

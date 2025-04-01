@@ -52,3 +52,7 @@ class SalleService:
     @staticmethod
     def create_none():
         return Salle(None, None, None)
+
+
+if __name__ == '__main__':
+    pass

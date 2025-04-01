@@ -14,29 +14,29 @@ class UserTools:
 
     def refresh_session_admin(self, user):
         status, admin = self.admin_service.find_admin_by_id(user['id_admin'])
-        print(admin)
+
         if status == 'success':
             session['admin'] = admin
         return admin
 
     def refresh_session_user(self, user):
         status, user = self.utilisateur_service.find_utilisateur_by_id(user['id_utilisateur'])
-        print('new user : ', user)
+
         if status == 'success':
             session['user'] = user[0]
         return user[0]
 
     def check_user_in_session(self, user):
-        print("zz : ", user)
+
         if user not in session or not session[user] or session[user] == "" or session[user] is None:
             return False
-        print(user, session[user])
+
         if user == 'admin':
             if self.type == 'dashboard':
                 na = self.refresh_session_admin(session[user])
             else:
                 na = session['admin']
-            print("na", na)
+
             if na is None:
                 return False
             if na['marked_as_deleted'] == 1:
@@ -48,7 +48,6 @@ class UserTools:
                 na = self.refresh_session_user(session[user])
             else:
                 na = session['user']
-            print("nu", na)
             if na is None:
                 return False
             if na['marked_as_deleted'] == 1:
@@ -56,3 +55,7 @@ class UserTools:
             if na['compte_utilisateur'] != 'Active':
                 return False
         return True
+
+
+if __name__ == '__main__':
+    pass

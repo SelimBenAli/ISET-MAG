@@ -18,7 +18,7 @@ function envoyer_reclamation() {
     xhr.onreadystatechange = function () {
         if (xhr.readyState === 4 && xhr.status === 200) {
             var response = JSON.parse(xhr.responseText);
-            console.log(response)
+
             if (response.status === 'success') {
                 //reclamation_btn.disabled = false;
                 openPageHistoriqueReclamationClient();
@@ -38,7 +38,7 @@ function load_hardware_model_list() {
     xhr.onreadystatechange = function () {
         if (xhr.readyState === 4 && xhr.status === 200) {
             var response = JSON.parse(xhr.responseText);
-            console.log(response)
+
             if (response.status === 'success') {
                 types = response.types;
                 marques = response.marques;
@@ -65,7 +65,6 @@ function check_data_changed() {
         alert("La date de début doit être supérieure à la date actuelle");
         return false;
     }
-    console.log(date_debut, date_fin)
     if (date_debut > date_fin) {
         alert("La date de fin doit être supérieure à la date de début");
         return false;
@@ -85,8 +84,6 @@ function envoyer_location() {
     select_marque = document.getElementById("select-marque").value;
     quantite = document.getElementById("quantite").value;
     id_modele = -1;
-    console.log(select_type, select_marque)
-    console.log(types)
     types.forEach(function (type) {
         if (type.nom_modele === select_type && type.marque_modele.id_marque.toString() === select_marque) {
             id_modele = type.id_modele;
@@ -101,7 +98,7 @@ function envoyer_location() {
     xhr.onreadystatechange = function () {
         if (xhr.readyState === 4 && xhr.status === 200) {
             var response = JSON.parse(xhr.responseText);
-            console.log(response)
+
             if (response.status === 'success') {
                 openPageHistoriqueLocationClient()
             } else {
@@ -129,7 +126,6 @@ function check_quantity() {
     xhr.onreadystatechange = function () {
         if (xhr.readyState === 4 && xhr.status === 200) {
             var response = JSON.parse(xhr.responseText);
-            console.log(response)
             if (response.status === 'success') {
                 if (response.quantity > 0) {
                     document.getElementById("affichage-quantite").value = `Quantité disponible : ${response.quantity}`;
@@ -194,7 +190,6 @@ function envoyer_message() {
     xhr.onreadystatechange = function () {
         if (xhr.readyState === 4 && xhr.status === 200) {
             var response = JSON.parse(xhr.responseText);
-            console.log(response)
             if (response.status === 'success') {
                 contact_btn.disabled = false;
                 openPageHistoriqueReclamationClient()
@@ -216,7 +211,6 @@ function envoyer_fermeture_reclamation(idr) {
     xhr.onreadystatechange = function () {
         if (xhr.readyState === 4 && xhr.status === 200) {
             var response = JSON.parse(xhr.responseText);
-            console.log(response)
             if (response.status === 'success') {
                 openPageReclamationActiveClient()
             } else {
@@ -234,7 +228,6 @@ function load_client_alerts() {
     xhr.onreadystatechange = function () {
         if (xhr.readyState === 4 && xhr.status === 200) {
             var response = JSON.parse(xhr.responseText);
-            console.log(response)
             if (response.status === 'success') {
                 var alerts = response.alerts;
                 var alert_list = document.getElementById("client-alert-number");
@@ -300,8 +293,6 @@ socket.on('desactivate_client_account_by_id', function (data) {
     user_element = user_element.replaceAll("\'", "\"");
     user_data = JSON.parse(user_element);
     if (data.id_utilisateur === user_data.id_utilisateur) {
-        console.log("closed session 5 : ", "ok")
-        console.log("closed session : ", data)
         alert("Session Fermé par l'administrateur")
         window.location.href = "/auth/logout";
     }

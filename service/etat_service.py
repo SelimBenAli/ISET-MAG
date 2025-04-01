@@ -43,3 +43,7 @@ class EtatService:
 
     def delete_etat(self, id_etat):
         return self.database_tools.execute_request(f"""DELETE FROM etat WHERE IDEtat = {id_etat}""")
+
+
+if __name__ == '__main__':
+    pass

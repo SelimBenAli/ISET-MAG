@@ -12,7 +12,7 @@ function load_page_salle_bloc() {
     xhr.onreadystatechange = function () {
         if (xhr.readyState === 4 && xhr.status === 200) {
             var response = JSON.parse(xhr.responseText);
-            console.log(response)
+
             if (response.status === 'success') {
                 liste_salle = response.salles
                 liste_bloc = response.blocs
@@ -117,7 +117,7 @@ function ajout_bloc_request(nom) {
     xhr.onreadystatechange = function () {
         if (xhr.readyState === 4 && xhr.status === 200) {
             var response = JSON.parse(xhr.responseText);
-            console.log(response)
+
             if (response.status === 'success') {
                 window.location.href = "/dashboard/salle-bloc";
             } else {
@@ -147,7 +147,7 @@ function ajout_salle_request(nom, bloc) {
     xhr.onreadystatechange = function () {
         if (xhr.readyState === 4 && xhr.status === 200) {
             var response = JSON.parse(xhr.responseText);
-            console.log(response)
+
             if (response.status === 'success') {
                 window.location.href = "/dashboard/salle-bloc";
             } else {
@@ -177,7 +177,7 @@ function modifier_bloc_request(id_bloc, nom) {
     xhr.onreadystatechange = function () {
         if (xhr.readyState === 4 && xhr.status === 200) {
             var response = JSON.parse(xhr.responseText);
-            console.log(response)
+
             if (response.status === 'success') {
                 window.location.href = "/dashboard/salle-bloc";
             } else {
@@ -205,7 +205,7 @@ function supprimer_bloc_request(id_bloc) {
     xhr.onreadystatechange = function () {
         if (xhr.readyState === 4 && xhr.status === 200) {
             var response = JSON.parse(xhr.responseText);
-            console.log(response)
+
             if (response.status === 'success') {
                 window.location.href = "/dashboard/salle-bloc";
             } else {
@@ -235,7 +235,7 @@ function modifier_salle_request(id_salle, nom, bloc) {
     xhr.onreadystatechange = function () {
         if (xhr.readyState === 4 && xhr.status === 200) {
             var response = JSON.parse(xhr.responseText);
-            console.log(response)
+
             if (response.status === 'success') {
                 window.location.href = "/dashboard/salle-bloc";
             } else {
@@ -264,7 +264,7 @@ function supprimer_salle_request(id_salle) {
     xhr.onreadystatechange = function () {
         if (xhr.readyState === 4 && xhr.status === 200) {
             var response = JSON.parse(xhr.responseText);
-            console.log(response)
+
             if (response.status === 'success') {
                 window.location.href = "/dashboard/salle-bloc";
             } else {

@@ -49,3 +49,7 @@ class FournisseurService:
 
     def create_none(self):
         return Fournisseur(None, None, None)
+
+
+if __name__ == '__main__':
+    pass

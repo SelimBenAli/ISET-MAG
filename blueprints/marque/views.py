@@ -67,3 +67,7 @@ class MarqueViews:
                 status, marque = self.marque_service.find_marque_by_id(id_marque)
                 return jsonify({'status': 'success', 'marque': marque})
             return {'status': 'failed'}
+
+
+if __name__ == '__main__':
+    pass

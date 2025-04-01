@@ -39,3 +39,7 @@ class Utilisateur:
                 'telephone_utilisateur': self.telephone, 'code_a_barre_utilisateur': self.code_a_barre,
                 'role_utilisateur': self.role, 'code_utilisateur': self.code, "compte_utilisateur": self.compte,
                 'marked_as_deleted': self.marked_as_deleted}
+
+
+if __name__ == '__main__':
+    pass

@@ -122,6 +122,10 @@ class SalleBlocViews:
             if self.user_tools.check_user_in_session('admin'):
                 status_salles, salles = self.salle_service.find_all_salle()
                 status_blocs, blocs = self.bloc_service.find_all_bloc()
-                print(salles, blocs)
+
                 return jsonify({'status': 'success', 'salles': salles, 'blocs': blocs})
             return {'status': 'failed'}
+
+
+if __name__ == '__main__':
+    pass

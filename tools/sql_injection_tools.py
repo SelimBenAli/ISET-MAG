@@ -30,7 +30,6 @@ class SQLInjectionTools:
                 value = str(value)
             except Exception as e:
                 return False
-            print(value)
             if value != "" and self.string_contains_sql_injection(value):
                 return True
         return False
@@ -53,7 +52,6 @@ class SQLInjectionTools:
 
     def detect_sql_injection_in_descriptions(self, my_list):
         for value in my_list:
-            print(value)
             if value != "" and self.string_contains_sql_injection_in_descriptions(value):
                 return True
         return False
@@ -66,3 +64,7 @@ class SQLInjectionTools:
             session['blocked_reason'] = 'SQL Injection detected'
             session['block_start'] = datetime.now()
             session['block_end'] = datetime.now() + timedelta(minutes=int(session['sql_injections']) * 1)
+
+
+if __name__ == '__main__':
+    pass

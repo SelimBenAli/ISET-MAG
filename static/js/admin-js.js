@@ -1,7 +1,7 @@
 var lien = "http://127.0.0.1:5000/static/";
 
 function login() {
-    console.log('login')
+
     var email = document.getElementById("email").value;
     var password = document.getElementById("password").value;
     if (email === '' || password === '') {
@@ -12,21 +12,21 @@ function login() {
 }
 
 function login_request(email, password) {
-    console.log(email, password)
+
     var xhr = new XMLHttpRequest();
     xhr.open('POST', '/admin/login', true);
     xhr.setRequestHeader('Content-Type', 'application/json');
     xhr.onreadystatechange = function () {
         if (xhr.readyState === 4 && xhr.status === 200) {
             var response = JSON.parse(xhr.responseText);
-            console.log(response)
+
             if (response.status === 'success') {
                 window.location.href = "/dashboard/fournisseur";
             } else {
                 alert(response.message);
             }
         } else {
-            console.log('error')
+
         }
     };
     xhr.send(JSON.stringify({email: email, password: password}));
@@ -54,13 +54,13 @@ function change_settings() {
 }
 
 function load_messages_notifications() {
-    console.log('load_messages_notifications')
+
     var xhr = new XMLHttpRequest();
     xhr.open('GET', '/message/messages-notifications', true);
     xhr.onreadystatechange = function () {
         if (xhr.readyState === 4 && xhr.status === 200) {
             var response = JSON.parse(xhr.responseText);
-            console.log(response)
+
             if (response.status === 'success') {
                 show_messages_notifications(response.messages)
                 alert_message_number(response.messages.length)
@@ -108,13 +108,13 @@ function alert_message_number(number) {
 
 
 function load_alerts_notifications() {
-    console.log('load_alerts_notifications')
+
     var xhr = new XMLHttpRequest();
     xhr.open('GET', '/message/alertes-notifications', true);
     xhr.onreadystatechange = function () {
         if (xhr.readyState === 4 && xhr.status === 200) {
             var response = JSON.parse(xhr.responseText);
-            console.log(response)
+
             if (response.status === 'success') {
                 show_alerts_notifications(response.alertes)
                 alert_alert_number(response.alertes.length)
@@ -205,7 +205,7 @@ function change_scan_mode(mode) {
         if (xhr.readyState === 4 && xhr.status === 200) {
             var response = JSON.parse(xhr.responseText);
             if (response.status === 'success') {
-                console.log('scan mode changed')
+
             } else {
                 alert('Error');
             }
@@ -219,13 +219,13 @@ function change_scan_mode(mode) {
 
 var socket = io();
 socket.on('update_admin_alert', function (data) {
-    console.log("updated alert : ", data)
+
     load_alerts_notifications(data)
     alert_notification_sound()
 });
 
 socket.on('update_admin_message', function (data) {
-    console.log("updated message : ", data)
+
     load_messages_notifications(data)
     message_notification_sound()
 });
@@ -235,8 +235,7 @@ socket.on('close_admin_session', function (data) {
     user_element = user_element.replaceAll("\'", "\"");
     user_data = JSON.parse(user_element);
     if (data.id_admin === user_data.id_admin) {
-        console.log("closed session 5 : ", "ok")
-        console.log("closed session : ", data)
+
         alert("Session Fermé par l'administrateur")
         window.location.href = "/admin/logout";
     }

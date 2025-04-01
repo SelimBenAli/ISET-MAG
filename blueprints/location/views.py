@@ -60,6 +60,10 @@ class LocationViews:
         def get_locations():
             if self.user_tools.check_user_in_session('admin'):
                 status, locations = self.location_service.find_all_location()
-                print(locations)
+
                 return jsonify({'status': 'success', 'locations': locations})
             return {'status': 'failed'}
+
+
+if __name__ == '__main__':
+    pass

@@ -7,3 +7,6 @@ class Relation:
     def dict_form(self):
         return {'id_relation': self.id_relation, 'hardware_1': self.hardware_1, 'hardware_2': self.hardware_2}
 
+
+if __name__ == '__main__':
+    pass

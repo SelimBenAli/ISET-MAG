@@ -22,7 +22,7 @@ class MessageViews:
         def get_messages():
             if self.user_tools.check_user_in_session('admin'):
                 status, messages = self.message_service.find_all_message()
-                print(messages)
+
                 return jsonify({'status': 'success', 'messages': messages})
             return {'status': 'failed'}
 
@@ -43,7 +43,7 @@ class MessageViews:
                 id_admin = session['admin']['id_admin']
                 status, messages = self.message_service.find_message_by_something(
                     ' `Vu` NOT LIKE "%' + str(id_admin) + ';%" ORDER BY `Date` DESC')
-                print(messages)
+
                 return jsonify({'status': 'success', 'messages': messages})
             return {'status': 'failed'}
 
@@ -56,7 +56,7 @@ class MessageViews:
                     f" `Vu` NOT LIKE '%{id_admin};%' ORDER BY `DateReclamation` DESC LIMIT 0, 6 ")
                 status, locations = self.location_service.find_location_by_something(
                     ' Confirmation = 0 ORDER BY `DateAjout` DESC LIMIT 0, 6')
-                print("22", reclamations, locations)
+
                 reclamations.sort(key=lambda x: x['date_reclamation'], reverse=True)
                 locations.sort(key=lambda x: x['date_ajout_location'], reverse=True)
                 alertes = []
@@ -69,15 +69,19 @@ class MessageViews:
                 alertes.sort(key=lambda x: x['date'], reverse=True)
                 if len(alertes) > 6:
                     alertes = alertes[:6]
-                print(alertes)
+
                 return jsonify({'status': 'success', 'alertes': alertes})
             return {'status': 'failed'}
 
         @self.message_bp.route('/client-alerts', methods=['GET'])
         def client_alerts():
             status, reclamations = self.reclamation_service.find_reclamation_by_not_finished()
-            print(status, reclamations)
+
             if status != 'success':
                 return jsonify({'status': 'failed'})
             reclamations.sort(key=lambda x: x['date_reclamation'], reverse=True)
             return jsonify({'status': 'success', 'alerts': len(reclamations)})
+
+
+if __name__ == '__main__':
+    pass

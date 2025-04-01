@@ -30,11 +30,9 @@ class MailTools:
             server.sendmail(self.sender_email, receiver, msg.as_string())
             server.quit()
 
-            print("Email sent successfully!")
             return True
         except Exception as e:
-            print(f"Error: {e}")
-        return False
+            return False, e
 
     # ADMIN
 
@@ -54,8 +52,6 @@ class MailTools:
         subject, message = self.get_admin_add_verification_mail_data()
         message = self.prepare_admin_add_verification_mail(message, receiver_email, receiver_pwd)
         self.send_mail(receiver_email, subject, message)
-
-
 
     # USER
 

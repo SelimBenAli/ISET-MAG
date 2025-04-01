@@ -10,7 +10,7 @@ function load_page_reclamation(page, status, user_code, num_inv) {
     xhr.onreadystatechange = function () {
         if (xhr.readyState === 4 && xhr.status === 200) {
             var response = JSON.parse(xhr.responseText);
-            console.log(response)
+
             if (response.status === 'success') {
                 liste_reclamation = response.reclamations
                 liste_reclamation_tous = response.reclamations
@@ -117,7 +117,7 @@ function supprimer_reclamation(id_reclamation) {
         xhr.onreadystatechange = function () {
             if (xhr.readyState === 4 && xhr.status === 200) {
                 var response = JSON.parse(xhr.responseText);
-                console.log(response)
+
                 if (response.status === 'success') {
                     openPageReclamation()
                 } else {

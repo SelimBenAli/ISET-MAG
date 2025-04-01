@@ -45,7 +45,7 @@ class ReclamationService:
                 self.cursor.close()
                 self.connection.close()
             except Exception as e:
-                print(e)
+                pass
             return 'success', liste_reclamation
         except Exception as e:
             return 'error', e
@@ -82,7 +82,7 @@ class ReclamationService:
                 self.cursor.close()
                 self.connection.close()
             except Exception as e:
-                print(e)
+                pass
             return 'success', lid
         except Exception as e:
             return 'error', e
@@ -111,9 +111,9 @@ class ReclamationService:
         self.cursor.execute(
             f"""SELECT `IDReclamation`, `Vu` FROM reclamation_hardware WHERE `Vu` NOT LIKE "%{id_utilisateur}%;" """)
         liste_vues = self.cursor.fetchall()
-        print(liste_vues)
+
         for liste_vu in liste_vues:
-            print("aa : ", liste_vu)
+
             if liste_vu is not None:
                 vues = liste_vu[1]
                 id_reclamation = liste_vu[0]
@@ -123,7 +123,7 @@ class ReclamationService:
                     my_list = f"{id_utilisateur};"
                 req = (
                     f"""UPDATE reclamation_hardware SET Vu = '{my_list}' WHERE IDReclamation = {id_reclamation}""")
-                print(req)
+
                 self.database_tools.execute_request(req)
         self.connection.commit()
         self.cursor.close()
@@ -143,3 +143,7 @@ class ReclamationService:
     def find_all_reclamation_with_limit(self, conditions, number, begin):
         return self.find_reclamation_by_something(
             f" 1 {conditions} ORDER BY `DateReclamation` DESC LIMIT {begin}, {number}")
+
+
+if __name__ == '__main__':
+    pass

@@ -45,3 +45,7 @@ class MarqueService:
 
     def create_none(self):
         return Marque(None, None)
+
+
+if __name__ == '__main__':
+    pass

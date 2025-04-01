@@ -38,7 +38,7 @@ class ParametreViews:
     def parametre_scanner_routes(self):
         @self.parametre_bp.route('/change-scan-mode/<int:mode>', methods=['PUT'])
         def scan_mode_update(mode):
-            print('scan_mode_update')
+
             # mode 1: open, mode 2: close
             if not self.user_tools.check_user_in_session('admin'):
                 return {'status': 'error', 'message': 'Token Error'}
@@ -56,3 +56,7 @@ class ParametreViews:
                 return {'status': 'error', 'message': 'Invalid Scan Ending'}
             self.scanner_tools.switch_scan_ending(scan_ending)
             return {'status': 'success'}
+
+
+if __name__ == '__main__':
+    pass

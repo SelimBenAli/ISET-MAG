@@ -62,7 +62,6 @@ class HardwareService:
         except Exception as e:
             return 'error', e
 
-
     def find_all_hardware(self):
         return self.find_hardware_by_something(" 1")
 
@@ -102,7 +101,7 @@ class HardwareService:
 
     def add_hardware(self, id_model, id_fournisseur, id_magasin, id_salle, numero_inventaire, date_achat,
                      date_mise_en_service, code, id_etat, historique_relation):
-        print("date 10 : ", date_achat, date_mise_en_service)
+
         add = ''
         if date_achat == 'NULL' or date_achat == ' NULL ':
             add += " NULL, NOW(), "
@@ -115,7 +114,7 @@ class HardwareService:
         req = (f"""INSERT INTO hardware (IDModel, IDFournisseur, IDMagasin, IDSalle, 
          NumeroInventaire, DateAchat, DateAjout, DateMiseEnService, Code, IDEtat, HistoriqueRelation) 
                 VALUES ({id_model}, {id_fournisseur}, {id_magasin}, {id_salle}, '{numero_inventaire}', {add}, '{code}', {id_etat}, {json.dumps(historique_relation)})""")
-        print(req)
+
         return self.database_tools.execute_request(req)
 
     def update_hardware(self, id_hardware, id_model, id_fournisseur, id_magasin, id_salle, numero_inventaire,
@@ -136,7 +135,7 @@ class HardwareService:
                  Code = '{code}', IDEtat = {id_etat},
                    HistoriqueRelation = {json.dumps(historique_relation)}
                    WHERE IDHardware = {id_hardware}""")
-        print(req)
+
         return self.database_tools.execute_request(req)
 
     def delete_hardware(self, id_hardware):
@@ -153,3 +152,7 @@ class HardwareService:
             return 'success', data[0][0]
         except Exception as e:
             return 'error', e
+
+
+if __name__ == '__main__':
+    pass

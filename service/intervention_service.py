@@ -48,7 +48,7 @@ class InterventionService:
         return self.find_intervention_by_something(' 1')
 
     def find_all_intervention_with_limit(self, conditions, begin, number):
-        print(begin, number, "aa444")
+
         return self.find_intervention_by_something(f" 1 {conditions} ", f"LIMIT {begin}, {number}")
 
     def find_intervention_by_id(self, id_intervention):
@@ -136,3 +136,7 @@ class InterventionService:
 
     def find_closed_intervention_with_limit(self, begin, number):
         return self.find_intervention_by_something("  DateFin IS NOT NULL ", f"LIMIT {begin}, {number}")
+
+
+if __name__ == '__main__':
+    pass

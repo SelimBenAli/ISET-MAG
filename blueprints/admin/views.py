@@ -30,20 +30,16 @@ class AdminViews:
             if self.sql_injection_tools.detect_sql_injection([email, password]):
                 return {'status': 'error', 'message': 'Problème de sécurité détecté'}
             status, admin = self.admin_service.find_admin(email, password)
-            print(status)
             if status == 'success':
                 admin = admin.dict_form()
-                print(admin)
                 if admin['desactive_admin'] == 1:
                     return {'status': 'failed', 'message': 'Votre Compte est Désactivé'}
                 if admin['marked_as_deleted'] == 1:
                     return {'status': 'failed', 'message': 'Utilisateur Non Trouvé'}
-                print("ok", admin)
                 session['admin'] = admin
                 self.scan_tools.switch_scan_ending('doubleEnter')
                 return {'status': 'success'}
             elif status == 'failed':
-                print("no")
                 return {'status': 'failed', 'message': 'Utilisateur Non Trouvé'}
             else:
                 return {'status': 'Error'}
@@ -172,3 +168,7 @@ class AdminViews:
                     return {'status': 'success', 'email': mail}
                 return {'status': 'failed', 'message': 'Erreur lors de l\'envoi de l\'email'}
             return {'status': 'failed', 'message': 'Erreur de session'}
+
+
+if __name__ == '__main__':
+    pass

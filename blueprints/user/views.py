@@ -43,7 +43,7 @@ class UserViews:
                                                                                   description)
                 if status == 'success':
                     status, r = self.reclamation_service.find_reclamation_by_id(id_reclamation)
-                    print('my rec : ', r)
+
                     socketio.emit('update_admin_alert', {'message': 'success'})
                     socketio.emit('update_client_alerts', {'message': 'success', 'reclamation': r[0]})
                     return jsonify({'status': 'success'})
@@ -55,7 +55,7 @@ class UserViews:
             if self.user_tools.check_user_in_session('user'):
                 status, modele_list = self.modele_service.find_all_modele()
                 status, marque_list = self.marque_service.find_all_marque()
-                print(modele_list, marque_list)
+
                 return jsonify({'status': 'success', 'types': modele_list, 'marques': marque_list})
             return jsonify({'status': 'failed'})
 
@@ -212,10 +212,10 @@ class UserViews:
                 description = data.get('message')
                 description = description.replace('"', "'")
                 if self.sql_injection_tools.detect_sql_injection_in_descriptions([description]):
-                    print("no, msg sec", description)
+
                     return jsonify({'status': 'failed', 'message': 'Problème de sécurité détecté'})
                 technicien = session['user']
-                print('**************', technicien)
+
                 status = self.reclamation_service.finish_reclamation(idr, technicien['id_utilisateur'], description)
                 if status == 'success':
                     socketio.emit('delete_reclamation_alert', {'message': 'success', 'id_reclamation': idr})
@@ -236,3 +236,7 @@ class UserViews:
                     return jsonify({'status': 'success'})
                 return jsonify({'status': 'error'})
             return jsonify({'status': 'failed', 'message': 'Utilisateur Non Trouvé'})
+
+
+if __name__ == '__main__':
+    pass

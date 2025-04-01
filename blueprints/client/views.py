@@ -48,7 +48,7 @@ class ClientViews:
                     status, hardware = self.hardware_service.find_hardware_by_numero_inventaire(
                         numero_inventaire_hardware)
                     if status == 'success' and hardware is not None and hardware != []:
-                        print(hardware)
+
                         session['hardware_reclamation'] = hardware[0]
                         return render_template('client/reclamation.html', hardware=hardware[0], new=True,
                                                page_name='openPageReclamationClient', user=session['user'])
@@ -60,12 +60,12 @@ class ClientViews:
         def historique_materielle_client():
             if self.user_tools.check_user_in_session('user'):
                 user = session['user']
-                print(user)
+
                 status, interventions = self.intervention_service.find_intervention_by_user(user['id_utilisateur'],
                                                                                             'LIMIT 0, 10')
                 if status != 'success':
                     return render_template('client/404.html')
-                print(interventions)
+
                 return render_template('client/historique-materielle.html', liste_interventions=interventions,
                                        page_name='openPageHistoriqueMaterielleClient', user=session['user'])
             return redirect(url_for('auth.login'))
@@ -78,7 +78,7 @@ class ClientViews:
                     user['id_utilisateur'])
                 if status != 'success':
                     return render_template('client/404.html')
-                print(reclamations)
+
                 return render_template('client/historique-reclamation.html', liste_reclamations=reclamations,
                                        page_name='openPageHistoriqueReclamationClient', user=session['user'])
             return redirect(url_for('auth.login'))
@@ -90,7 +90,7 @@ class ClientViews:
                 status, locations = self.location_service.find_location_by_utilisateur(user['id_utilisateur'])
                 if status != 'success':
                     return render_template('client/404.html')
-                print(locations)
+
                 return render_template('client/historique-location.html', liste_locations=locations,
                                        page_name='openPageHistoriqueLocationClient', user=session['user'])
             return redirect(url_for('auth.login'))
@@ -104,7 +104,7 @@ class ClientViews:
                 status, reclamations = self.reclamation_service.find_reclamation_by_not_finished()
                 if status != 'success':
                     return render_template('client/404.html')
-                print(reclamations)
+
                 return render_template('client/reclamation-active.html', liste_reclamations=reclamations,
                                        page_name='openPageReclamationActiveClient', user=session['user'])
             return redirect(url_for('auth.login'))
@@ -118,7 +118,7 @@ class ClientViews:
                 status, reclamation = self.reclamation_service.find_reclamation_by_id(idr)
                 if status != 'success':
                     return render_template('client/404.html')
-                print(reclamation)
+
                 return render_template('client/fermer-reclamation.html', reclamation=reclamation[0],
                                        page_name='openPageReclamationActiveClient', user=session['user'])
             return redirect(url_for('auth.login'))
@@ -126,3 +126,7 @@ class ClientViews:
     @staticmethod
     def get_current_user():
         return session['user']
+
+
+if __name__ == '__main__':
+    pass

@@ -10,7 +10,7 @@ function load_page_marque() {
     xhr.onreadystatechange = function () {
         if (xhr.readyState === 4 && xhr.status === 200) {
             var response = JSON.parse(xhr.responseText);
-            console.log(response)
+
             if (response.status === 'success') {
                 liste_marque = response.marques
                 liste_marque_tous = response.marques

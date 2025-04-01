@@ -38,3 +38,7 @@ class BlocService:
 
     def delete_bloc(self, id_bloc):
         return self.database_tools.execute_request(f"""DELETE FROM bloc WHERE IDBloc = {id_bloc}""")
+
+
+if __name__ == '__main__':
+    pass

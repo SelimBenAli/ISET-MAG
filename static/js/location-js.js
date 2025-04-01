@@ -10,7 +10,6 @@ function load_page_location() {
     xhr.onreadystatechange = function () {
         if (xhr.readyState === 4 && xhr.status === 200) {
             var response = JSON.parse(xhr.responseText);
-            console.log(response)
             if (response.status === 'success') {
                 liste_location_tous = response.locations
                 liste_location = response.locations
@@ -27,7 +26,6 @@ function load_page_location() {
 
 function search_location_by_user() {
     search = document.getElementById("utilisateur-location").value
-    console.log(search)
     if (search === "") {
         liste_location = liste_location_tous
     } else {
@@ -38,7 +36,6 @@ function search_location_by_user() {
 
 function search_location_by_date_debut() {
     search = document.getElementById("date-debut-location").value
-    console.log(search)
     if (search === "") {
         liste_location = liste_location_tous
     } else {
@@ -49,7 +46,6 @@ function search_location_by_date_debut() {
 
 function search_location_by_date_fin() {
     search = document.getElementById("date-fin-location").value
-    console.log(search)
     if (search === "") {
         liste_location = liste_location_tous
     } else {
@@ -60,7 +56,7 @@ function search_location_by_date_fin() {
 
 function changer_etat() {
     etat = document.getElementById("etat-location").value
-    console.log(etat)
+
     if (etat === "get-all") {
         liste_location = liste_location_tous
     } else {
@@ -70,7 +66,7 @@ function changer_etat() {
 }
 
 function load_table_location_parameters() {
-    console.log(liste_location)
+
     header = "<thead><tr><th>Code</th><th>Utilisateur</th><th>Modèle</th><th>Quantité</th><th>Date Début Estimée</th><th>Date Fin Estimée</th><th>Confirmer</th><th>Refuser</th></tr></thead>"
     footer = "<tfoot><tr><th>Code</th><th>Utilisateur</th><th>Modèle</th><th>Quantité</th><th>Date Début Estimée</th><th>Date Fin Estimée</th><th>Confirmer</th><th>Refuser</th></tr></tfoot>"
     body = []
@@ -105,7 +101,7 @@ function confirmer_demande(id_location) {
         xhr.onreadystatechange = function () {
             if (xhr.readyState === 4 && xhr.status === 200) {
                 var response = JSON.parse(xhr.responseText);
-                console.log(response)
+
                 if (response.status === 'success') {
                     load_page_location()
                 } else {
@@ -127,7 +123,7 @@ function refuser_demande(id_location) {
         xhr.onreadystatechange = function () {
             if (xhr.readyState === 4 && xhr.status === 200) {
                 var response = JSON.parse(xhr.responseText);
-                console.log(response)
+
                 if (response.status === 'success') {
                     load_page_location()
                 } else {

@@ -32,16 +32,15 @@ class InterventionViews:
                 #     id_salle = ' NULL '
                 status, u = self.utilisateur_service.find_utilisateur_by_code_barre(code_user)
                 status, h = self.hardware_service.find_hardware_by_code(code_hardware)
-                print('User : ', u)
-                print('Hardware : ', h)
+
                 if u is not None and h is not None:
                     id_user = u[0]['id_utilisateur']
                     id_hardware = h[0]['id_hardware']
                 else:
                     return {'status': 'failed'}
-                print('Int ajout : ', id_user, id_hardware)
+
                 status, i = self.intervention_service.find_intervention_by_used_hardware(id_hardware)
-                print('currrrrrr', i)
+
                 if len(i) > 0:
                     return {'status': 'failed', 'message': 'Hardware déjà pris en intervention'}
                 id_admin = session['admin']['id_admin']
@@ -84,7 +83,7 @@ class InterventionViews:
         def get_interventions():
             if self.user_tools.check_user_in_session('admin'):
                 status, interventions = self.intervention_service.find_all_intervention()
-                print(interventions)
+
                 return jsonify({'status': 'success', 'interventions': interventions})
             return {'status': 'failed'}
 
@@ -95,7 +94,7 @@ class InterventionViews:
                     return {'status': 'error', 'message': 'Problème de sécurité détecté'}
                 status, user = self.utilisateur_service.find_utilisateur_by_code(code)
                 status, interventions = self.intervention_service.find_intervention_by_user(user[0]['id_utilisateur'])
-                print(interventions)
+
                 return jsonify({'status': 'success', 'interventions': interventions})
             return {'status': 'failed'}
 
@@ -106,7 +105,7 @@ class InterventionViews:
                     return {'status': 'error', 'message': 'Problème de sécurité détecté'}
                 status, hard = self.hardware_service.find_hardware_by_code(code)
                 status, interventions = self.intervention_service.find_intervention_by_hardware(hard[0]['id_hardware'])
-                print(interventions)
+
                 return jsonify({'status': 'success', 'interventions': interventions})
             return {'status': 'failed'}
 
@@ -117,7 +116,7 @@ class InterventionViews:
                     return {'status': 'error', 'message': 'Problème de sécurité détecté'}
                 status, hard = self.hardware_service.find_hardware_by_numero_inventaire(code)
                 status, interventions = self.intervention_service.find_intervention_by_hardware(hard[0]['id_hardware'])
-                print(interventions)
+
                 return jsonify({'status': 'success', 'interventions': interventions})
             return {'status': 'failed'}
 
@@ -135,7 +134,7 @@ class InterventionViews:
                         page_number = pages // number + 1
                     else:
                         page_number = pages // number
-                    print(interventions)
+
                     return jsonify(
                         {'status': 'success', 'interventions': interventions, 'pages': page_number,
                          'current_page': page,
@@ -156,7 +155,7 @@ class InterventionViews:
                         page_number = pages // number + 1
                     else:
                         page_number = pages // number
-                    print(interventions)
+
                     return jsonify(
                         {'status': 'success', 'interventions': interventions, 'pages': page_number,
                          'current_page': page,
@@ -168,11 +167,11 @@ class InterventionViews:
             methods=['GET'])
         def get_interventions_limit(page, status, code_hard, code_user, num_hard):
             if self.user_tools.check_user_in_session('admin'):
-                print("err0")
-                print(page, status, code_hard, code_user, num_hard)
+
+
                 if self.sql_injection_tools.detect_sql_injection([page, status, code_hard, code_user, num_hard]):
                     return {'status': 'error', 'message': 'Problème de sécurité détecté'}
-                print("current stat : ", status, code_hard, code_user, num_hard)
+
                 code_hard = code_hard.replace('code_hard_', '')
                 code_user = code_user.replace('code_user_', '')
                 num_hard = num_hard.replace('num_hard_', '')
@@ -197,20 +196,20 @@ class InterventionViews:
                     if status == 'success' and len(hard) > 0:
                         hard = hard[0]['id_hardware']
                         ch += f' AND IDHardware = {hard} '
-                print(ch)
+
                 number = 10
                 begin = (page - 1) * number
-                print("err1")
+
                 status, pages = self.intervention_service.find_number_interventions(ch)
-                print("err2")
+
                 status, interventions = self.intervention_service.find_all_intervention_with_limit(ch, begin, number)
-                print("err3", status, interventions)
+
                 if status == 'success':
                     if pages % number != 0:
                         page_number = pages // number + 1
                     else:
                         page_number = pages // number
-                    print(interventions)
+
                     return jsonify(
                         {'status': 'success', 'interventions': interventions, 'pages': page_number,
                          'current_page': page,
@@ -223,7 +222,7 @@ class InterventionViews:
                 if self.sql_injection_tools.detect_sql_injection([id_intervention]):
                     return {'status': 'error', 'message': 'Problème de sécurité détecté'}
                 status, i = self.intervention_service.find_intervention_by_id(id_intervention)
-                print('Intervention à fermer : ', i)
+
                 if len(i) == 0:
                     return {'status': 'failed', 'message': 'Intervetion introuvable'}
                 if i[0]['date_fin_intervention'] is not None:
@@ -233,3 +232,7 @@ class InterventionViews:
                 if status != 'failed':
                     return {'status': 'success'}
             return {'status': 'failed', 'message': 'Erreur de session'}
+
+
+if __name__ == '__main__':
+    pass

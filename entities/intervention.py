@@ -15,3 +15,7 @@ class Intervention:
                 'hardware_intervention': self.hardware, 'admin_intervention': self.admin,
                 'date_debut_intervention': self.date_debut,
                 'date_fin_intervention': self.date_fin, 'admin_fermeture_intervention': self.admin_fermeture}
+
+
+if __name__ == '__main__':
+    pass

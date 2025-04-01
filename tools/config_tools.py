@@ -17,3 +17,7 @@ class ConfigTools:
         # RECOVERY
         self.subject_recovery = "Récupération de votre compte ISET - TRACKER"
         self.message_recovery = """ Votre nouveau mot de passe est : {password} \n\n Cordialement,\nISETN - TRACKER"""
+
+
+if __name__ == '__main__':
+    pass

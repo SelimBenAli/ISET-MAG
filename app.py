@@ -24,7 +24,7 @@ from extensions import socketio
 
 app = Flask(__name__)
 CORS(app)
-app.secret_key = 'secret_key'
+app.secret_key = 'selim_ben_ali'
 
 socketio.init_app(app)
 

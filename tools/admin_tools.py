@@ -28,4 +28,4 @@ class AdminTools:
 
 if __name__ == '__main__':
     admin_tools = AdminTools()
-    print(admin_tools.generate_admin_password(1))
+

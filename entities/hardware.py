@@ -22,3 +22,7 @@ class Hardware:
                 'numero_inventaire_hardware': self.numero_inventaire, 'date_achat_hardware': self.date_achat,
                 'date_mise_service_hardware': self.date_mise_service, 'date_ajout_hardware': self.date_ajout,
                 'code_hardware': self.code_hardware, 'historique_relation_hardware': self.historique_relation}
+
+
+if __name__ == '__main__':
+    pass

@@ -83,4 +83,3 @@ WHERE
 
 if __name__ == '__main__':
     relation_service = RelationService()
-    print(relation_service.find_relation_by_hardware(9))

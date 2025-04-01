@@ -9,3 +9,7 @@ class ParametreEmail:
         return {'id_parametre_email': self.id_parametre_email, 'nom_parametre_email': self.nom_parametre_email,
                 'objet_parametre_email': self.objet_parametre_email,
                 'message_parametre_email': self.message_parametre_email}
+
+
+if __name__ == '__main__':
+    pass

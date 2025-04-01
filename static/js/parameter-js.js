@@ -8,7 +8,7 @@ function save_scanner_ending() {
             xhr.onreadystatechange = function () {
                 if (xhr.readyState === 4 && xhr.status === 200) {
                     var response = JSON.parse(xhr.responseText);
-                    console.log(response)
+
                     if (response.status === 'success') {
                         openPageAdminSettings()
                     } else {

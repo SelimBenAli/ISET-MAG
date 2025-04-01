@@ -73,12 +73,12 @@ class UtilisateurService:
                     VALUES ('{nom}', '{prenom}', '{mail}', '{tel}', NULL, '{role}', '{code}', '{self.cryption_tools.generate_code_barre_utilisateur(code)}')""")
             lid = self.cursor.lastrowid
             mdp, crypted = self.cryption_tools.generate_user_password(lid)
-            print("cryption : ", mdp, crypted)
+
             self.cursor.execute(f"""UPDATE utilisateur SET MDP = '{crypted}' WHERE IDUtilisateur = {lid}""")
             try:
                 self.mail_tools.send_user_add_verification_mail(mail, mdp)
             except Exception as e:
-                print('aaaaa', e)
+
                 return 'error', e
             self.connection.commit()
             try:
@@ -88,7 +88,7 @@ class UtilisateurService:
                 ...
             return 'success'
         except Exception as e:
-            print('bbbb', e)
+
             return 'error', e
 
     def delete_utilisateur(self, id_utilisateur):
@@ -129,7 +129,11 @@ class UtilisateurService:
             try:
                 self.mail_tools.send_user_password_recovery_mail(mail, mdp)
             except Exception as e:
-                print('aaaaa', e)
+
                 return 'error', e
             return 'success'
         return 'error', 'Utilisateur Non Trouvé'
+
+
+if __name__ == '__main__':
+    pass

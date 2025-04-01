@@ -12,7 +12,6 @@ class HardwareTools:
         while len(ch) < 12:
             ch = '0' + ch
         ch = '7' + ch
-        print("code a barre : ", code, " => ", ch)
         return ch
 
     def check_num_inventaire(self, num_inventaire):
@@ -21,3 +20,7 @@ class HardwareTools:
         if not num_inventaire.isdigit():
             return False
         return True
+
+
+if __name__ == '__main__':
+    pass

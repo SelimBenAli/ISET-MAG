@@ -10,7 +10,7 @@ function load_page_modele() {
     xhr.onreadystatechange = function () {
         if (xhr.readyState === 4 && xhr.status === 200) {
             var response = JSON.parse(xhr.responseText);
-            console.log(response)
+
             if (response.status === 'success') {
                 liste_modele = response.modeles
                 liste_modele_tous = response.modeles
@@ -36,7 +36,7 @@ function search_modele() {
 
 function search_modele_by_marque() {
     search = document.getElementById("marque-modele").value
-    console.log(search)
+
     if (search === "get-all") {
         liste_modele = liste_modele_tous
     } else {
@@ -79,7 +79,7 @@ function ajout_modele_request(nom, marque) {
     xhr.onreadystatechange = function () {
         if (xhr.readyState === 4 && xhr.status === 200) {
             var response = JSON.parse(xhr.responseText);
-            console.log(response)
+
             if (response.status === 'success') {
                 openPageModele()
             } else {
@@ -110,7 +110,7 @@ function modifier_modele_request(id_modele, nom, marque) {
     xhr.onreadystatechange = function () {
         if (xhr.readyState === 4 && xhr.status === 200) {
             var response = JSON.parse(xhr.responseText);
-            console.log(response)
+
             if (response.status === 'success') {
                 openPageModele()
             } else {
@@ -139,7 +139,7 @@ function supprimer_modele_request(id_modele) {
     xhr.onreadystatechange = function () {
         if (xhr.readyState === 4 && xhr.status === 200) {
             var response = JSON.parse(xhr.responseText);
-            console.log(response)
+
             if (response.status === 'success') {
                 openPageModele()
             } else {

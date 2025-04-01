@@ -19,3 +19,7 @@ class Location:
                 'admin_location': self.admin, 'quantite_location': self.quantite,
                 'confirmation_location': self.confirmation,
                 'date_confirmation_location': self.date_confirmation, 'date_ajout_location': self.date_ajout}
+
+
+if __name__ == '__main__':
+    pass

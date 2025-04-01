@@ -5,3 +5,7 @@ class Marque:
 
     def dict_form(self):
         return {'id_marque': self.id_marque, 'nom_marque': self.nom_marque}
+
+
+if __name__ == '__main__':
+    pass

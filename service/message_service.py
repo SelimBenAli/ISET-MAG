@@ -68,9 +68,9 @@ class MessageService:
         self.connection, self.cursor = self.database_tools.find_connection()
         self.cursor.execute(f"""SELECT `IDMessage`, `Vu` FROM message WHERE `Vu` NOT LIKE "%{id_utilisateur}%;" """)
         liste_vues = self.cursor.fetchall()
-        print(liste_vues)
+
         for liste_vu in liste_vues:
-            print("aa : ", liste_vu)
+
             if liste_vu is not None:
                 vues = liste_vu[1]
                 id_message = liste_vu[0]
@@ -80,7 +80,7 @@ class MessageService:
                     my_list = f"{id_utilisateur};"
                 req = (
                     f"""UPDATE message SET Vu = '{my_list}' WHERE IDMessage = {id_message}""")
-                print(req)
+
                 self.database_tools.execute_request(req)
         self.connection.commit()
 
@@ -95,3 +95,7 @@ class MessageService:
             liste_vu = liste_vu[0]
             return liste_vu.split(';')
         return []
+
+
+if __name__ == '__main__':
+    pass

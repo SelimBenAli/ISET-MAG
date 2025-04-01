@@ -83,3 +83,7 @@ class ParametreEmailService:
             return 'success', None
         except Exception as e:
             return 'error', e
+
+
+if __name__ == '__main__':
+    pass

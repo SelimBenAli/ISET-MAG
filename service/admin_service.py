@@ -20,7 +20,7 @@ class AdminService:
             req = (
                 f"""SELECT `IDAdmin`, `Nom`, `Prenom`, `Mail`, `MDP`, `Role`, `Desactive`, `MarkedAsDeleted` FROM admin 
                 WHERE Mail = "{email}" AND MDP = "{self.cryption_tools.crypt_sha256(password)}"  """)
-            print(req)
+
             self.cursor.execute(req)
             data = self.cursor.fetchone()
             self.cursor.close()
@@ -197,3 +197,7 @@ class AdminService:
             return 'success', mail
         except Exception as e:
             return 'error', e
+
+
+if __name__ == '__main__':
+    pass

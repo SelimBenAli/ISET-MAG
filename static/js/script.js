@@ -138,19 +138,19 @@ function get_data_ready_load_table(table_id, table_header, table_footer, table_d
     footer = table_footer;
     data = table_data;
     division_table = table_division_table;
-    console.log(table_division_table, division_table)
+
     load_table();
 }
 
 function load_table() {
-    console.log(division_table)
+
     var table = document.getElementById(id_table);
     table.innerHTML = header;
     var start = (current_page - 1) * division_table;
     var end = current_page * division_table;
     var data_page = data.slice(start, end);
-    console.log(start, end)
-    console.log(data_page)
+
+
     for (var i = 0; i < data_page.length; i++) {
         table.innerHTML += data_page[i];
     }

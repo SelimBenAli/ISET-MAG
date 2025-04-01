@@ -34,7 +34,7 @@
                         <script>
 
                             socket.on('update_client_alerts', function (data) {
-                                console.log(data)
+
                                 load_client_alerts()
                                 show_client_reclamation(data['reclamation'])
                                 var audio = document.getElementById("sound-alert-client")
@@ -43,7 +43,7 @@
                             })
 
                             socket.on('delete_reclamation_alert', function (data) {
-                                console.log(data)
+
                                 load_client_alerts()
                                 delete_client_reclamation(data['id_reclamation'])
                                 /*window.location.reload()*/

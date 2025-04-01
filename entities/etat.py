@@ -6,3 +6,7 @@ class Etat:
         
     def dict_form(self):
         return {'id_etat': self.id_etat, 'nom_etat': self.nom_etat, 'description_etat': self.description}
+
+
+if __name__ == '__main__':
+    pass

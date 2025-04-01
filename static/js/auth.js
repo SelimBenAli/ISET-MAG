@@ -54,7 +54,6 @@ function client_login_request() {
     xhr.onreadystatechange = function () {
         if (xhr.readyState === 4 && xhr.status === 200) {
             var response = JSON.parse(xhr.responseText);
-            console.log(response)
             if (response.status === 'success') {
                 login_btn.disabled = false;
                 openPageHistoriqueMaterielleClient();
@@ -79,7 +78,7 @@ function envoyer_email_recuperation() {
     xhr.onreadystatechange = function () {
         if (xhr.readyState === 4 && xhr.status === 200) {
             var response = JSON.parse(xhr.responseText);
-            console.log(response)
+
             if (response.status === 'success') {
                 recuperation_btn.disabled = false;
                 alert("Email envoyé avec succès");

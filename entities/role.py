@@ -5,3 +5,7 @@ class Role:
 
     def dict_form(self):
         return {'id_role': self.id_role, 'nom_role': self.nom_role}
+
+
+if __name__ == '__main__':
+    pass

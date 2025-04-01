@@ -10,7 +10,7 @@ function load_page_magasin() {
     xhr.onreadystatechange = function () {
         if (xhr.readyState === 4 && xhr.status === 200) {
             var response = JSON.parse(xhr.responseText);
-            console.log(response)
+
             if (response.status === 'success') {
                 liste_magasin = response.magasins
                 liste_magasin_tous = response.magasins
@@ -79,7 +79,7 @@ function ajout_magasin_request(nom, salle) {
     xhr.onreadystatechange = function () {
         if (xhr.readyState === 4 && xhr.status === 200) {
             var response = JSON.parse(xhr.responseText);
-            console.log(response)
+
             if (response.status === 'success') {
                 openPageMagasin()
             } else {
@@ -110,7 +110,7 @@ function modifier_magasin_request(id, nom, salle) {
     xhr.onreadystatechange = function () {
         if (xhr.readyState === 4 && xhr.status === 200) {
             var response = JSON.parse(xhr.responseText);
-            console.log(response)
+
             if (response.status === 'success') {
                 openPageMagasin()
             } else {
@@ -139,7 +139,7 @@ function supprimer_magasin_request(id) {
     xhr.onreadystatechange = function () {
         if (xhr.readyState === 4 && xhr.status === 200) {
             var response = JSON.parse(xhr.responseText);
-            console.log(response)
+
             if (response.status === 'success') {
                 openPageMagasin()
             } else {

@@ -11,12 +11,12 @@ var scann_mode = 1;
 
 function getEnding(e) {
     currentEnding = e;
-    console.log('Scanner ending set to:', e);
+
 }
 
 function getScannMode(mode) {
     scann_mode = mode;
-    console.log('Scanner mode set to:', scann_mode);
+
 }
 
 
@@ -42,9 +42,9 @@ function verify_hardware_barcode() {
 function verify_user_barcode_place() {
     let userDiv = document.getElementById('code-ajout-interventien-utilisateur');
     userValue = userDiv.value;
-    console.log(typeof userValue, userValue.length !== 0 && (userValue.charAt(0) !== userBeginChar.toString() || userValue.charAt(0) !== userBeginChar))
+
     if (userValue.length === barcodelength && (userValue.charAt(0) === userBeginChar.toString() || userValue.charAt(0) === userBeginChar)) {
-        console.log('User barcode scanned:', userValue);
+
         let hardwareDiv = document.getElementById('code-ajout-interventien-hardware');
         hardwareValue = hardwareDiv.value;
         if (hardwareValue.length === 0) {
@@ -53,7 +53,7 @@ function verify_user_barcode_place() {
         }
         call_intervention_check_add();
     }
-    console.log(userValue, userBeginChar, typeof userValue.charAt(0), typeof userBeginChar.toString(), userValue.charAt(0) !== userBeginChar.toString() || userValue.charAt(0) !== userBeginChar)
+
     if (userValue.charAt(0) !== userBeginChar.toString() && userValue.charAt(0) !== userBeginChar) {
         userDiv.value = '';
     }
@@ -63,9 +63,9 @@ function verify_user_barcode_place() {
 function verify_hardware_barcode_place() {
     let hardwareDiv = document.getElementById('code-ajout-interventien-hardware');
     hardwareValue = hardwareDiv.value;
-    console.log(hardwareValue, hardwareValue.length !== 0 && (hardwareValue.charAt(0) !== hardwareBeginChar.toString() || hardwareValue.charAt(0) !== hardwareBeginChar))
+
     if (hardwareValue.length === barcodelength && (hardwareValue.charAt(0) === hardwareBeginChar.toString() || hardwareValue.charAt(0) === hardwareBeginChar)) {
-        console.log('Hardware barcode scanned:', hardwareValue);
+
         let userDiv = document.getElementById('code-ajout-interventien-utilisateur');
         userValue = userDiv.value;
         if (userValue.length === 0) {
@@ -81,7 +81,7 @@ function verify_hardware_barcode_place() {
 }
 
 function call_intervention_check_add() {
-    console.log('Call intervention check add');
+
     let hardwareDiv = document.getElementById('code-ajout-interventien-hardware');
     hardwareValue = hardwareDiv.value;
     let userDiv = document.getElementById('code-ajout-interventien-utilisateur');
@@ -94,7 +94,7 @@ function call_intervention_check_add() {
         userDiv.value = '';
         return;
     }
-    console.log('Intervention check add:', userValue, hardwareValue);
+
     add_intervention_request(userValue, hardwareValue);
 }
 
@@ -105,11 +105,11 @@ function add_intervention_request(userValue, hardwareValue) {
     xhr.onreadystatechange = function () {
         if (xhr.readyState === 4 && xhr.status === 200) {
             var response = JSON.parse(xhr.responseText);
-            console.log(response)
+
             if (response.status === 'success') {
                 //openPageIntervention()
                 const pageName = document.location.pathname.split('/').pop();
-                console.log(pageName);
+
                 if (pageName === 'intervention') {
                     load_page_intervention(1, 0, '', '', '');
                 }
@@ -130,11 +130,11 @@ function add_intervention_request(userValue, hardwareValue) {
 // Select all relevant input elements
 function prepare_focus() {
     const inputs = document.querySelectorAll('input[type="text"], input[type="search"], input[type="number"], textarea');
-    console.log(inputs)
+
 // Add focus event listener to each input element
     inputs.forEach(input => {
         input.addEventListener('focus', function () {
-            console.log(`Focused element ID: ${this.id}`);
+
             if (this.id !== 'code-ajout-interventien-utilisateur' &&
                 this.id !== 'code-ajout-interventien-hardware') {
                 var toggle = document.getElementById('toggle-intervention');
@@ -213,7 +213,7 @@ document.body.addEventListener('keydown', function (event) {
 
         lastKeyTime = currentTime;
     } else {
-        console.log('Scanner mode is off');
+
         /*setTimeout(() => {
             c = confirm('Mode scanner désactivé, voulez-vous activer le mode scanner ?');
             if (c) {
@@ -231,7 +231,7 @@ document.body.addEventListener('keydown', function (event) {
 function processBarcode(code) {
     if (code.length > 0) {
         //resultDiv.textContent = 'Last scanned: ' + code;
-        console.log('Barcode scanned:', code);
+
         buffer = '';
         let userDiv = document.getElementById('code-ajout-interventien-utilisateur');
         let hardwareDiv = document.getElementById('code-ajout-interventien-hardware');

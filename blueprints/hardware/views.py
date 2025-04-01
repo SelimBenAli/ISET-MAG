@@ -19,9 +19,9 @@ class HardwareViews:
     def hardware_routes(self):
         @self.hardware_bp.route('/add-hardware', methods=['POST'])
         def add_hardware():
-            print("add hardware")
+
             if self.user_tools.check_user_in_session('admin'):
-                print("add hardware 2")
+
                 data = request.get_json()
                 id_modele = data.get('modele_hardware')
                 id_fournisseur = data.get('fournisseur_hardware')
@@ -35,7 +35,7 @@ class HardwareViews:
                         [id_modele, id_fournisseur, id_magasin, id_salle, num_inventaire, date_achat,
                          date_mise_en_service, id_etat]):
                     return {'status': 'error', 'message': 'Problème de sécurité détecté'}
-                print("date 1 : ", date_achat, date_mise_en_service)
+
                 if id_modele is None:
                     return jsonify({'status': 'failed', 'message': 'modele is required'})
                 if id_fournisseur is None:
@@ -60,7 +60,7 @@ class HardwareViews:
                 if len(hard) > 0:
                     return jsonify({'status': 'failed', 'message': 'numéro inventaire existant'})
                 code_hardware = self.hardware_tools.generate_code_barre_hardware(str(num_inventaire))
-                print("date 2 : ", date_achat, date_mise_en_service)
+
                 status = self.hardware_service.add_hardware(id_modele, id_fournisseur, id_magasin, id_salle,
                                                             num_inventaire,
                                                             date_achat, date_mise_en_service, code_hardware, id_etat,
@@ -136,7 +136,7 @@ class HardwareViews:
         def get_hardwares():
             if self.user_tools.check_user_in_session('admin'):
                 status, hardwares = self.hardware_service.find_all_hardware()
-                print("hardwares : ", status, hardwares)
+
                 if status == 'success':
                     return jsonify({'status': 'success', 'hardwares': hardwares})
             return {'status': 'failed'}
@@ -150,7 +150,7 @@ class HardwareViews:
                 begin = (page - 1) * number
                 status, pages = self.hardware_service.find_number_hardware()
                 status, hardwares = self.hardware_service.find_all_hardware_with_limit(number, begin)
-                print("hardwares : ", status, hardwares)
+
                 if status == 'success':
                     if pages % number != 0:
                         page_number = pages // number + 1
@@ -167,7 +167,7 @@ class HardwareViews:
                 if self.sql_injection_tools.detect_sql_injection([code]):
                     return {'status': 'error', 'message': 'Problème de sécurité détecté'}
                 status, hardwares = self.hardware_service.find_hardware_by_code(code)
-                print("hardwares : ", status, hardwares)
+
                 if status == 'success':
                     return jsonify(
                         {'status': 'success', 'hardwares': hardwares})
@@ -179,7 +179,7 @@ class HardwareViews:
                 if self.sql_injection_tools.detect_sql_injection([inv]):
                     return {'status': 'error', 'message': 'Problème de sécurité détecté'}
                 status, hardwares = self.hardware_service.find_hardware_by_numero_inventaire(inv)
-                print("hardwares : ", status, hardwares)
+
                 if status == 'success':
                     return jsonify(
                         {'status': 'success', 'hardwares': hardwares})
@@ -228,3 +228,7 @@ class HardwareViews:
                     status, hardwares = self.hardware_service.find_all_hardware()
                     return jsonify({'status': 'success', 'hardwares': hardwares})
             return {'status': 'failed'}
+
+
+if __name__ == '__main__':
+    pass

@@ -56,3 +56,7 @@ class ModeleViews:
                 status, modeles = self.modele_service.find_all_modele()
                 return jsonify({'status': 'success', 'modeles': modeles})
             return {'status': 'failed'}
+
+
+if __name__ == '__main__':
+    pass

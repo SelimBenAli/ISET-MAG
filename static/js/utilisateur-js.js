@@ -10,7 +10,7 @@ function load_page_utilisateur() {
     xhr.onreadystatechange = function () {
         if (xhr.readyState === 4 && xhr.status === 200) {
             var response = JSON.parse(xhr.responseText);
-            console.log(response)
+
             if (response.status === 'success') {
                 liste_utilisateur = response.utilisateurs
                 liste_utilisateur_tous = response.utilisateurs
@@ -116,7 +116,7 @@ function ajout_utilisateur_request() {
     xhr.onreadystatechange = function () {
         if (xhr.readyState === 4 && xhr.status === 200) {
             var response = JSON.parse(xhr.responseText);
-            console.log(response)
+
             if (response.status === 'success') {
                 openPageUtilisateur()
             } else {
@@ -178,7 +178,7 @@ function modifier_utilisateur_request(id_utilisateur) {
     xhr.onreadystatechange = function () {
         if (xhr.readyState === 4 && xhr.status === 200) {
             var response = JSON.parse(xhr.responseText);
-            console.log(response)
+
             if (response.status === 'success') {
                 openPageUtilisateur()
             } else {
@@ -205,7 +205,7 @@ function activer_compte(id_utilisateur) {
         xhr.onreadystatechange = function () {
             if (xhr.readyState === 4 && xhr.status === 200) {
                 var response = JSON.parse(xhr.responseText);
-                console.log(response)
+
                 if (response.status === 'success') {
                     openPageUtilisateur()
                 } else {
@@ -226,7 +226,7 @@ function desactiver_compte(id_utilisateur) {
         xhr.onreadystatechange = function () {
             if (xhr.readyState === 4 && xhr.status === 200) {
                 var response = JSON.parse(xhr.responseText);
-                console.log(response)
+
                 if (response.status === 'success') {
                     openPageUtilisateur()
                 } else {
@@ -247,7 +247,7 @@ function desactiver_tous() {
         xhr.onreadystatechange = function () {
             if (xhr.readyState === 4 && xhr.status === 200) {
                 var response = JSON.parse(xhr.responseText);
-                console.log(response)
+
                 if (response.status === 'success') {
                     openPageUtilisateur()
                 } else {
@@ -268,7 +268,7 @@ function activer_tous() {
         xhr.onreadystatechange = function () {
             if (xhr.readyState === 4 && xhr.status === 200) {
                 var response = JSON.parse(xhr.responseText);
-                console.log(response)
+
                 if (response.status === 'success') {
                     openPageUtilisateur()
                 } else {
@@ -289,7 +289,7 @@ function supprimer_utilisateur(id_utilisateur) {
         xhr.onreadystatechange = function () {
             if (xhr.readyState === 4 && xhr.status === 200) {
                 var response = JSON.parse(xhr.responseText);
-                console.log(response)
+
                 if (response.status === 'success') {
                     openPageUtilisateur()
                 } else {

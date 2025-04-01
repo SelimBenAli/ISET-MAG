@@ -53,3 +53,7 @@ class ModeleService:
     def update_modele(self, id_modele, nom, id_marque):
         return self.database_tools.execute_request(
             f"""UPDATE model_hardware SET Nom = '{nom}', IDMarque = {id_marque} WHERE IDModel = {id_modele}""")
+
+
+if __name__ == '__main__':
+    pass

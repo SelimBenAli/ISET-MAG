@@ -41,3 +41,7 @@ class RoleService:
 
     def delete_role(self, id_role):
         return self.database_tools.execute_request(f"""DELETE FROM role WHERE IDRole = {id_role}""")
+
+
+if __name__ == '__main__':
+    pass

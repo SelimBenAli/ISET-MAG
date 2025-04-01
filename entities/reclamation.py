@@ -20,4 +20,9 @@ class Reclamation:
                 'description_reclamation': self.description,
                 'date_reclamation': self.date_reclamation, 'vu_reclamation': self.vu,
                 'technicien_reclamation': self.technicien,
-                'description_technicien_reclamation': self.description_technicien, 'date_technicien_reclamation': self.date_technicien_reclamation}
+                'description_technicien_reclamation': self.description_technicien,
+                'date_technicien_reclamation': self.date_technicien_reclamation}
+
+
+if __name__ == '__main__':
+    pass

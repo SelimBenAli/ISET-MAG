@@ -145,7 +145,7 @@ function modifier_admin(id_admin) {
 }
 
 function modifier_admin_request(id_admin, email){
-    console.log(typeof email)
+
     var xhr = new XMLHttpRequest();
     xhr.open('PUT', '/admin/update-admin/' + id_admin, true);
     xhr.setRequestHeader('Content-Type', 'application/json');

@@ -10,7 +10,7 @@ function load_page_message() {
     xhr.onreadystatechange = function () {
         if (xhr.readyState === 4 && xhr.status === 200) {
             var response = JSON.parse(xhr.responseText);
-            console.log(response)
+
             if (response.status === 'success') {
                 liste_message = response.messages
                 liste_message_tous = response.messages
@@ -56,7 +56,7 @@ function load_table_message(header, footer, body, division_table) {
 
 function consulter_message(id_message) {
     my_message = liste_message.find(message => message.id_message === id_message)
-    console.log(my_message.contenu_message)
+
     document.getElementById("hidden-big-div").style.display = "block";
     l = document.getElementsByClassName("page-link")
     for (i = 0; i < l.length; i++) {
@@ -83,7 +83,7 @@ function supprimer_message(id_message) {
         xhr.onreadystatechange = function () {
             if (xhr.readyState === 4 && xhr.status === 200) {
                 var response = JSON.parse(xhr.responseText);
-                console.log(response)
+
                 if (response.status === 'success') {
                     load_page_message()
                 } else {

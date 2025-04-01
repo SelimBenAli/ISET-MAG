@@ -78,3 +78,7 @@ class LocationService:
 
     def delete_location(self, id_location):
         return self.database_tools.execute_request(f"""DELETE FROM louer_hardware WHERE IDLocation = {id_location}""")
+
+
+if __name__ == '__main__':
+    pass

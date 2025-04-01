@@ -20,7 +20,6 @@ class CryptionTools:
         while len(ch) < 11:
             ch = '0' + ch
         ch = '2' + ch
-        print("code a barre : ", code, " => ", ch)
         return ch
 
     def generate_user_password(self, id_user):
@@ -39,3 +38,7 @@ class CryptionTools:
             else:
                 string += chr(randint(48, 57))
         return string
+
+
+if __name__ == '__main__':
+    pass
