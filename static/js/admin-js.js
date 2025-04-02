@@ -12,7 +12,9 @@ function login() {
 }
 
 function login_request(email, password) {
-
+    var b = document.getElementById('login-btn');
+    b.innerHTML = 'Chargement...';
+    b.disabled = true;
     var xhr = new XMLHttpRequest();
     xhr.open('POST', '/admin/login', true);
     xhr.setRequestHeader('Content-Type', 'application/json');
@@ -24,6 +26,8 @@ function login_request(email, password) {
                 window.location.href = "/dashboard/fournisseur";
             } else {
                 alert(response.message);
+                b.innerHTML = 'Se Connecter';
+                b.disabled = false;
             }
         } else {
 

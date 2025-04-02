@@ -3,11 +3,17 @@ import pymysql
 
 class DatabaseConnection:
     def __init__(self):
-        self.pwd = "isetnmagdb"
+        """self.pwd = "isetnmagdb"
         self.db = "isetn2025tracker$default"
         self.user = "isetn2025tracker"
         self.port = 3306
-        self.host = "isetn2025tracker.mysql.pythonanywhere-services.com"
+        self.host = "isetn2025tracker.mysql.pythonanywhere-services.com" """
+
+        self.pwd = ""
+        self.db = "iset_mag_db"
+        self.user = "root"
+        self.port = 3306
+        self.host = "localhost"
 
     def find_connection(self):
         conn = pymysql.connect(host=self.host,
