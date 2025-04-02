@@ -356,7 +356,9 @@ class DashboardViews:
         @self.dashboard_bp.route('/admin-utilisateur', methods=['GET'])
         def admin_utilisateur_template():
             if self.user_tools.check_user_in_session('admin'):
-                return render_template('admin-utilisateur.html', user=session['admin'])
+                if str(session['admin']['role_admin']) == '1':
+                    return render_template('admin-utilisateur.html', user=session['admin'])
+                return render_template('404.html')
             else:
                 return redirect(url_for('admin.login'))
 
@@ -364,7 +366,9 @@ class DashboardViews:
         def ajout_admin_template():
             if self.user_tools.check_user_in_session('admin'):
                 session['scan_mode'] = 2
-                return render_template('ajout-admin.html')
+                if str(session['admin']['role_admin']) == '1':
+                    return render_template('ajout-admin.html')
+                return render_template('404.html')
             else:
                 return redirect(url_for('admin.login'))
 

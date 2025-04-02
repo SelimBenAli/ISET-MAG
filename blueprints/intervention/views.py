@@ -32,7 +32,7 @@ class InterventionViews:
                 #     id_salle = ' NULL '
                 status, u = self.utilisateur_service.find_utilisateur_by_code_barre(code_user)
                 status, h = self.hardware_service.find_hardware_by_code(code_hardware)
-
+                print(u, h)
                 if u is not None and h is not None:
                     id_user = u[0]['id_utilisateur']
                     id_hardware = h[0]['id_hardware']

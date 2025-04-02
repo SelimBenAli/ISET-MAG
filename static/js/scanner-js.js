@@ -4,7 +4,7 @@ let enterCount = 0;
 const DOUBLE_ENTER_THRESHOLD = 100; // milliseconds between enters
 const SCANNER_SPEED_THRESHOLD = 50; // milliseconds, typical scanner speed
 let currentEnding = 'doubleEnter';
-var userBeginChar = 6;
+var userBeginChar = 2;
 var hardwareBeginChar = 7;
 var barcodelength = 13;
 var scann_mode = 1;
@@ -30,10 +30,12 @@ function verify_user_barcode() {
 }
 
 function verify_hardware_barcode() {
-    let hardwareDiv = document.getElementById('code-ajout-interventien-hardware');
+    var hardwareDiv = document.getElementById('code-ajout-interventien-hardware');
     hardwareValue = hardwareDiv.value;
     if (hardwareValue.charAt(0) !== hardwareBeginChar.toString() && hardwareValue.charAt(0) !== hardwareBeginChar) {
         hardwareDiv.value = '';
+        console.log('hardware', hardwareDiv.value, hardwareValue);
+        let userDiv = document.getElementById('code-ajout-interventien-utilisateur');
     }
 
 }
@@ -65,7 +67,7 @@ function verify_hardware_barcode_place() {
     hardwareValue = hardwareDiv.value;
 
     if (hardwareValue.length === barcodelength && (hardwareValue.charAt(0) === hardwareBeginChar.toString() || hardwareValue.charAt(0) === hardwareBeginChar)) {
-
+        console.log('writing hard')
         let userDiv = document.getElementById('code-ajout-interventien-utilisateur');
         userValue = userDiv.value;
         if (userValue.length === 0) {
@@ -76,6 +78,7 @@ function verify_hardware_barcode_place() {
     }
     if (hardwareValue.length !== 0 && (hardwareValue.charAt(0) !== hardwareBeginChar.toString() && hardwareValue.charAt(0) !== hardwareBeginChar)) {
         hardwareDiv.value = '';
+        console.log('NOT writing hard')
     }
 
 }
@@ -115,7 +118,7 @@ function add_intervention_request(userValue, hardwareValue) {
                 }
                 document.getElementById('code-ajout-interventien-utilisateur').value = '';
                 document.getElementById('code-ajout-interventien-hardware').value = '';
-                alert('Intervention ajoutée avec succès');
+                alert('Prêt ajoutée avec succès');
 
             } else {
                 alert(response.message);
@@ -230,15 +233,21 @@ document.body.addEventListener('keydown', function (event) {
 
 function processBarcode(code) {
     if (code.length > 0) {
-        //resultDiv.textContent = 'Last scanned: ' + code;
+        console.log('Last scanned: ' + code)
 
         buffer = '';
         let userDiv = document.getElementById('code-ajout-interventien-utilisateur');
         let hardwareDiv = document.getElementById('code-ajout-interventien-hardware');
         if (code.charAt(0) === userBeginChar.toString() || code.charAt(0) === userBeginChar) {
+            console.log('writing user')
             userDiv.value = code;
+            if (hardwareDiv.value.length !== barcodelength || (hardwareDiv.value.charAt(0) !== hardwareBeginChar.toString() && hardwareDiv.value.charAt(0) !== hardwareBeginChar))
+            hardwareDiv.value = '';
         } else {
+            console.log('writing hard')
             hardwareDiv.value = code;
+            if (userDiv.value.length !== barcodelength || (userDiv.value.charAt(0) !== userBeginChar.toString() && userDiv.value.charAt(0) !== userBeginChar))
+            userDiv.value = '';
         }
     }
     verify_user_barcode_place()

@@ -115,9 +115,9 @@
                             class="fas fa-user fa-sm fa-fw me-2 text-gray-400"></i>&nbsp;Profile</a>
                         <a onclick="openPageAdminSettings()"
                            class="dropdown-item" href="#"><i class="fas fa-cogs fa-sm fa-fw me-2 text-gray-400"></i>&nbsp;Settings</a>
-                        <a onclick="openPageAdminUtilisateur()"
+                        {% if user['role_admin'] == 1 %}<a onclick="openPageAdminUtilisateur()"
                            class="dropdown-item" href="#"><i class="fas fa-list fa-sm fa-fw me-2 text-gray-400"></i>&nbsp;Liste
-                            des Admins</a>
+                            des Admins</a> {% endif %}
                         <div class="dropdown-divider"></div>
                         <a class="dropdown-item" href="#" onclick="logout_admin()"><i
                                 class="fas fa-sign-out-alt fa-sm fa-fw me-2 text-gray-400"></i>&nbsp;Logout</a>
