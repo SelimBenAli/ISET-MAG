@@ -186,12 +186,13 @@ function showInterventionParameters() {
         mode = 1
         parameters.innerHTML = `
         <input class="form-control form-control-user" type="text" 
-                       id="code-ajout-interventien-utilisateur" style="margin-left: 15px" autofocus oninput="verify_user_barcode_place()"
+                       id="code-ajout-interventien-utilisateur" style="margin-left: 15px" autofocus oninput=""
                        placeholder="Code Utilisateur..." >
 
-            <input class="form-control form-control-user" type="text"  oninput="verify_hardware_barcode_place()"
+            <input class="form-control form-control-user" type="text"  oninput=""
                    id="code-ajout-interventien-hardware" style="margin-left: 15px"
                    placeholder="Code Hardware..." >
+                  <button class="btn btn-outline-primary" id="ajouter-intervention" style="margin-left: 15px" onclick="call_intervention_check_add()">Ajouter</button>
         `
     } else {
         mode = 2

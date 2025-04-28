@@ -42,6 +42,7 @@ function verify_hardware_barcode() {
 
 
 function verify_user_barcode_place() {
+    console.log('entring_verification 1')
     let userDiv = document.getElementById('code-ajout-interventien-utilisateur');
     userValue = userDiv.value;
 
@@ -51,34 +52,50 @@ function verify_user_barcode_place() {
         hardwareValue = hardwareDiv.value;
         if (hardwareValue.length === 0) {
             hardwareDiv.focus();
+            // alert('Code matériel incorrect');
+            console.log('quit verification 1')
             return;
+        } else {
+            console.log('continue verification 1')
+            call_intervention_check_add();
         }
-        call_intervention_check_add();
     }
 
-    if (userValue.charAt(0) !== userBeginChar.toString() && userValue.charAt(0) !== userBeginChar) {
+    console.log('process verification 1')
+
+
+    if ((userValue.charAt(0) !== userBeginChar.toString() && userValue.charAt(0) !== userBeginChar) || userValue.length !== barcodelength) {
+        console.log('log verification 1')
+        notifs.error('Code utilisateur incorrect');
         userDiv.value = '';
     }
 
 }
 
 function verify_hardware_barcode_place() {
+    console.log('entring_verification 2')
     let hardwareDiv = document.getElementById('code-ajout-interventien-hardware');
     hardwareValue = hardwareDiv.value;
 
     if (hardwareValue.length === barcodelength && (hardwareValue.charAt(0) === hardwareBeginChar.toString() || hardwareValue.charAt(0) === hardwareBeginChar)) {
-        console.log('writing hard')
+        console.log('writing hard 3')
         let userDiv = document.getElementById('code-ajout-interventien-utilisateur');
         userValue = userDiv.value;
         if (userValue.length === 0) {
             userDiv.focus();
+            // alert('Code utilisateur incorrect');
+            console.log('quit verification 2')
             return;
         }
+        console.log('continue verification 2')
         call_intervention_check_add();
     }
-    if (hardwareValue.length !== 0 && (hardwareValue.charAt(0) !== hardwareBeginChar.toString() && hardwareValue.charAt(0) !== hardwareBeginChar)) {
+    console.log('process verification 2')
+    if (hardwareValue.length !== barcodelength || (hardwareValue.charAt(0) !== hardwareBeginChar.toString() && hardwareValue.charAt(0) !== hardwareBeginChar)) {
+        notifs.error('Code matériel incorrect');
+        console.log('log verification 2')
         hardwareDiv.value = '';
-        console.log('NOT writing hard')
+        console.log('NOT writing hard 4')
     }
 
 }
@@ -91,10 +108,12 @@ function call_intervention_check_add() {
     userValue = userDiv.value;
     if (hardwareValue.length !== barcodelength || (hardwareValue.charAt(0) !== hardwareBeginChar.toString() && hardwareValue.charAt(0) !== hardwareBeginChar)) {
         hardwareDiv.value = '';
+        notifs.error('Code matériel incorrect');
         return;
     }
     if (userValue.length !== barcodelength || (userValue.charAt(0) !== userBeginChar.toString() && userValue.charAt(0) !== userBeginChar)) {
         userDiv.value = '';
+        notifs.error('Code utilisateur incorrect');
         return;
     }
 
@@ -118,10 +137,10 @@ function add_intervention_request(userValue, hardwareValue) {
                 }
                 document.getElementById('code-ajout-interventien-utilisateur').value = '';
                 document.getElementById('code-ajout-interventien-hardware').value = '';
-                alert('Prêt ajoutée avec succès');
+                notifs.success('Prêt ajoutée avec succès');
 
             } else {
-                alert(response.message);
+                notifs.warn('Erreur', 'Hardware déjà en cours d\'intervention', 3000);
                 document.getElementById('code-ajout-interventien-utilisateur').value = '';
                 document.getElementById('code-ajout-interventien-hardware').value = '';
             }
@@ -232,25 +251,34 @@ document.body.addEventListener('keydown', function (event) {
 });
 
 function processBarcode(code) {
+    let x = 0;
     if (code.length > 0) {
         console.log('Last scanned: ' + code)
+
 
         buffer = '';
         let userDiv = document.getElementById('code-ajout-interventien-utilisateur');
         let hardwareDiv = document.getElementById('code-ajout-interventien-hardware');
         if (code.charAt(0) === userBeginChar.toString() || code.charAt(0) === userBeginChar) {
-            console.log('writing user')
+            console.log('writing user 1')
             userDiv.value = code;
             if (hardwareDiv.value.length !== barcodelength || (hardwareDiv.value.charAt(0) !== hardwareBeginChar.toString() && hardwareDiv.value.charAt(0) !== hardwareBeginChar))
-            hardwareDiv.value = '';
+                hardwareDiv.value = '';
+            x = 1
         } else {
-            console.log('writing hard')
+            console.log('writing hard 2')
             hardwareDiv.value = code;
             if (userDiv.value.length !== barcodelength || (userDiv.value.charAt(0) !== userBeginChar.toString() && userDiv.value.charAt(0) !== userBeginChar))
-            userDiv.value = '';
+                userDiv.value = '';
+            x = 2
         }
     }
-    verify_user_barcode_place()
+    if (x === 1) {
+        verify_user_barcode_place();
+    } else if (x === 2) {
+        verify_hardware_barcode_place();
+    }
+    // verify_user_barcode_place()
 }
 
 // Removed checkOtherEndings and suggestEnding functions

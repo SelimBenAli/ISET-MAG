@@ -7,6 +7,7 @@ var footer = ''
 var division_table = 1
 var show_div_id = ''
 var entite = ''
+var notifs = new Notifications()
 
 function openPageFournisseur() {
     window.location.href = "/dashboard/fournisseur";
