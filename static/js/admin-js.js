@@ -222,7 +222,7 @@ function change_scan_mode(mode) {
 //window.onload = load_messages_notifications;
 
 
-var socket = io();
+/*var socket = io();
 socket.on('update_admin_alert', function (data) {
 
     load_alerts_notifications(data)
@@ -244,4 +244,4 @@ socket.on('close_admin_session', function (data) {
         alert("Session Fermé par l'administrateur")
         window.location.href = "/admin/logout";
     }
-});
+});*/

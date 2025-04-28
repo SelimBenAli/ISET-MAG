@@ -1,6 +1,5 @@
 from flask_cors import CORS
 from flask import Flask, url_for, redirect, session
-from flask_socketio import SocketIO
 
 # Import Blueprints
 from blueprints.admin import admin_bp
@@ -20,15 +19,12 @@ from blueprints.salle_bloc import salle_bloc_bp
 from blueprints.user import user_bp
 from blueprints.parametre import parametre_bp
 
-from extensions import socketio
-
 app = Flask(__name__)
 CORS(app)
 app.secret_key = 'selim_ben_ali'
 
-socketio.init_app(app)
 
-
+# Define your session-related functions
 def current_scan_ending():
     if 'scan_ending' not in session or session['scan_ending'] is None:
         session['scan_ending'] = 'Enter'
@@ -44,6 +40,7 @@ def current_scan_mode():
     return session['scan_mode']
 
 
+# Register functions as Jinja globals
 app.jinja_env.globals['current_scan_ending'] = current_scan_ending
 app.jinja_env.globals['current_scan_mode'] = current_scan_mode
 
@@ -66,6 +63,7 @@ app.register_blueprint(message_bp, url_prefix='/message')
 app.register_blueprint(parametre_bp, url_prefix='/parameter')
 
 
+# Define routes
 @app.route('/')
 def index_client():
     return redirect(url_for('auth.login'))
@@ -76,5 +74,6 @@ def index_admin():
     return redirect(url_for('dashboard.reclamation_template'))
 
 
+# Run the app
 if __name__ == '__main__':
-    socketio.run(app, debug=True, host='0.0.0.0')
+    app.run(debug=True, host='0.0.0.0')

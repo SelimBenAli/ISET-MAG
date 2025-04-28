@@ -1,4 +1,4 @@
-<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js"></script>
+<!--<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js"></script>-->
 <script src="{{ url_for('static', filename='js/client-script.js') }}"></script> <!-- SOCKET FILE -->
 <script src="{{ url_for('static', filename='js/auth.js') }}"></script>
 
@@ -22,32 +22,32 @@
                     {% if page_name != 'openPageReclamationActiveClient' %}
                         <script>
 
-                            socket.on('update_client_alerts', function (data) {
+                            /*socket.on('update_client_alerts', function (data) {
                                 load_client_alerts()
                                 var audio = document.getElementById("sound-alert-client")
                                 audio.play();
 
-                            })
+                            })*/
 
                         </script>
                     {% else %}
                         <script>
 
-                            socket.on('update_client_alerts', function (data) {
+                            /*socket.on('update_client_alerts', function (data) {
 
                                 load_client_alerts()
                                 show_client_reclamation(data['reclamation'])
                                 var audio = document.getElementById("sound-alert-client")
                                 audio.play();
-                                /*window.location.reload()*/
-                            })
+                                /*window.location.reload()
+                            })*/
 
-                            socket.on('delete_reclamation_alert', function (data) {
+                            /*socket.on('delete_reclamation_alert', function (data) {
 
                                 load_client_alerts()
                                 delete_client_reclamation(data['id_reclamation'])
-                                /*window.location.reload()*/
-                            })
+                                /*window.location.reload()
+                            })*/
 
                         </script>
                     {% endif %}

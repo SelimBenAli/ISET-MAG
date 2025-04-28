@@ -4,7 +4,7 @@ from service.admin_service import AdminService
 from tools.scanner_tools import ScannerTools
 from tools.sql_injection_tools import SQLInjectionTools
 from tools.user_tools import UserTools
-from extensions import socketio
+# from extensions import socketio
 
 
 class AdminViews:
@@ -80,7 +80,7 @@ class AdminViews:
             if self.user_tools.check_user_in_session('admin'):
                 status = self.admin_service.desactivate_admin(ida)
                 if status == 'success':
-                    socketio.emit('close_admin_session', {'message': 'success', 'id_admin': ida})
+                    # socketio.emit('close_admin_session', {'message': 'success', 'id_admin': ida})
                     return {'status': 'success'}
                 return {'status': 'failed'}
             return {'status': 'failed'}
@@ -148,7 +148,7 @@ class AdminViews:
 
                     status = self.admin_service.update_admin(id_admin, email)
                     if status == 'success':
-                        socketio.emit('close_admin_session', {'message': 'success', 'id_admin': id_admin})
+                        # socketio.emit('close_admin_session', {'message': 'success', 'id_admin': id_admin})
                         return {'status': 'success'}
                     return {'status': 'failed', 'message': 'Erreur de mise à jour'}
                 return {'status': 'failed', 'message': 'Admin non trouvé'}
@@ -164,7 +164,7 @@ class AdminViews:
                     return {'status': 'error', 'message': 'Problème de sécurité détecté'}
                 status, mail = self.admin_service.envoyer_email_recuperation(id_admin)
                 if status == 'success':
-                    socketio.emit('close_admin_session', {'message': 'success', 'id_admin': id_admin})
+                    # socketio.emit('close_admin_session', {'message': 'success', 'id_admin': id_admin})
                     return {'status': 'success', 'email': mail}
                 return {'status': 'failed', 'message': 'Erreur lors de l\'envoi de l\'email'}
             return {'status': 'failed', 'message': 'Erreur de session'}

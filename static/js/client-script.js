@@ -287,7 +287,7 @@ function delete_client_reclamation(idr) {
 }
 
 
-var socket = io();
+/*var socket = io();
 socket.on('desactivate_client_account_by_id', function (data) {
     user_element = document.querySelector('clientdata').textContent;
     user_element = user_element.replaceAll("\'", "\"");
@@ -301,4 +301,4 @@ socket.on('desactivate_client_account_by_id', function (data) {
 socket.on('desactivate_all_client_accounts', function (data) {
     alert("Session Fermé par l'administrateur")
     window.location.href = "/auth/logout";
-})
+})*/

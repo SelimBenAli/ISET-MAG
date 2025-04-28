@@ -9,7 +9,7 @@ from service.reclamation_service import ReclamationService
 from service.utilisateur_service import UtilisateurService
 from tools.sql_injection_tools import SQLInjectionTools
 from tools.user_tools import UserTools
-from extensions import socketio
+# from extensions import socketio
 
 
 class UserViews:
@@ -44,8 +44,8 @@ class UserViews:
                 if status == 'success':
                     status, r = self.reclamation_service.find_reclamation_by_id(id_reclamation)
 
-                    socketio.emit('update_admin_alert', {'message': 'success'})
-                    socketio.emit('update_client_alerts', {'message': 'success', 'reclamation': r[0]})
+                    # socketio.emit('update_admin_alert', {'message': 'success'})
+                    # socketio.emit('update_client_alerts', {'message': 'success', 'reclamation': r[0]})
                     return jsonify({'status': 'success'})
                 return jsonify({'status': 'failed'})
             return jsonify({'status': 'failed'})
@@ -74,7 +74,7 @@ class UserViews:
                                                             id_modele, quantite)
 
                 if status == 'success':
-                    socketio.emit('update_admin_alert', {'message': 'success'})
+                    # socketio.emit('update_admin_alert', {'message': 'success'})
                     return jsonify({'status': 'success'})
                 return jsonify({'status': 'failed'})
             return jsonify({'status': 'failed'})
@@ -92,7 +92,7 @@ class UserViews:
                 user = session['user']
                 status = self.message_service.add_message(user['id_utilisateur'], sujet, message)
                 if status == 'success':
-                    socketio.emit('update_admin_message', {'message': 'success'})
+                    # socketio.emit('update_admin_message', {'message': 'success'})
                     return jsonify({'status': 'success'})
                 return jsonify({'status': 'failed'})
             return jsonify({'status': 'failed'})
@@ -142,8 +142,8 @@ class UserViews:
                     return jsonify({'status': 'failed', 'message': 'Problème de sécurité détecté'})
                 status = self.user_service.delete_utilisateur(id_utilisateur)
                 if status == 'success':
-                    socketio.emit('desactivate_client_account_by_id',
-                                  {'message': 'success', 'id_utilisateur': id_utilisateur})
+                    # socketio.emit('desactivate_client_account_by_id',
+                    #              {'message': 'success', 'id_utilisateur': id_utilisateur})
                     return jsonify({'status': 'success'})
                 return jsonify({'status': 'failed'})
             return jsonify({'status': 'failed'})
@@ -173,8 +173,8 @@ class UserViews:
                 if self.sql_injection_tools.detect_sql_injection([id_utilisateur]):
                     return jsonify({'status': 'failed', 'message': 'Problème de sécurité détecté'})
                 status = self.user_service.desactiver_compte(id_utilisateur)
-                socketio.emit('desactivate_client_account_by_id',
-                              {'message': 'success', 'id_utilisateur': id_utilisateur})
+                # socketio.emit('desactivate_client_account_by_id',
+                #               {'message': 'success', 'id_utilisateur': id_utilisateur})
                 if status == 'success':
                     return jsonify({'status': 'success'})
                 return jsonify({'status': 'failed'})
@@ -205,7 +205,7 @@ class UserViews:
         def desactiver_tous_compte():
             if self.user_tools.check_user_in_session('admin'):
                 status = self.user_service.desactiver_tous_compte()
-                socketio.emit('desactivate_all_client_accounts', {'message': 'success'})
+                # socketio.emit('desactivate_all_client_accounts', {'message': 'success'})
                 if status == 'success':
                     return jsonify({'status': 'success'})
                 return jsonify({'status': 'failed'})
@@ -224,7 +224,7 @@ class UserViews:
 
                 status = self.reclamation_service.finish_reclamation(idr, technicien['id_utilisateur'], description)
                 if status == 'success':
-                    socketio.emit('delete_reclamation_alert', {'message': 'success', 'id_reclamation': idr})
+                    # socketio.emit('delete_reclamation_alert', {'message': 'success', 'id_reclamation': idr})
                     return jsonify({'status': 'success'})
                 return jsonify({'status': 'failed'})
             return jsonify({'status': 'failed'})
