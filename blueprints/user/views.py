@@ -115,18 +115,24 @@ class UserViews:
                 role = data.get('role_utilisateur')
                 code = data.get('code_utilisateur')
                 if self.sql_injection_tools.detect_sql_injection([nom, prenom, mail, tel, role, code]):
+                    print("1")
                     return jsonify({'status': 'failed', 'message': 'Problème de sécurité détecté'})
                 status, user = self.user_service.find_utilisateur_by_mail(mail)
                 if status == 'success' and user != []:
+                    print("2")
                     return jsonify({'status': 'failed', 'message': 'email already used'})
                 status, user = self.user_service.find_utilisateur_by_code(code)
                 if status == 'success' and user != []:
+                    print("3")
                     return jsonify({'status': 'failed', 'message': 'code already used'})
                 status = self.user_service.add_utilisateur(nom.upper(), prenom.upper(), mail, tel, "", role,
                                                            code.upper())
                 if status == 'success':
+                    print("4")
                     return jsonify({'status': 'success'})
+                print("5")
                 return jsonify({'status': 'failed'})
+            print("6")
             return jsonify({'status': 'failed'})
 
         @self.user_bp.route('/delete-utilisateur/<int:id_utilisateur>', methods=['DELETE'])

@@ -120,7 +120,7 @@ function ajout_utilisateur_request() {
             if (response.status === 'success') {
                 openPageUtilisateur()
             } else {
-                alert('Erreur');
+                alert('Erreur', response.message);
                 btn.disabled = false
             }
         }
@@ -182,7 +182,7 @@ function modifier_utilisateur_request(id_utilisateur) {
             if (response.status === 'success') {
                 openPageUtilisateur()
             } else {
-                alert('Erreur');
+                alert('Erreur', response.message);
             }
         }
     };

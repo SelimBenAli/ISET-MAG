@@ -8,11 +8,11 @@ from tools.config_tools import ConfigTools
 class MailTools:
     def __init__(self):
         self.config_tools = ConfigTools()
-        self.sender_email = 'selimbenali2003@gmail.com'
-        self.password = 'npzd ncfk epzc ljfj'  # Use App Password if 2FA is enabled
+        self.sender_email = 'isetn.dep.ti.solutions@gmail.com'
+        self.password = 'ulsf mqgz xeqf syre'  # Use App Password if 2FA is enabled
         self.smtp_server = "smtp.gmail.com"
         self.smtp_port = 587
-        self.lien = "http://192.168.1.17:5000"
+        self.lien = "http://isetn-dep-ti.solutions"
 
     def send_mail(self, receiver, subject, message):
         try:

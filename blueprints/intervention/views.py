@@ -224,7 +224,7 @@ class InterventionViews:
                 status, i = self.intervention_service.find_intervention_by_id(id_intervention)
 
                 if len(i) == 0:
-                    return {'status': 'failed', 'message': 'Intervetion introuvable'}
+                    return {'status': 'failed', 'message': 'Pret introuvable'}
                 if i[0]['date_fin_intervention'] is not None:
                     return {'status': 'failed', 'message': 'Intervention déjà fermée'}
                 admin = session['admin']['id_admin']
